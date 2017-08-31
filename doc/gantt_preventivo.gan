@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-08-15" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
+    <description/>
+    <view zooming-state="default:3" id="gantt-chart">
+        <field id="tpd3" name="Name" width="285" order="0"/>
+        <field id="tpd4" name="Begin date" width="71" order="1"/>
+        <field id="tpd5" name="End date" width="84" order="2"/>
+        <option id="color.recent"><![CDATA[#ffcc00]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Name" width="210" order="0"/>
+        <field id="1" name="Default role" width="87" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="Analisi" meeting="false" start="2017-08-30" duration="6" complete="0" expand="true">
+            <task id="4" name="Analisi dei mezzi" color="#8cb6ce" meeting="false" start="2017-08-30" duration="6" complete="0" expand="true"/>
+            <task id="53" name="Pianificazione" meeting="false" start="2017-08-30" duration="6" complete="0" expand="true"/>
+            <task id="1" name="Intervista mandante" color="#8cb6ce" meeting="false" start="2017-08-31" duration="1" complete="0" expand="true"/>
+            <task id="10" name="Analisi dei requisiti" color="#8cb6ce" meeting="false" start="2017-08-31" duration="3" complete="0" expand="true"/>
+            <task id="3" name="Analisi scientifica" color="#8cb6ce" meeting="false" start="2017-08-31" duration="4" complete="0" expand="true"/>
+            <task id="51" name="Analisi del dominio" meeting="false" start="2017-09-06" duration="1" complete="0" expand="true"/>
+            <task id="54" name="Terminare analisi" color="#8cb6ce" meeting="true" start="2017-09-07" duration="0" complete="0" priority="2" expand="true"/>
+        </task>
+        <task id="6" name="Progettazione" color="#8cb6ce" meeting="false" start="2017-08-29" duration="10" complete="0" expand="true">
+            <task id="17" name="Mockup GUI" color="#8cb6ce" meeting="false" start="2017-09-06" duration="1" complete="0" expand="true"/>
+            <task id="52" name="Elaborazione funzionalità" meeting="false" start="2017-09-07" duration="1" complete="0" expand="true"/>
+            <task id="66" name="UML classi" color="#8cb6ce" meeting="false" start="2017-09-07" duration="3" complete="0" expand="true"/>
+            <task id="64" name="Sistema di gravità" meeting="false" start="2017-08-29" duration="1" complete="0" expand="true"/>
+            <task id="65" name="Sistema di disegno" meeting="false" start="2017-08-29" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="7" name="Implementazione" color="#8cb6ce" meeting="false" start="2017-08-21" duration="17" complete="0" expand="true">
+            <task id="23" name="Template MVVM" color="#8cb6ce" meeting="false" start="2017-09-11" duration="2" complete="0" expand="true"/>
+            <task id="24" name="Controlli utente" meeting="false" start="2017-09-12" duration="1" complete="0" expand="true"/>
+            <task id="49" name="Motore fisico" color="#8cb6ce" meeting="false" start="2017-08-21" duration="1" complete="0" expand="true"/>
+            <task id="50" name="Motore di disegno" meeting="false" start="2017-08-21" duration="1" complete="0" expand="true"/>
+            <task id="60" name="Terminare componenti base" color="#8cb6ce" meeting="true" start="2017-08-21" duration="0" complete="0" expand="true"/>
+            <task id="44" name="Sistema posizionamento aste fori" meeting="false" start="2017-08-28" duration="1" complete="0" expand="true"/>
+            <task id="45" name="Rappresentazione statistica" meeting="false" start="2017-08-21" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="8" name="Test" color="#8cb6ce" meeting="false" start="2017-08-07" duration="1" complete="0" expand="true">
+            <task id="29" name="Integration testing" meeting="false" start="2017-08-07" duration="1" complete="0" expand="true"/>
+            <task id="30" name="Unit testing" meeting="false" start="2017-08-07" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2017-08-30" duration="72" complete="0" expand="true"/>
+    </tasks>
+    <resources/>
+    <allocations/>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles roleset-name="SoftwareDevelopment"/>
+</project>
