@@ -56,10 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GraphicsDeviceService.cs" />
-    <Page Include="XnaControl.cs" />
+    <Compile Include="XnaControl.cs" />
     <Compile Include="XnaImageSource.cs" />
     <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="App.xaml.cs">

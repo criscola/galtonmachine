@@ -7,108 +7,112 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using XnaIntoWpf;
 
-public partial class XnaControl : UserControl
+namespace XnaIntoWpf
 {
-    private GraphicsDeviceService graphicsService;
-    private XnaImageSource imageSource;
 
-    /// <summary>
-    /// Gets the GraphicsDevice behind the control.
-    /// </summary>
-    public GraphicsDevice GraphicsDevice
+    public partial class XnaControl : UserControl
     {
-        get { return graphicsService.GraphicsDevice; }
-    }
+        private GraphicsDeviceService graphicsService;
+        private XnaImageSource imageSource;
 
-    /// <summary>
-    /// Invoked when the XnaControl needs to be redrawn.
-    /// </summary>
-    public Action<GraphicsDevice> DrawFunction;
-
-    public XnaControl()
-    {
-        InitializeComponent();
-
-        // hook up an event to fire when the control has finished loading
-        Loaded += new RoutedEventHandler(XnaControl_Loaded);
-    }
-
-    ~XnaControl()
-    {
-        imageSource.Dispose();
-
-        // release on finalizer to clean up the graphics device
-        if (graphicsService != null)
-            graphicsService.Release();
-    }
-
-    void XnaControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        // if we're not in design mode, initialize the graphics device
-        if (DesignerProperties.GetIsInDesignMode(this) == false)
+        /// <summary>
+        /// Gets the GraphicsDevice behind the control.
+        /// </summary>
+        public GraphicsDevice GraphicsDevice
         {
-            InitializeGraphicsDevice();
+            get { return graphicsService.GraphicsDevice; }
         }
-    }
 
-    protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-    {
-        // if we're not in design mode, recreate the 
-        // image source for the new size
-        if (DesignerProperties.GetIsInDesignMode(this) == false &&
-            graphicsService != null)
+        /// <summary>
+        /// Invoked when the XnaControl needs to be redrawn.
+        /// </summary>
+        public Action<GraphicsDevice> DrawFunction;
+
+        public XnaControl()
         {
-            // recreate the image source
+            InitializeComponent();
+
+            // hook up an event to fire when the control has finished loading
+            Loaded += new RoutedEventHandler(XnaControl_Loaded);
+        }
+
+        ~XnaControl()
+        {
             imageSource.Dispose();
-            imageSource = new XnaImageSource(
-                GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
-            rootImage.Source = imageSource.WriteableBitmap;
+
+            // release on finalizer to clean up the graphics device
+            if (graphicsService != null)
+                graphicsService.Release();
         }
 
-        base.OnRenderSizeChanged(sizeInfo);
-    }
-
-    private void InitializeGraphicsDevice()
-    {
-        if (graphicsService == null)
+        void XnaControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // add a reference to the graphics device
-            graphicsService = GraphicsDeviceService.AddRef(
-                (PresentationSource.FromVisual(this) as HwndSource).Handle);
-
-            // create the image source
-            imageSource = new XnaImageSource(
-                GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
-            rootImage.Source = imageSource.WriteableBitmap;
-
-            // hook the rendering event
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
+            // if we're not in design mode, initialize the graphics device
+            if (DesignerProperties.GetIsInDesignMode(this) == false)
+            {
+                InitializeGraphicsDevice();
+            }
         }
-    }
 
-    /// <summary>
-    /// Draws the control and allows subclasses to override 
-    /// the default behavior of delegating the rendering.
-    /// </summary>
-    protected virtual void Render()
-    {
-        // invoke the draw delegate so someone will draw something pretty
-        if (DrawFunction != null)
-            DrawFunction(GraphicsDevice);
-    }
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            // if we're not in design mode, recreate the 
+            // image source for the new size
+            if (DesignerProperties.GetIsInDesignMode(this) == false &&
+                graphicsService != null)
+            {
+                // recreate the image source
+                imageSource.Dispose();
+                imageSource = new XnaImageSource(
+                    GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
+                rootImage.Source = imageSource.WriteableBitmap;
+            }
 
-    void CompositionTarget_Rendering(object sender, EventArgs e)
-    {
-        // set the image source render target
-        GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
+            base.OnRenderSizeChanged(sizeInfo);
+        }
 
-        // allow the control to draw
-        Render();
+        private void InitializeGraphicsDevice()
+        {
+            if (graphicsService == null)
+            {
+                // add a reference to the graphics device
+                graphicsService = GraphicsDeviceService.AddRef(
+                    (PresentationSource.FromVisual(this) as HwndSource).Handle);
 
-        // unset the render target
-        GraphicsDevice.SetRenderTarget(null);
+                // create the image source
+                imageSource = new XnaImageSource(
+                    GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
+                rootImage.Source = imageSource.WriteableBitmap;
 
-        // commit the changes to the image source
-        imageSource.Commit();
-    }
+                // hook the rendering event
+                CompositionTarget.Rendering += CompositionTarget_Rendering;
+            }
+        }
+
+        /// <summary>
+        /// Draws the control and allows subclasses to override 
+        /// the default behavior of delegating the rendering.
+        /// </summary>
+        protected virtual void Render()
+        {
+            // invoke the draw delegate so someone will draw something pretty
+            if (DrawFunction != null)
+                DrawFunction(GraphicsDevice);
+        }
+
+        void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+            // set the image source render target
+            GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
+
+            // allow the control to draw
+            Render();
+
+            // unset the render target
+            GraphicsDevice.SetRenderTarget(null);
+
+            // commit the changes to the image source
+            imageSource.Commit();
+        }
+    } 
 }
