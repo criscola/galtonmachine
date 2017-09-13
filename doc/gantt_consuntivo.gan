@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-02" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-01" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
     <description/>
     <view zooming-state="default:0" id="gantt-chart">
         <field id="tpd3" name="Name" width="279" order="0"/>
@@ -25,6 +25,7 @@
         <date year="2017" month="9" date="20" type="HOLIDAY"><![CDATA[Holiday on 9/20/17 12:00 AM]]></date>
         <date year="2017" month="9" date="22" type="HOLIDAY"><![CDATA[Holiday on 9/22/17 12:00 AM]]></date>
         <date year="2017" month="9" date="21" type="HOLIDAY"><![CDATA[Holiday on 9/21/17 12:00 AM]]></date>
+        <date year="2017" month="9" date="12" type="HOLIDAY"><![CDATA[Holiday on 9/12/17 12:00 AM]]></date>
     </calendars>
     <tasks empty-milestones="true">
         <taskproperties>
@@ -56,16 +57,16 @@
             <task id="68" name="Use case" color="#8cb6ce" meeting="false" start="2017-09-07" duration="3" complete="0" expand="true">
                 <depend id="70" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="70" name="Terminare analisi e progettazione" color="#8cb6ce" meeting="true" start="2017-09-12" duration="0" complete="0" priority="2" expand="true">
+            <task id="70" name="Terminare analisi e progettazione" color="#8cb6ce" meeting="true" start="2017-09-13" duration="0" complete="0" priority="2" expand="true">
                 <depend id="23" type="2" difference="0" hardness="Strong"/>
             </task>
         </task>
-        <task id="7" name="Implementazione" color="#8cb6ce" meeting="false" start="2017-09-12" duration="43" complete="0" expand="true">
-            <task id="23" name="Struttura MVVM" color="#8cb6ce" meeting="false" start="2017-09-12" duration="2" complete="0" expand="true">
+        <task id="7" name="Implementazione" color="#8cb6ce" meeting="false" start="2017-09-13" duration="42" complete="0" expand="true">
+            <task id="23" name="Struttura MVVM" color="#8cb6ce" meeting="false" start="2017-09-13" duration="2" complete="0" expand="true">
                 <depend id="24" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="24" name="Simulazione macchina di Galton" meeting="false" start="2017-09-14" duration="13" complete="0" expand="true">
-                <task id="49" name="Generazione palline" color="#8cb6ce" meeting="false" start="2017-09-14" duration="5" complete="0" expand="true">
+            <task id="24" name="Simulazione macchina di Galton" meeting="false" start="2017-09-15" duration="12" complete="0" expand="true">
+                <task id="49" name="Generazione palline" color="#8cb6ce" meeting="false" start="2017-09-15" duration="5" complete="0" expand="true">
                     <depend id="60" type="2" difference="0" hardness="Strong"/>
                 </task>
                 <task id="50" name="Generazione sprite fissi (aste, contenitori)" color="#8cb6ce" meeting="false" start="2017-09-26" duration="5" complete="0" expand="true">

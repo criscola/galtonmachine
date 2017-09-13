@@ -1,0 +1,5 @@
+C:\Users\A4XX-COLCRI\Desktop\I3AC\Moduli\223_C#\projects\01 MVVM\MVVM\bin\Release\MVVM.dll
+C:\Users\A4XX-COLCRI\Desktop\I3AC\Moduli\223_C#\projects\01 MVVM\MVVM\bin\Release\MVVM.pdb
+C:\Users\A4XX-COLCRI\Desktop\I3AC\Moduli\223_C#\projects\01 MVVM\MVVM\obj\Release\MVVM.csprojResolveAssemblyReference.cache
+C:\Users\A4XX-COLCRI\Desktop\I3AC\Moduli\223_C#\projects\01 MVVM\MVVM\obj\Release\MVVM.dll
+C:\Users\A4XX-COLCRI\Desktop\I3AC\Moduli\223_C#\projects\01 MVVM\MVVM\obj\Release\MVVM.pdb

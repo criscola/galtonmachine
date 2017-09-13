@@ -1,0 +1,17 @@
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe.config
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csprojResolveAssemblyReference.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\MainWindow.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\App.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF_MarkupCompile.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF_MarkupCompile.lref
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\MainWindow.baml
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.g.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.Properties.Resources.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csproj.GenerateResource.Cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\GaltonMachineView.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\GaltonMachineView.baml
