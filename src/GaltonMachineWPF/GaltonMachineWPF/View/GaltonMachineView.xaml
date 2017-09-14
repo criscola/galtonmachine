@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GaltonMachineWPF.View"
+             xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="318">
+    <UserControl.DataContext>
+        <viewmodel:GaltonMachineViewModel/>
+    </UserControl.DataContext>
     <Grid Background="White">
         <Canvas Margin="0,0,0.4,0">
             <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10"/>
@@ -23,9 +27,11 @@
             <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="268" Canvas.Left="130"/>
 
             <Rectangle Fill="Orange" Canvas.Left="109" Canvas.Top="0" Width="100" Height="70"></Rectangle>
-            
-            <Ellipse  Fill="Red" Canvas.Top="{Binding ballX}" Canvas.Left="{Binding ballY}" Width="30" Height="30"/>
-            
+
+            <Ellipse  Fill="Red" Width="30" Height="30">
+
+            </Ellipse>
+
         </Canvas>
     </Grid>
 </UserControl>

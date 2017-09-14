@@ -1,0 +1,6 @@
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\bin\Debug\GaltonConsole.exe.config
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\bin\Debug\GaltonConsole.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\bin\Debug\GaltonConsole.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\obj\Debug\GaltonConsole.csprojResolveAssemblyReference.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\obj\Debug\GaltonConsole.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\GaltonConsole\GaltonConsole\obj\Debug\GaltonConsole.pdb

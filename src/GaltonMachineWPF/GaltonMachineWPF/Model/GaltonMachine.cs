@@ -10,9 +10,7 @@ namespace GaltonMachineWPF.Model
     public class GaltonMachine
     {
         #region =================== costanti ===================
-
-        public const int BALL_PRESENT = 1;
-        public const int BALL_EMPTY = 0;
+        
 
         #endregion
 
@@ -29,21 +27,7 @@ namespace GaltonMachineWPF.Model
 
         public GaltonMachine(int width)
         {
-            // TODO: Forse rimuovere if quando si saranno aggiunti dei controlli alla fonte dell'input
-            if (width > 2)
-            {
-                // Inizializza l'array della griglia
-                Grid = new int[width][];
-
-                for (int i = 0; i < width; i++)
-                {
-                    Grid[i] = new int[width + 1];
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Specified width must be >= 2.");
-            }
+            
         }
 
         #endregion
@@ -54,6 +38,12 @@ namespace GaltonMachineWPF.Model
 
         #region =================== metodi pubblici ============
 
+        public int[][] ComputatePath()
+        {
+            // Computa se la direzione è sinistra o destra
+            int direction = new Random().Next(0, 2);
+        }
+
         #endregion
 
 
@@ -61,6 +51,8 @@ namespace GaltonMachineWPF.Model
 
     public class GaltonMachineAnimator
     {
+        public GaltonMachine model;
+        public event Action<int[,]> NewCoordinates;
         public void Animation()
         {
 
