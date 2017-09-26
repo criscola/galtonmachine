@@ -20,6 +20,7 @@ namespace GaltonMachineWPF.Model
         #region =================== membri e proprietà ===========
 
         public int[][] Grid { get; private set; }
+        public int BallLeft { get; internal set; }
 
         #endregion
 
@@ -38,11 +39,11 @@ namespace GaltonMachineWPF.Model
 
         #region =================== metodi pubblici ============
 
-        public int[][] ComputatePath()
+        /*public int[][] ComputatePath()
         {
             // Computa se la direzione è sinistra o destra
             int direction = new Random().Next(0, 2);
-        }
+        }*/
 
         #endregion
 

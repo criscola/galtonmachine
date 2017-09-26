@@ -11,7 +11,7 @@
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
     <Grid Background="White">
-        <Canvas Margin="0,0,0.4,0">
+        <Canvas Name="canvas" Margin="0,0,0.4,0">
             <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10"/>
             <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10" Canvas.Left="86"/>
             <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10" Canvas.Left="172"/>
@@ -28,9 +28,9 @@
 
             <Rectangle Fill="Orange" Canvas.Left="109" Canvas.Top="0" Width="100" Height="70"></Rectangle>
 
-            <Ellipse  Fill="Red" Width="30" Height="30">
+            <Ellipse Fill="Red" Width="30" Height="30" Canvas.Left="{Binding Path=BallLeft}" />
 
-            </Ellipse>
+
 
         </Canvas>
     </Grid>

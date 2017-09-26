@@ -11,6 +11,8 @@ namespace GaltonConsole
     public class GaltonMachine
     {
         #region =================== costanti ===================
+        public const int REFRESH_TIME = 50;
+        public const int CYCLE_PAUSE = 800;
         #endregion
 
         #region =================== membri statici =============
@@ -19,6 +21,7 @@ namespace GaltonConsole
         #region =================== membri e proprietà ===========
         public QuincunxGrid Grid { get; private set; }
         public Ball Ball { get; private set; }
+
         #endregion
 
         #region =================== costruttori ================
@@ -44,20 +47,20 @@ namespace GaltonConsole
                 Ball.Y = 0;
                 
                 PrintGrid();
-                Thread.Sleep(1500);
+                Thread.Sleep(CYCLE_PAUSE);
                 Grid.IncrementCell(0, 0);
-                for (int j = 0; j < Grid.Width - 1; j++) {
+                for (int j = 0; j < Grid.Size - 1; j++) {
                     // Fa scendere la pallina di 1
-                    Ball.Y++;
+                    Ball.X++;
                     // Guarda dove rimbalza la pallina
                     if (Ball.Bounce())
                     {
-                        Ball.X++;
+                        Ball.Y++;
                     }
                     Grid.IncrementCell(Ball.X, Ball.Y);
                     //Console.WriteLine(Ball.X + " -- " + Ball.Y);
                     PrintGrid();
-                    Thread.Sleep(1500);
+                    Thread.Sleep(REFRESH_TIME);
                 }
             }
         }
@@ -65,12 +68,12 @@ namespace GaltonConsole
         public void PrintGrid()
         {
             Console.Clear();
-            for (int i = 0; i < Grid.Width; i++)
+            for (int i = 0; i < Grid.Size; i++)
             {
-                for (int j = 0; j < Grid.Width; j++)
+                for (int j = 0; j < Grid.Size; j++)
                 {
                     // Se siamo alla cella in cui è attualmente presente la pallina, stampare un carattere speciale
-                    if (Ball.X == j && Ball.Y == i)
+                    if (Ball.X == i && Ball.Y == j)
                     {
                         Console.Write("X\t");
                         
@@ -82,8 +85,13 @@ namespace GaltonConsole
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine();
-            Console.WriteLine("----------------------------------------------------------------");
+            for (int i = 0; i < Grid.Size; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(Grid.GetResults()[i] + "\t");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            
         }
         #endregion
     }

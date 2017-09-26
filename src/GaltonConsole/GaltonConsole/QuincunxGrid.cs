@@ -11,7 +11,7 @@ namespace GaltonConsole
     {
         private int[][] grid;
 
-        public int Width { get; private set; }
+        public int Size { get; private set; }
 
         public QuincunxGrid(int width)
         {
@@ -29,7 +29,7 @@ namespace GaltonConsole
                         grid[i][j] = 0;
                     }
                 }
-                Width = width;
+                Size = width;
             }
             else
             {
@@ -62,11 +62,11 @@ namespace GaltonConsole
         /// <summary>
         /// Incrementa di 1 la cella specificata
         /// </summary>
-        /// <param name="x">L'indice della riga</param>
-        /// <param name="y">L'indice della colonna</param>
+        /// <param name="x">L'indice della colonna</param>
+        /// <param name="y">L'indice della riga</param>
         public void IncrementCell(int x, int y)
         {
-            grid[y][x] = grid[y][x] + 1;
+            grid[x][y] = grid[x][y] + 1;
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace GaltonConsole
         /// <returns>L'array di risultati (copia dell'ultima riga della griglia)</returns>
         public int[] GetResults()
         {
-            int[] lastRow = new int[Width];
-            for (int i = 0; i < grid[Width - 1].Length; i++)
+            int[] lastRow = new int[Size];
+            for (int i = 0; i < Size; i++)
             {
-                lastRow[i] = grid[Width - 1][i];
+                lastRow[i] = grid[Size - 1][i];
             }
             return lastRow;
         }

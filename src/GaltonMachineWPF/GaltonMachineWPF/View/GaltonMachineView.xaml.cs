@@ -20,6 +20,8 @@ namespace GaltonMachineWPF.View
     /// </summary>
     public partial class GaltonMachineView : UserControl
     {
+        
+
         public GaltonMachineView()
         {
             InitializeComponent();

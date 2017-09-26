@@ -14,8 +14,9 @@ namespace GaltonMachineWPF.ViewModel
         private GaltonMachine model;
         private int x;
         private int y;
+        public int BallLeft { get { return model.BallLeft; } }
 
-        public int X { get { return model.Grid. } }
+        //public int X { get { return model.Grid. } }
         public GaltonMachineViewModel()
         {
             model = new GaltonMachine(4);
