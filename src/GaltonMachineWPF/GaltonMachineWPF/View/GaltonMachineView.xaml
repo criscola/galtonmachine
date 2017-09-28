@@ -28,9 +28,7 @@
 
             <Rectangle Fill="Orange" Canvas.Left="109" Canvas.Top="0" Width="100" Height="70"></Rectangle>
 
-            <Ellipse Fill="Red" Width="30" Height="30" Canvas.Left="{Binding Path=BallLeft}" />
-
-
+            <Ellipse Fill="Red" Width="30" Height="30" Canvas.Left="{Binding Path=Ball.X}" Canvas.Top="{Binding Path=Ball.Y}" />
 
         </Canvas>
     </Grid>

@@ -62,19 +62,23 @@ public class GaltonMachineFX extends Application {
         // Get del canvas
         canvas = (Canvas) scene.lookup("#simulationArea");
         gc = canvas.getGraphicsContext2D();
+        gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
         
         // Disegno stecche
         gc.setFill(Color.RED);
-        int columnCount = 1;
         
+        // Grandezza della base
         double n = grid.getSize();
-        double d = canvas.getWidth() / n;
+        // Distanza fra le stecche
+        double dx = (canvas.getWidth() - BallRenderer.DIAMETER) / (n - 1);
+        double dy = (canvas.getHeight() - BallRenderer.DIAMETER) / (n - 1);
+        // Coordinate x y delle stecche iniziali
         double x = 0;
-        double y = (n - 1) * d;
-        System.out.println(grid.getSize());
+        //double y = (n - 1) * d;
+        double y = canvas.getHeight() - BallRenderer.DIAMETER;
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n-i; j++) {
-                BallRenderer currentBall = new BallRenderer(25, 25);
+            for (int j = 0; j < n - i; j++) {
+                BallRenderer currentBall = new BallRenderer(BallRenderer.DIAMETER, BallRenderer.DIAMETER);
                 sticks.add(currentBall);
                 
                 gc.fillOval(
@@ -82,14 +86,11 @@ public class GaltonMachineFX extends Application {
                     y,
                     currentBall.getWidth(), 
                     currentBall.getHeight());
-                
-                x += d;
+                x += dx;
             }   
-            x = d / 2 * (i+1);
-            y -= d;
-            columnCount++;
+            x = dx / 2 * (i + 1);
+            y -= dy;
         }
-        
     }
 
     public void repaint(GraphicsContext gc) {

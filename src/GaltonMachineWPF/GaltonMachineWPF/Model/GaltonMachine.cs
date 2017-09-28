@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GaltonMachineWPF.Model
@@ -20,7 +21,7 @@ namespace GaltonMachineWPF.Model
         #region =================== membri e proprietà ===========
 
         public int[][] Grid { get; private set; }
-        public int BallLeft { get; internal set; }
+        public Ball Ball { get; set; }
 
         #endregion
 
@@ -28,7 +29,11 @@ namespace GaltonMachineWPF.Model
 
         public GaltonMachine(int width)
         {
-            
+            ThreadStart tOra = new ThreadStart(ComputatePath);
+            Thread thread = new Thread(tOra);
+            thread.IsBackground = true;
+            thread.Priority = ThreadPriority.Normal;
+            thread.Start();
         }
 
         #endregion
@@ -39,24 +44,14 @@ namespace GaltonMachineWPF.Model
 
         #region =================== metodi pubblici ============
 
-        /*public int[][] ComputatePath()
+        public void ComputatePath()
         {
             // Computa se la direzione è sinistra o destra
-            int direction = new Random().Next(0, 2);
-        }*/
+            Ball.Bounce();
+        }
 
         #endregion
 
 
-    }
-
-    public class GaltonMachineAnimator
-    {
-        public GaltonMachine model;
-        public event Action<int[,]> NewCoordinates;
-        public void Animation()
-        {
-
-        }
     }
 }

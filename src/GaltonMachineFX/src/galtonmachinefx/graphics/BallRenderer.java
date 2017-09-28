@@ -29,10 +29,10 @@ import galtonmachinefx.model.Ball;
  *
  * @author A4XX-COLCRI
  */
-public class BallRenderer {
-    private Ball model;
+public class BallRenderer extends Ball {
     private int width;
     private int height;
+    public static final int DIAMETER = 20;
     
     public int getWidth() {
         return width;
@@ -41,27 +41,15 @@ public class BallRenderer {
     public int getHeight() {
         return height;
     }
-
-    public int getX() {
-        return model.getX();
-    }
-
-    public int getY() {
-        return model.getY();
-    }
-    
-    public void setX(int x) {
-        model.setX(x);
-    }
-
-    public void setY(int y) {
-        model.setY(y);
-    }
     
     public BallRenderer(int width, int height) {
-        model = new Ball();
         this.width = width;
         this.height = height;
     }
     
+    public BallRenderer(int x, int y, int width, int height) {
+        super(x, y);
+        this.width = width;
+        this.height = height;
+    }
 }
