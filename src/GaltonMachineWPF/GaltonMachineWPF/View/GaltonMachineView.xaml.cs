@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaltonMachineWPF.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,6 @@ namespace GaltonMachineWPF.View
     /// </summary>
     public partial class GaltonMachineView : UserControl
     {
-        
-
         public GaltonMachineView()
         {
             InitializeComponent();

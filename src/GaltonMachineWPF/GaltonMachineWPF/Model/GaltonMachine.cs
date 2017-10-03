@@ -20,7 +20,7 @@ namespace GaltonMachineWPF.Model
 
         #region =================== membri e proprietà ===========
 
-        public int[][] Grid { get; private set; }
+        public QuincunxGrid Grid { get; private set; }
         public Ball Ball { get; set; }
 
         #endregion
@@ -29,11 +29,8 @@ namespace GaltonMachineWPF.Model
 
         public GaltonMachine(int width)
         {
-            ThreadStart tOra = new ThreadStart(ComputatePath);
-            Thread thread = new Thread(tOra);
-            thread.IsBackground = true;
-            thread.Priority = ThreadPriority.Normal;
-            thread.Start();
+            Ball = new Ball();
+            Grid = new QuincunxGrid(width);
         }
 
         #endregion
@@ -43,12 +40,6 @@ namespace GaltonMachineWPF.Model
         #endregion
 
         #region =================== metodi pubblici ============
-
-        public void ComputatePath()
-        {
-            // Computa se la direzione è sinistra o destra
-            Ball.Bounce();
-        }
 
         #endregion
 

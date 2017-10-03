@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:GaltonMachineWPF"
         xmlns:view="clr-namespace:GaltonMachineWPF.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="480">
+        Title="MainWindow" Height="650" Width="454">
     <Grid>
         <view:GaltonMachineView/>
-        
-        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Left" Margin="309,541,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_close" Content="Close" HorizontalAlignment="Left" Margin="389,541,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_reset" Content="Reset" HorizontalAlignment="Left" Margin="90,541,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_about" Content="About" HorizontalAlignment="Left" Margin="10,541,0,0" VerticalAlignment="Top" Width="75"/>
+
+        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Left" Margin="285,540,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_close" Content="Close" HorizontalAlignment="Left" Margin="365,540,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_reset" Content="Reset" HorizontalAlignment="Left" Margin="90,540,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_about" Content="About" HorizontalAlignment="Left" Margin="10,540,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

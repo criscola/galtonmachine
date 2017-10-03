@@ -6,30 +6,29 @@
              xmlns:local="clr-namespace:GaltonMachineWPF.View"
              xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="318">
+             d:DesignHeight="650" d:DesignWidth="454">
+    
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
     <Grid Background="White">
-        <Canvas Name="canvas" Margin="0,0,0.4,0">
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10" Canvas.Left="86"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10" Canvas.Left="172"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="10" Canvas.Left="258"/>
-
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="96" Canvas.Left="44"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="96" Canvas.Left="130"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="96" Canvas.Left="215"/>
-
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="182" Canvas.Left="172"/>
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="182" Canvas.Left="86"/>
-
-            <Ellipse Fill="Green" Width="60" Height="60" Canvas.Bottom="268" Canvas.Left="130"/>
-
-            <Rectangle Fill="Orange" Canvas.Left="109" Canvas.Top="0" Width="100" Height="70"></Rectangle>
-
-            <Ellipse Fill="Red" Width="30" Height="30" Canvas.Left="{Binding Path=Ball.X}" Canvas.Top="{Binding Path=Ball.Y}" />
-
-        </Canvas>
+        <ItemsControl ItemsSource="{Binding SticksList}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="{Binding ActualWidth, ElementName=UC}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Width="{Binding Path=Radius}" Height="{Binding Path=Radius}" Fill="Red"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

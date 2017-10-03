@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Helpers\BindableBase.cs" />
     <Compile Include="Model\Ball.cs" />
+    <Compile Include="Model\QuincunxGrid.cs" />
     <Compile Include="ViewModel\GaltonMachineViewModel.cs" />
     <Compile Include="View\GaltonMachineView.xaml.cs">
       <DependentUpon>GaltonMachineView.xaml</DependentUpon>

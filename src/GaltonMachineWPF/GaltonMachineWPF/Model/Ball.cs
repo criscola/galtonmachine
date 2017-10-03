@@ -8,21 +8,11 @@ namespace GaltonMachineWPF.Model
 {
     public class Ball
     {
-        private int x;
+        public double X { get; set; }
 
-        public int X
-        {
-            get { return x; }
-            set { x = value; }
-        }
+        public double Y { get; set; }
 
-        private int y;
-
-        public int Y
-        {
-            get { return y; }
-            set { y = value; }
-        }
+        public double Radius { get; set; }
 
         /// <summary>
         /// Fa "rimbalzare" la pallina. Se ritorna false va sinistra, se ritorna true va a destra.

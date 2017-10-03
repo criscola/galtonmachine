@@ -1,7 +1,6 @@
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe.config
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.pdb
-D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csprojResolveAssemblyReference.cache
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\MainWindow.g.cs
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\App.g.cs
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF_MarkupCompile.cache
