@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GaltonMachineWPF"
         xmlns:view="clr-namespace:GaltonMachineWPF.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="454">
+        Title="MainWindow" Height="650" Width="600"
+        SizeToContent="Width">
     <Grid>
         <view:GaltonMachineView/>
 

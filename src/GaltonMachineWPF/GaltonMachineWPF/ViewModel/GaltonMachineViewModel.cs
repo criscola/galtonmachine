@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
 using GaltonMachineWPF.View;
+using System.Windows;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -38,7 +39,7 @@ namespace GaltonMachineWPF.ViewModel
 
             //BallX = CanvasWidth / 2;
             SticksList = new ObservableCollection<Ball>();
-            GeneraStecche();
+            GenerateSticks();
             
             // Inizializzazione dispatcher timer
             dispTimer = new DispatcherTimer();
@@ -63,7 +64,7 @@ namespace GaltonMachineWPF.ViewModel
             OnPropertyChanged(() => BallY);*/
         }
 
-        private void GeneraStecche()
+        private void GenerateSticks()
         {
             // Grandezza della base
             double n = model.Grid.GetSize();
@@ -77,10 +78,7 @@ namespace GaltonMachineWPF.ViewModel
             {
                 for (int j = 0; j < n - i; j++)
                 {
-                    Ball currentBall = new Ball();
-                    currentBall.Radius = STICKS_DIAMETER;
-                    currentBall.X = x;
-                    currentBall.Y = y;
+                    Ball currentBall = new Ball(x, y, STICKS_DIAMETER);
                     SticksList.Add(currentBall);
 
                     x += dx;

@@ -8,6 +8,18 @@ namespace GaltonMachineWPF.Model
 {
     public class Ball
     {
+        public Ball()
+        {
+
+        }
+
+        public Ball(double x, double y, double radius)
+        {
+            X = x;
+            Y = y;
+            Radius = radius;
+        }
+
         public double X { get; set; }
 
         public double Y { get; set; }

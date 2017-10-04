@@ -21,9 +21,14 @@ namespace GaltonMachineWPF.View
     /// </summary>
     public partial class GaltonMachineView : UserControl
     {
+        double parentWindowWidth;
+        double parentWindowHeight;
+
         public GaltonMachineView()
         {
             InitializeComponent();
+            parentWindowWidth = parentWindowWidth = Application.Current.MainWindow.ActualWidth;
+            parentWindowHeight = Application.Current.MainWindow.ActualWidth;
         }
     }
 }

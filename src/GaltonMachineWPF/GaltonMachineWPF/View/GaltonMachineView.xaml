@@ -5,21 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GaltonMachineWPF.View"
              xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
-             mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="454">
+             mc:Ignorable="d">
     
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
-    <Grid Background="White">
-        <ItemsControl ItemsSource="{Binding SticksList}">
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Path=SticksList}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Width="{Binding ActualWidth, ElementName=UC}"/>
+                    <Canvas />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
+                <Style>
                     <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
                     <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
                 </Style>
