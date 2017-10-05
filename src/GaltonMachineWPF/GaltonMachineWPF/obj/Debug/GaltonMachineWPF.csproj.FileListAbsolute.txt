@@ -14,3 +14,4 @@ D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineW
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csproj.GenerateResource.Cache
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.exe
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csprojResolveAssemblyReference.cache

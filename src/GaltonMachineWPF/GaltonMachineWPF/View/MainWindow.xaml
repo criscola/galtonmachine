@@ -6,14 +6,25 @@
         xmlns:local="clr-namespace:GaltonMachineWPF"
         xmlns:view="clr-namespace:GaltonMachineWPF.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="600"
-        SizeToContent="Width">
+        SizeToContent="Width"
+        Title="MainWindow" Height="650" Width="600">
     <Grid>
-        <view:GaltonMachineView/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        
+        <view:GaltonMachineView Margin="0, 0, 0, 100" Width="440" Height="400" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0"/>
 
-        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Left" Margin="285,540,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_close" Content="Close" HorizontalAlignment="Left" Margin="365,540,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_reset" Content="Reset" HorizontalAlignment="Left" Margin="90,540,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btn_about" Content="About" HorizontalAlignment="Left" Margin="10,540,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="0" Grid.Row="1" />
+        <Button x:Name="btn_close" Content="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="btn_reset" Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="2" Grid.Row="1"/>
+        <Button x:Name="btn_about" Content="About" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="3" Grid.Row="1"/>
     </Grid>
 </Window>

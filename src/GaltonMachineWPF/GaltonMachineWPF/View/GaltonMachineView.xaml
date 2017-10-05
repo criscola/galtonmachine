@@ -11,10 +11,15 @@
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <ItemsControl ItemsSource="{Binding Path=SticksList}">
+        <Canvas Panel.ZIndex="2">
+            <Ellipse Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX}"
+                     Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}"
+                     Fill="Black"/>
+        </Canvas>
+        <ItemsControl ItemsSource="{Binding Path=SticksList}" Panel.ZIndex="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas />
+                    <Canvas Background="#eaeaea"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
