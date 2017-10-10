@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-15" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-13" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
     <description/>
-    <view zooming-state="default:1" id="gantt-chart">
+    <view zooming-state="default:2" id="gantt-chart">
         <field id="tpd3" name="Name" width="303" order="0"/>
         <field id="tpd4" name="Begin date" width="60" order="1"/>
         <field id="tpd5" name="End date" width="76" order="2"/>
@@ -63,21 +63,17 @@
         </task>
         <task id="7" name="Implementazione" color="#8cb6ce" meeting="false" start="2017-09-13" duration="42" complete="0" expand="true">
             <task id="23" name="Struttura MVVM" color="#8cb6ce" meeting="false" start="2017-09-13" duration="10" complete="0" expand="true"/>
-            <task id="24" name="Simulazione macchina di Galton" color="#000000" meeting="false" start="2017-09-27" duration="8" complete="0" expand="true">
-                <task id="50" name="Generazione aste" color="#8cb6ce" meeting="false" start="2017-09-27" duration="2" complete="0" expand="true">
-                    <depend id="60" type="2" difference="0" hardness="Strong"/>
-                </task>
-                <task id="49" name="Generazione pallina in caduta" color="#8cb6ce" meeting="false" start="2017-09-28" duration="5" complete="0" expand="true">
-                    <depend id="60" type="2" difference="0" hardness="Strong"/>
-                </task>
+            <task id="24" name="Simulazione macchina di Galton" color="#000000" meeting="false" start="2017-09-27" duration="12" complete="0" expand="true">
+                <task id="50" name="Generazione aste" color="#8cb6ce" meeting="false" start="2017-09-27" duration="2" complete="0" expand="true"/>
                 <task id="100" name="Aggiustamenti grafici" color="#8cb6ce" meeting="false" start="2017-10-03" duration="2" complete="0" expand="true"/>
-                <task id="60" name="Debugging/test percorso" color="#8cb6ce" meeting="false" start="2017-10-05" duration="2" complete="0" expand="true"/>
+                <task id="49" name="Generazione pallina in caduta" color="#8cb6ce" meeting="false" start="2017-10-04" duration="5" complete="0" expand="true"/>
+                <task id="101" name="Converter griglia coordinate" color="#8cb6ce" meeting="false" start="2017-10-11" duration="2" complete="0" expand="true"/>
             </task>
-            <task id="44" name="Sistema posizionamento aste fori" meeting="false" start="2017-10-10" duration="10" complete="0" expand="true">
-                <task id="86" name="Aggiunta elementi a runtime" color="#8cb6ce" meeting="false" start="2017-10-10" duration="2" complete="0" expand="true">
+            <task id="44" name="Sistema posizionamento aste fori" meeting="false" start="2017-10-11" duration="10" complete="0" expand="true">
+                <task id="86" name="Aggiunta elementi a runtime" color="#8cb6ce" meeting="false" start="2017-10-11" duration="2" complete="0" expand="true">
                     <depend id="87" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="87" name="Interfaccia utente" color="#8cb6ce" meeting="false" start="2017-10-12" duration="8" complete="0" expand="true"/>
+                <task id="87" name="Interfaccia utente" color="#8cb6ce" meeting="false" start="2017-10-13" duration="8" complete="0" expand="true"/>
             </task>
             <task id="45" name="Sistema report" meeting="false" start="2017-10-31" duration="13" complete="0" expand="true">
                 <task id="91" name="Riassunto dati iniziali" color="#8cb6ce" meeting="false" start="2017-10-31" duration="1" complete="0" expand="true"/>
