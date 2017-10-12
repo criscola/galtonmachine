@@ -10,16 +10,29 @@
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
         <Canvas Panel.ZIndex="2">
             <Ellipse Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX}"
                      Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}"
-                     Fill="Black"/>
+                     Fill="Black" Grid.ColumnSpan="4" Grid.Row="0" Grid.Column="0" 
+            />
         </Canvas>
         <ItemsControl ItemsSource="{Binding Path=SticksList}" Panel.ZIndex="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="#eaeaea"/>
+                    <Canvas Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
@@ -34,5 +47,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="0" Grid.Row="1" Command="{Binding Path=StartSimulationCommand}"/>
+        <Button x:Name="btn_close" Content="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="btn_reset" Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="2" Grid.Row="1"/>
+        <Button x:Name="btn_about" Content="About" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="3" Grid.Row="1"/>
+
     </Grid>
 </UserControl>

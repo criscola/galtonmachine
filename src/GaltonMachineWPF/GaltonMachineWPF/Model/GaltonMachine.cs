@@ -10,39 +10,20 @@ namespace GaltonMachineWPF.Model
 {
     public class GaltonMachine
     {
-        #region =================== costanti ===================
-        
-
-        #endregion
-
-        #region =================== membri statici =============
-        #endregion
-
-        #region =================== membri e proprietà ===========
 
         public QuincunxGrid Grid { get; private set; }
-        public Ball Ball { get; set; }
-
-        #endregion
-
-        #region =================== costruttori ================
+        public Ball Ball { get; private set; }
+        public int BallRow { get; set; }
+        public int BallColumn { get; set; }
+        public HistogramSet Results { get; set; }
 
         public GaltonMachine(int width)
         {
             Ball = new Ball();
             Grid = new QuincunxGrid(width);
+            BallRow = 0;
+            BallColumn = 0;
         }
-
-        #endregion
-
-        #region =================== metodi privati ===============
-
-        #endregion
-
-        #region =================== metodi pubblici ============
-
-        #endregion
-
 
     }
 }
