@@ -25,5 +25,11 @@ namespace GaltonMachineWPF.Model
             BallColumn = 0;
         }
 
+        public void Reset()
+        {
+            Ball = new Ball();
+            BallRow = 0;
+            BallColumn = 0;
+        }
     }
 }
