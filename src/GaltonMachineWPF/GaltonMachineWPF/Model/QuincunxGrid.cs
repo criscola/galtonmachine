@@ -41,10 +41,6 @@ namespace GaltonMachineWPF.Model
                     count++;
                 }
             }
-            else
-            {
-                // Specified width must be >= 2
-            }
         }
 
         public Ball GetCell(int x, int y)

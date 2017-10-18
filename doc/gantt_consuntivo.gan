@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-10" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-24" view-index="0" gantt-divider-location="443" resource-divider-location="300" version="2.8.1" locale="en_US">
     <description/>
     <view zooming-state="default:5" id="gantt-chart">
         <field id="tpd3" name="Name" width="303" order="0"/>
@@ -69,7 +69,7 @@
                 <task id="49" name="Generazione pallina in caduta" color="#8cb6ce" meeting="false" start="2017-10-04" duration="5" complete="0" expand="true"/>
                 <task id="103" name="Modifica algoritmo generazione stecche" color="#8cb6ce" meeting="false" start="2017-10-11" duration="1" complete="0" expand="true"/>
                 <task id="101" name="Conversione griglia coordinate" color="#8cb6ce" meeting="false" start="2017-10-11" duration="1" complete="0" expand="true"/>
-                <task id="86" name="Bottoni GUI" color="#8cb6ce" meeting="false" start="2017-10-12" duration="4" complete="0" expand="true"/>
+                <task id="86" name="Bottoni GUI" color="#8cb6ce" meeting="false" start="2017-10-12" duration="5" complete="0" expand="true"/>
                 <task id="87" name="Istogrammi con curva normale" color="#8cb6ce" meeting="false" start="2017-10-18" duration="6" complete="0" expand="true"/>
             </task>
             <task id="45" name="Sistema report" meeting="false" start="2017-10-31" duration="13" complete="0" expand="true">

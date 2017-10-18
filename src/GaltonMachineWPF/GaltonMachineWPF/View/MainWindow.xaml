@@ -8,7 +8,7 @@
         xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
         mc:Ignorable="d"
         SizeToContent="Width"
-        Title="MainWindow" Height="650" Width="600">
+        Title="MainWindow" Height="710" Width="460" MinHeight="710" MinWidth="460">
 
     <Grid>
         <view:GaltonMachineView />

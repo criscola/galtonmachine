@@ -23,25 +23,72 @@ namespace GaltonMachineWPF.ViewModel
 
         public const int STICKS_DIAMETER = 20;
         public const int BALL_DIAMETER = 15;
-        public const int ANIMATION_SPEED = 500;
-        public const int SIMULATION_SIZE = 8;
+
         public const int CANVAS_WIDTH = 440;
         public const int CANVAS_HEIGHT = 400;
-        public const int SIMULATION_LENGTH = 10;
+
+        public int DEFAULT_SIMULATION_SIZE { get { return 5; } }
+        public int DEFAULT_SIMULATION_LENGTH { get { return 10; } }
+        public int DEFAULT_SIMULATION_SPEED { get { return 500; } }
+        public int MIN_SIMULATION_SIZE { get { return 3; } }
+        public int MIN_SIMULATION_LENGTH { get { return 1; } }
+        public int MIN_SIMULATION_SPEED { get { return 20; } }
+        public int MAX_SIMULATION_SIZE { get { return 15; } }
+        public int MAX_SIMULATION_LENGTH { get { return 100; } }
+        public int MAX_SIMULATION_SPEED { get { return 2000; } }
         #endregion
 
         #region ================== Attributi & proprietà =================
 
         private GaltonMachine model;
-        private bool simulationRunning;
+        private volatile bool simulationRunning;
+        private int simulationSpeed;
+        private int simulationSize;
+        private int simulationLength;
+
         private Thread ballAnimationThread;
 
         public int CanvasWidth { get; private set; }
         public int CanvasHeight { get; private set; }
+        public int SimulationSpeed
+        {
+            get
+            {
+                return simulationSpeed;
+            }
+            set
+            {
+                simulationSpeed = value;
+                OnPropertyChanged(() => SimulationSpeed);
+            }
+        }
+        public int SimulationSize
+        {
+            get
+            {
+                return simulationSize;
+            }
+            set
+            {
+                simulationSize = value;
+                OnPropertyChanged(() => SimulationSize);
+            }
+        }
+        public int SimulationLength
+        {
+            get
+            {
+                return simulationLength;
+            }
+            set
+            {
+                simulationLength = value;
+                OnPropertyChanged(() => SimulationLength);
+            }
+        }
 
         public ObservableCollection<Ball> SticksList { get; private set; }
         public double BallDiameter { get; private set; }
-
         public double BallX
         {
             get
@@ -66,7 +113,6 @@ namespace GaltonMachineWPF.ViewModel
                 OnPropertyChanged(() => BallY);
             }
         }
-
         public bool SimulationRunning
         {
             get
@@ -84,6 +130,7 @@ namespace GaltonMachineWPF.ViewModel
         #region ================== Delegati=================
 
         public IDelegateCommand StartSimulationCommand { get; protected set; }
+        public IDelegateCommand StopSimulationCommand { get; protected set; }
         public IDelegateCommand ResetSimulationCommand { get; protected set; }
         public IDelegateCommand CloseApplicationCommand { get; protected set; }
         public IDelegateCommand AboutApplicationCommand { get; protected set; }
@@ -94,10 +141,15 @@ namespace GaltonMachineWPF.ViewModel
 
         public GaltonMachineViewModel()
         {
+            // Inizializzazione valori di default
             CanvasWidth = CANVAS_WIDTH;
             CanvasHeight = CANVAS_HEIGHT;
-            // Inizializzazione variabili/model
-            model = new GaltonMachine(SIMULATION_SIZE);
+            SimulationSize = DEFAULT_SIMULATION_SIZE;
+            SimulationSpeed = DEFAULT_SIMULATION_SPEED;
+            SimulationLength = DEFAULT_SIMULATION_LENGTH;
+
+            // Inizializzazione model/proprietà vm
+            model = new GaltonMachine(SimulationSize);
 
             SticksList = new ObservableCollection<Ball>();
             GenerateSticks();
@@ -107,7 +159,7 @@ namespace GaltonMachineWPF.ViewModel
 
             PlaceBallOnTopStick();
             // Generazione del dataset dei risultati
-            model.Results = new HistogramSet(SIMULATION_SIZE);
+            model.Results = new HistogramSet(DEFAULT_SIMULATION_LENGTH);
 
             RegisterCommands();
         }
@@ -122,14 +174,27 @@ namespace GaltonMachineWPF.ViewModel
 
         private void AnimateFallingBall()
         {
-            for (int i = 0; i < SIMULATION_LENGTH; i++) {
+            
+            for (int i = 0; i < SimulationLength; i++) {
                 // Piazza la pallina sulla prima stecca
                 PlaceBallOnTopStick();
 
                 for (int j = 0; j < model.Grid.GetSize() - 1; j++)
                 {
-                    Thread.Sleep(ANIMATION_SPEED);
-
+                    // Serve per far chiudere correttamente e istantaneamente il thread
+                    // ev. fare in modo diverso per non fargli fare 1 ciclo/ms
+                    for (int k = 0; k < SimulationSpeed; k++)
+                    {
+                        if (SimulationRunning)
+                        {
+                            Thread.Sleep(1);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    
                     model.BallRow++;
 
                     // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
@@ -141,7 +206,7 @@ namespace GaltonMachineWPF.ViewModel
                     // Riceve la stecca su cui posizionare la pallina
                     PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
                 }
-                Thread.Sleep(ANIMATION_SPEED);
+                Thread.Sleep(SimulationSpeed);
             }
         }
         private void GenerateSticks()
@@ -198,12 +263,6 @@ namespace GaltonMachineWPF.ViewModel
 
         }
 
-        private void PlaceBallOnStick(Ball stick)
-        {
-            BallX = stick.X + stick.Radius / 2 - BallDiameter / 2;
-            BallY = stick.Y - BallDiameter - 0.5;
-        }
-
         private void StartSimulation()
         {
             // Istanza thread pallina che cade animata
@@ -212,12 +271,19 @@ namespace GaltonMachineWPF.ViewModel
             PlaceBallOnTopStick();
         }
 
+        private void PlaceBallOnStick(Ball stick)
+        {
+            BallX = stick.X + stick.Radius / 2 - BallDiameter / 2;
+            BallY = stick.Y - BallDiameter - 0.5;
+        }
+
         private void PlaceBallOnTopStick()
         {
             model.BallRow = 0;
             model.BallColumn = 0;
             PlaceBallOnStick(model.Grid.GetCell(0, 0));
         }
+
         #endregion
 
         #region ================== Metodi dei delegati =================
@@ -225,16 +291,19 @@ namespace GaltonMachineWPF.ViewModel
         private void RegisterCommands()
         {
             StartSimulationCommand = new DelegateCommand(OnStart, CanStart);
-            ResetSimulationCommand = new DelegateCommand(OnReset, CanReset);
+            StopSimulationCommand = new DelegateCommand(OnStop, CanStop);
+            ResetSimulationCommand = new DelegateCommand(OnReset);
             CloseApplicationCommand = new DelegateCommand(OnClose);
             AboutApplicationCommand = new DelegateCommand(OnAbout);
         }
+
 
         private void OnStart(object obj)
         {
             SimulationRunning = true;
             StartSimulationCommand.RaiseCanExecuteChanged();
-            // Segnala che può resettare la simulazione
+            // Segnala che può stoppare e resettare la simulazione
+            StopSimulationCommand.RaiseCanExecuteChanged();
             ResetSimulationCommand.RaiseCanExecuteChanged();
             StartSimulation();
         }
@@ -244,17 +313,25 @@ namespace GaltonMachineWPF.ViewModel
             return !SimulationRunning;
         }
 
-        private void OnReset(object obj)
+        private void OnStop(object obj)
         {
             SimulationRunning = false;
-            ResetSimulationCommand.RaiseCanExecuteChanged();
+            StopSimulationCommand.RaiseCanExecuteChanged();
             // Segnala che può startare la simulazione
             StartSimulationCommand.RaiseCanExecuteChanged();
 
-            ballAnimationThread.Abort();
+            ballAnimationThread?.Abort();
             model.Reset();
             PlaceBallOnTopStick();
 
+        }
+
+        private void OnReset(object obj)
+        {
+            OnStop(obj);
+            SimulationLength = DEFAULT_SIMULATION_LENGTH;
+            SimulationSize = DEFAULT_SIMULATION_SIZE;
+            SimulationSpeed = DEFAULT_SIMULATION_SPEED;
         }
 
         private void OnAbout(object obj)
@@ -262,13 +339,15 @@ namespace GaltonMachineWPF.ViewModel
             MessageBox.Show("Creato da Cristiano Colangelo I4AC", "About", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private bool CanReset(object obj)
+        private bool CanStop(object obj)
         {
             return SimulationRunning;
         }
 
         private void OnClose(object obj)
         {
+            SimulationRunning = false;
+            ballAnimationThread?.Join();
             Application.Current.Shutdown();
         }
 
