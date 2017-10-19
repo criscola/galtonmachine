@@ -41,7 +41,7 @@ namespace GaltonMachineWPF.ViewModel
         #region ================== Attributi & proprietà =================
 
         private GaltonMachine model;
-        private volatile bool simulationRunning;
+        private volatile bool isSimulationRunning;
         private int simulationSpeed;
         private int simulationSize;
         private int simulationLength;
@@ -86,7 +86,6 @@ namespace GaltonMachineWPF.ViewModel
                 OnPropertyChanged(() => SimulationLength);
             }
         }
-
         public ObservableCollection<Ball> SticksList { get; private set; }
         public double BallDiameter { get; private set; }
         public double BallX
@@ -113,18 +112,21 @@ namespace GaltonMachineWPF.ViewModel
                 OnPropertyChanged(() => BallY);
             }
         }
-        public bool SimulationRunning
+        public bool IsSimulationRunning
         {
             get
             {
-                return simulationRunning;
+                return isSimulationRunning;
             }
             set
             {
-                simulationRunning = value;
-                OnPropertyChanged(() => SimulationRunning);
+                isSimulationRunning = value;
+                OnPropertyChanged(() => IsSimulationRunning);
+                OnPropertyChanged(() => IsSimulationNotRunning);
             }
         }
+        public bool IsSimulationNotRunning { get { return !isSimulationRunning; } }
+        public bool SliderSimulationLengthIsEnabled { get; set; }
         #endregion
 
         #region ================== Delegati=================
@@ -147,7 +149,7 @@ namespace GaltonMachineWPF.ViewModel
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
-
+            SliderSimulationLengthIsEnabled = true;
             // Inizializzazione model/proprietà vm
             model = new GaltonMachine(SimulationSize);
 
@@ -174,39 +176,33 @@ namespace GaltonMachineWPF.ViewModel
 
         private void AnimateFallingBall()
         {
-            
-            for (int i = 0; i < SimulationLength; i++) {
-                // Piazza la pallina sulla prima stecca
-                PlaceBallOnTopStick();
-
-                for (int j = 0; j < model.Grid.GetSize() - 1; j++)
+            try
+            {
+                for (int i = 0; i < SimulationLength; i++)
                 {
-                    // Serve per far chiudere correttamente e istantaneamente il thread
-                    // ev. fare in modo diverso per non fargli fare 1 ciclo/ms
-                    for (int k = 0; k < SimulationSpeed; k++)
-                    {
-                        if (SimulationRunning)
-                        {
-                            Thread.Sleep(1);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    
-                    model.BallRow++;
+                    // Piazza la pallina sulla prima stecca
+                    PlaceBallOnTopStick();
 
-                    // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
-                    if (model.Ball.Bounce() && model.BallColumn < model.Grid.GetRowSize(j))
+                    for (int j = 0; j < model.Grid.GetSize() - 1; j++)
                     {
-                        model.BallColumn++;
-                    }
+                        Thread.Sleep(SimulationSpeed);
+                        model.BallRow++;
 
-                    // Riceve la stecca su cui posizionare la pallina
-                    PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
+                        // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
+                        if (model.Ball.Bounce() && model.BallColumn < model.Grid.GetRowSize(j))
+                        {
+                            model.BallColumn++;
+                        }
+
+                        // Riceve la stecca su cui posizionare la pallina
+                        PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
+                    }
+                    Thread.Sleep(SimulationSpeed);
                 }
-                Thread.Sleep(SimulationSpeed);
+            }
+            catch (ThreadInterruptedException)
+            {
+                return;
             }
         }
         private void GenerateSticks()
@@ -300,7 +296,7 @@ namespace GaltonMachineWPF.ViewModel
 
         private void OnStart(object obj)
         {
-            SimulationRunning = true;
+            IsSimulationRunning = true;
             StartSimulationCommand.RaiseCanExecuteChanged();
             // Segnala che può stoppare e resettare la simulazione
             StopSimulationCommand.RaiseCanExecuteChanged();
@@ -310,20 +306,19 @@ namespace GaltonMachineWPF.ViewModel
 
         private bool CanStart(object obj)
         {
-            return !SimulationRunning;
+            return !IsSimulationRunning;
         }
 
         private void OnStop(object obj)
         {
-            SimulationRunning = false;
+            IsSimulationRunning = false;
             StopSimulationCommand.RaiseCanExecuteChanged();
             // Segnala che può startare la simulazione
             StartSimulationCommand.RaiseCanExecuteChanged();
 
-            ballAnimationThread?.Abort();
+            ballAnimationThread?.Interrupt();
             model.Reset();
             PlaceBallOnTopStick();
-
         }
 
         private void OnReset(object obj)
@@ -341,12 +336,13 @@ namespace GaltonMachineWPF.ViewModel
 
         private bool CanStop(object obj)
         {
-            return SimulationRunning;
+            return IsSimulationRunning;
         }
 
         private void OnClose(object obj)
         {
-            SimulationRunning = false;
+            IsSimulationRunning = false;
+            ballAnimationThread?.Interrupt();
             ballAnimationThread?.Join();
             Application.Current.Shutdown();
         }
