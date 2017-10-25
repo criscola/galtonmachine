@@ -15,7 +15,8 @@ namespace GaltonMachineWPF.Model
         public Ball Ball { get; private set; }
         public int BallRow { get; set; }
         public int BallColumn { get; set; }
-        public HistogramSet Results { get; set; }
+        public HistogramChart HistogramChart { get; set; }
+        public int[] ResultSet { get; set; }
 
         public GaltonMachine(int width)
         {
@@ -23,6 +24,7 @@ namespace GaltonMachineWPF.Model
             Grid = new QuincunxGrid(width);
             BallRow = 0;
             BallColumn = 0;
+            HistogramChart = new HistogramChart();
         }
 
         public void Reset()
@@ -30,6 +32,7 @@ namespace GaltonMachineWPF.Model
             Ball = new Ball();
             BallRow = 0;
             BallColumn = 0;
+            HistogramChart = new HistogramChart();
         }
     }
 }

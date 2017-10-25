@@ -74,7 +74,9 @@
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\IDelegateCommand.cs" />
     <Compile Include="Model\Ball.cs" />
-    <Compile Include="Model\HistogramSet.cs" />
+    <Compile Include="Model\Histogram.cs" />
+    <Compile Include="Model\HistogramChart.cs" />
+    <Compile Include="Model\NormalCurve.cs" />
     <Compile Include="Model\QuincunxGrid.cs" />
     <Compile Include="ViewModel\GaltonMachineViewModel.cs" />
     <Compile Include="View\GaltonMachineView.xaml.cs">

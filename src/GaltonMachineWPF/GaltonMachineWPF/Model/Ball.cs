@@ -20,6 +20,7 @@ namespace GaltonMachineWPF.Model
 
         public Ball(double radius) : this (0, 0, radius)
         {
+
         }
 
         public Ball(double x, double y, double radius)

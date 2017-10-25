@@ -10,37 +10,28 @@ namespace GaltonMachineWPF.Model
     {
 
         private Ball[][] grid;
+
         private int size;
 
-        public int GetSize()
+        public int Size
         {
-            return size;
+            get { return size; }
+            set
+            {
+                size = value;
+                GenerateGrid();
+            }
+        }
+
+        public QuincunxGrid(int size)
+        {
+            this.size = size;
+            GenerateGrid();
         }
 
         public int GetRowSize(int rowNumber)
         {
             return grid[rowNumber].Length;
-        }
-
-        public QuincunxGrid(int size)
-        {
-            if (size > 2)
-            {
-                int count = 1;
-                this.size = size;
-                // Crea un int con colonne
-                grid = new Ball[size][];
-                for (int i = 0; i < size; i++)
-                {
-                    grid[i] = new Ball[count];
-                    // Popola l'array con int di valore 0
-                    for (int j = 0; j < grid[i].Length - 1; j++)
-                    {
-                        grid[i][j] = null;
-                    }
-                    count++;
-                }
-            }
         }
 
         public Ball GetCell(int x, int y)
@@ -51,6 +42,26 @@ namespace GaltonMachineWPF.Model
         public void SetCell(int x, int y, Ball value)
         {
             grid[x][y] = value;
+        }
+
+        private void GenerateGrid()
+        {
+            if (size > 2)
+            {
+                int count = 1;
+                
+                grid = new Ball[size][];
+                for (int i = 0; i < size; i++)
+                {
+                    grid[i] = new Ball[count];
+                    // Popola l'array con valori null
+                    for (int j = 0; j < grid[i].Length - 1; j++)
+                    {
+                        grid[i][j] = null;
+                    }
+                    count++;
+                }
+            }
         }
 
         /*

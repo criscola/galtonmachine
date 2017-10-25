@@ -23,17 +23,19 @@ namespace GaltonMachineWPF.ViewModel
 
         public const int STICKS_DIAMETER = 20;
         public const int BALL_DIAMETER = 15;
+        public const int HISTOGRAM_WIDTH = 20;
 
         public const int CANVAS_WIDTH = 440;
         public const int CANVAS_HEIGHT = 400;
 
-        public int DEFAULT_SIMULATION_SIZE { get { return 5; } }
+        public int DEFAULT_SIMULATION_SIZE { get { return 8; } }
         public int DEFAULT_SIMULATION_LENGTH { get { return 10; } }
         public int DEFAULT_SIMULATION_SPEED { get { return 500; } }
+        public int DEFAULT_HISTOGRAM_STEP { get { return 50; } }
         public int MIN_SIMULATION_SIZE { get { return 3; } }
         public int MIN_SIMULATION_LENGTH { get { return 1; } }
         public int MIN_SIMULATION_SPEED { get { return 20; } }
-        public int MAX_SIMULATION_SIZE { get { return 15; } }
+        public int MAX_SIMULATION_SIZE { get { return 12; } }
         public int MAX_SIMULATION_LENGTH { get { return 100; } }
         public int MAX_SIMULATION_SPEED { get { return 2000; } }
         #endregion
@@ -45,6 +47,7 @@ namespace GaltonMachineWPF.ViewModel
         private int simulationSpeed;
         private int simulationSize;
         private int simulationLength;
+        private int iterationCount;
 
         private Thread ballAnimationThread;
 
@@ -72,6 +75,12 @@ namespace GaltonMachineWPF.ViewModel
             {
                 simulationSize = value;
                 OnPropertyChanged(() => SimulationSize);
+                if (model != null)
+                {
+                    model.Grid.Size = value;
+                }
+                GenerateSticks();
+                GenerateHistograms();
             }
         }
         public int SimulationLength
@@ -86,7 +95,27 @@ namespace GaltonMachineWPF.ViewModel
                 OnPropertyChanged(() => SimulationLength);
             }
         }
+        public int IterationCount { get; set; }
+        public int CurrentIteration
+        {
+            get
+            {
+                return iterationCount;
+            }
+            private set
+            {
+                iterationCount = value;
+                OnPropertyChanged(() => CurrentIteration);
+            }
+        }
         public ObservableCollection<Ball> SticksList { get; private set; }
+        public ObservableCollection<Histogram> HistogramsList
+        {
+            get
+            {
+                return model?.HistogramChart?.HistogramsList;
+            }
+        }
         public double BallDiameter { get; private set; }
         public double BallX
         {
@@ -126,7 +155,7 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
         public bool IsSimulationNotRunning { get { return !isSimulationRunning; } }
-        public bool SliderSimulationLengthIsEnabled { get; set; }
+        //public bool IsSliderSimulationLengthEnabled { get; set; }
         #endregion
 
         #region ================== Delegati=================
@@ -149,19 +178,18 @@ namespace GaltonMachineWPF.ViewModel
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
-            SliderSimulationLengthIsEnabled = true;
+            //IsSliderSimulationLengthEnabled = true;
             // Inizializzazione model/proprietà vm
             model = new GaltonMachine(SimulationSize);
 
             SticksList = new ObservableCollection<Ball>();
             GenerateSticks();
+            GenerateHistograms();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
             BallDiameter = BALL_DIAMETER;
 
             PlaceBallOnTopStick();
-            // Generazione del dataset dei risultati
-            model.Results = new HistogramSet(DEFAULT_SIMULATION_LENGTH);
 
             RegisterCommands();
         }
@@ -183,8 +211,10 @@ namespace GaltonMachineWPF.ViewModel
                     // Piazza la pallina sulla prima stecca
                     PlaceBallOnTopStick();
 
-                    for (int j = 0; j < model.Grid.GetSize() - 1; j++)
+                    for (int j = 0; j < model.Grid.Size - 1; j++)
                     {
+                        IterationCount++;
+
                         Thread.Sleep(SimulationSpeed);
                         model.BallRow++;
 
@@ -197,6 +227,12 @@ namespace GaltonMachineWPF.ViewModel
                         // Riceve la stecca su cui posizionare la pallina
                         PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
                     }
+                    // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
+                    Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
+                    currentHistogram.Value++;
+                    currentHistogram.Y -= DEFAULT_HISTOGRAM_STEP;
+                    currentHistogram.Height += DEFAULT_HISTOGRAM_STEP;
+                    Console.WriteLine("Value {0} X {1} Y {2} W {3} H {4}", currentHistogram.Value, currentHistogram.X, currentHistogram.Y, currentHistogram.Width, currentHistogram.Height);
                     Thread.Sleep(SimulationSpeed);
                 }
             }
@@ -207,56 +243,94 @@ namespace GaltonMachineWPF.ViewModel
         }
         private void GenerateSticks()
         {
-            // Offset orizzontale e verticale
-            double hoffset = 50;
-            double voffset = 50;
-
-            // Larghezza e altezza canvas 
-            double cw = CanvasWidth - hoffset;
-            double ch = CanvasHeight - voffset;
-
-            // Grandezza della base
-            double n = model.Grid.GetSize();
-
-            // Distanza fra le stecche
-            double dx = (cw - STICKS_DIAMETER) / (n - 1) / 2;
-            double dy = (ch - STICKS_DIAMETER) / (n - 1);
-
-            // Coordinate x y delle stecche iniziali
-            double x = CanvasWidth / 2 - STICKS_DIAMETER;
-            double y = 0;
-
-            for (int i = 0; i < n; i++)
+            if (SticksList != null)
             {
-                for (int j = 0; j < i + 1; j++)
+                SticksList.Clear();
+
+                // Offset orizzontale e verticale
+                double hoffset = 50;
+                double voffset = 50;
+
+                // Larghezza e altezza canvas 
+                double cw = CanvasWidth - hoffset;
+                double ch = CanvasHeight - voffset;
+
+                // Grandezza della base
+                double n = model.Grid.Size;
+
+                // Distanza fra le stecche
+                double dx = (cw - STICKS_DIAMETER) / (n - 1) / 2;
+                double dy = (ch - STICKS_DIAMETER) / (n - 1);
+
+                // Coordinate x y delle stecche iniziali
+                double x = CanvasWidth / 2 - STICKS_DIAMETER;
+                double y = 0;
+
+                for (int i = 0; i < n; i++)
                 {
-                    // Se è la prima stecca   
-                    if (j == 0)
+                    for (int j = 0; j < i + 1; j++)
                     {
-                        x = dx * (n - i - 1);
-                    }
-                    else
-                    {
-                        x += dx * 2;
-                    }
+                        // Se è la prima stecca   
+                        if (j == 0)
+                        {
+                            x = dx * (n - i - 1);
+                        }
+                        else
+                        {
+                            x += dx * 2;
+                        }
 
-                    SticksList.Add(new Ball(x + (hoffset / 2), y + (voffset / 2), STICKS_DIAMETER));
-                    
+                        SticksList.Add(new Ball(x + (hoffset / 2), y + (voffset / 2), STICKS_DIAMETER));
+                    }
+                    y += dy;
                 }
-                y += dy;
-            }
 
-            // Inserisce gli elementi di SticksList nel model.Grid
-            int index = 0;
-            for (int i = 0; i < model.Grid.GetSize(); i++)
+                // Inserisce gli elementi di SticksList nel model.Grid
+                int index = 0;
+                for (int i = 0; i < model.Grid.Size; i++)
+                {
+                    for (int j = 0; j < model.Grid.GetRowSize(i); j++)
+                    {
+                        model.Grid.SetCell(i, j, SticksList.ElementAt(index));
+                        index++;
+                    }
+                }
+            }
+        }
+
+        private void GenerateHistograms()
+        {
+            if (HistogramsList != null)
             {
-                for (int j = 0; j < model.Grid.GetRowSize(i); j++)
+                HistogramsList.Clear();
+
+                // Offset orizzontale e verticale
+                double hoffset = 50;
+
+                // Larghezza e altezza canvas 
+                double cw = CanvasWidth;
+                double ch = CanvasHeight;
+
+                // Conteggio degli istogrammi
+                double n = SimulationSize;
+
+                // Distanza fra gli istogrammi
+                double dx = ((cw - hoffset * 2) - (HISTOGRAM_WIDTH * n)) / (n - 1);
+
+                // Coordinate x y delle stecche iniziali
+                double x = hoffset;
+                // Valore solo per test iniziale!
+                double y = ch;
+
+                HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
+
+                // Crea i nuovi istogrammi
+                for (int i = 0; i < n - 1; i++)
                 {
-                    model.Grid.SetCell(i, j, SticksList.ElementAt(index));
-                    index++;
+                    x += dx + HISTOGRAM_WIDTH;
+                    HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
                 }
             }
-
         }
 
         private void StartSimulation()
@@ -312,6 +386,7 @@ namespace GaltonMachineWPF.ViewModel
         private void OnStop(object obj)
         {
             IsSimulationRunning = false;
+            IterationCount = 0;
             StopSimulationCommand.RaiseCanExecuteChanged();
             // Segnala che può startare la simulazione
             StartSimulationCommand.RaiseCanExecuteChanged();

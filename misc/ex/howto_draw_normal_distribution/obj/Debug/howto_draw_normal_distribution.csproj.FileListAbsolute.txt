@@ -1,0 +1,8 @@
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\bin\Debug\howto_draw_normal_distribution.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\bin\Debug\howto_draw_normal_distribution.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.csprojResolveAssemblyReference.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.Form1.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.Properties.Resources.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.csproj.GenerateResource.Cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\howto_draw_normal_distribution\obj\Debug\howto_draw_normal_distribution.pdb
