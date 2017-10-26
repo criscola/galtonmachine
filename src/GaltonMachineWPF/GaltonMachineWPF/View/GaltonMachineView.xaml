@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="6*"/>
+            <RowDefinition Height="{Binding Path=CanvasHeight}"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
             <!-- Pallina che cade -->
@@ -51,7 +51,7 @@
         <ItemsControl ItemsSource="{Binding Path=HistogramsList}" Panel.ZIndex="1" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Focusable="False" Width="440" Height="400"/>
+                    <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
@@ -89,7 +89,7 @@
                 <Run Text="Simulazione n° " />
                 <Run Text="{Binding Path=CurrentIteration, Mode=OneWay}" />
                 <Run Text=" di " />
-                <Run Text="{Binding Path=IterationCount, Mode=OneWay}" />
+                <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
                 </TextBlock>
 
                 <!-- Riga 1 -->

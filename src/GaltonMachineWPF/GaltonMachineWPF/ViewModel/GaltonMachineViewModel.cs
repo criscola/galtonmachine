@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using GaltonMachineWPF.View;
 using System.Windows;
 using System.Threading;
+using System.Collections.Specialized;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -29,7 +30,7 @@ namespace GaltonMachineWPF.ViewModel
         public const int CANVAS_HEIGHT = 400;
 
         public int DEFAULT_SIMULATION_SIZE { get { return 8; } }
-        public int DEFAULT_SIMULATION_LENGTH { get { return 10; } }
+        public int DEFAULT_SIMULATION_LENGTH { get { return 50; } }
         public int DEFAULT_SIMULATION_SPEED { get { return 500; } }
         public int DEFAULT_HISTOGRAM_STEP { get { return 50; } }
         public int MIN_SIMULATION_SIZE { get { return 3; } }
@@ -49,7 +50,7 @@ namespace GaltonMachineWPF.ViewModel
         private int simulationLength;
         private int iterationCount;
 
-        private Thread ballAnimationThread;
+        private Thread animationThread;
 
         public int CanvasWidth { get; private set; }
         public int CanvasHeight { get; private set; }
@@ -80,7 +81,7 @@ namespace GaltonMachineWPF.ViewModel
                     model.Grid.Size = value;
                 }
                 GenerateSticks();
-                GenerateHistograms();
+                GenerateChart();
             }
         }
         public int SimulationLength
@@ -178,13 +179,13 @@ namespace GaltonMachineWPF.ViewModel
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
+
             //IsSliderSimulationLengthEnabled = true;
             // Inizializzazione model/proprietà vm
             model = new GaltonMachine(SimulationSize);
 
             SticksList = new ObservableCollection<Ball>();
             GenerateSticks();
-            GenerateHistograms();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
             BallDiameter = BALL_DIAMETER;
@@ -206,7 +207,7 @@ namespace GaltonMachineWPF.ViewModel
         {
             try
             {
-                for (int i = 0; i < SimulationLength; i++)
+                for (int i = 0; i < SimulationLength - 1; i++)
                 {
                     // Piazza la pallina sulla prima stecca
                     PlaceBallOnTopStick();
@@ -232,9 +233,23 @@ namespace GaltonMachineWPF.ViewModel
                     currentHistogram.Value++;
                     currentHistogram.Y -= DEFAULT_HISTOGRAM_STEP;
                     currentHistogram.Height += DEFAULT_HISTOGRAM_STEP;
-                    Console.WriteLine("Value {0} X {1} Y {2} W {3} H {4}", currentHistogram.Value, currentHistogram.X, currentHistogram.Y, currentHistogram.Width, currentHistogram.Height);
+
+                    CurrentIteration++;
+
                     Thread.Sleep(SimulationSpeed);
                 }
+                // Resetta la simulazione quando la pallina completa la simulazione
+                IsSimulationRunning = false;
+
+                // Essendo un altro thread che processa la chiamata, è necessario
+                // usare il Dispatcher per "passare" l'invocazione al thread della UI,
+                // altrimenti Execute lancerebbe una InvalidOperationException
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    StopSimulationCommand.RaiseCanExecuteChanged();
+                    StartSimulationCommand.RaiseCanExecuteChanged();
+                });
             }
             catch (ThreadInterruptedException)
             {
@@ -298,7 +313,7 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
 
-        private void GenerateHistograms()
+        private void GenerateChart()
         {
             if (HistogramsList != null)
             {
@@ -317,10 +332,10 @@ namespace GaltonMachineWPF.ViewModel
                 // Distanza fra gli istogrammi
                 double dx = ((cw - hoffset * 2) - (HISTOGRAM_WIDTH * n)) / (n - 1);
 
-                // Coordinate x y delle stecche iniziali
+                // Coordinate x y degli istogrammi iniziali
                 double x = hoffset;
-                // Valore solo per test iniziale!
-                double y = ch;
+                // Garantisce che il grafico sia allineato alla base delle stecche
+                double y = SticksList.Last().Y + STICKS_DIAMETER;
 
                 HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
 
@@ -335,10 +350,34 @@ namespace GaltonMachineWPF.ViewModel
 
         private void StartSimulation()
         {
+            IsSimulationRunning = true;
+
+            model.Reset();
+            // Generazione del grafico
+            GenerateChart();
+
             // Istanza thread pallina che cade animata
-            ballAnimationThread = new Thread(new ThreadStart(AnimateFallingBall));
-            ballAnimationThread.Start();
+            animationThread = new Thread(new ThreadStart(AnimateFallingBall));
+            // Necessario per far chiudere la thread quando si chiude l'applicazione
+            animationThread.IsBackground = true;
+            animationThread.Start();
+
             PlaceBallOnTopStick();
+            CurrentIteration = 1;
+
+            StartSimulationCommand.RaiseCanExecuteChanged();
+            StopSimulationCommand.RaiseCanExecuteChanged();
+        }
+
+        private void StopSimulation()
+        {
+            IsSimulationRunning = false;
+            CurrentIteration = 0;
+
+            StopSimulationCommand.RaiseCanExecuteChanged();
+            StartSimulationCommand.RaiseCanExecuteChanged();
+
+            animationThread?.Interrupt();
         }
 
         private void PlaceBallOnStick(Ball stick)
@@ -370,11 +409,6 @@ namespace GaltonMachineWPF.ViewModel
 
         private void OnStart(object obj)
         {
-            IsSimulationRunning = true;
-            StartSimulationCommand.RaiseCanExecuteChanged();
-            // Segnala che può stoppare e resettare la simulazione
-            StopSimulationCommand.RaiseCanExecuteChanged();
-            ResetSimulationCommand.RaiseCanExecuteChanged();
             StartSimulation();
         }
 
@@ -385,14 +419,7 @@ namespace GaltonMachineWPF.ViewModel
 
         private void OnStop(object obj)
         {
-            IsSimulationRunning = false;
-            IterationCount = 0;
-            StopSimulationCommand.RaiseCanExecuteChanged();
-            // Segnala che può startare la simulazione
-            StartSimulationCommand.RaiseCanExecuteChanged();
-
-            ballAnimationThread?.Interrupt();
-            model.Reset();
+            StopSimulation();
             PlaceBallOnTopStick();
         }
 
@@ -417,8 +444,8 @@ namespace GaltonMachineWPF.ViewModel
         private void OnClose(object obj)
         {
             IsSimulationRunning = false;
-            ballAnimationThread?.Interrupt();
-            ballAnimationThread?.Join();
+            animationThread?.Interrupt();
+            animationThread?.Join();
             Application.Current.Shutdown();
         }
 

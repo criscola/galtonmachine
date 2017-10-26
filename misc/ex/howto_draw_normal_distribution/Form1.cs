@@ -58,7 +58,7 @@ namespace howto_draw_normal_distribution
                 using (Pen pen = new Pen(Color.Red, 0))
                 {
                     using (Font font = new Font("Arial", 8))
-                    {/*
+                    {
                         // Draw the X axis.
                         gr.Transform = transform;
                         pen.Color = Color.Black;
@@ -123,7 +123,7 @@ namespace howto_draw_normal_distribution
                                 gr.DrawString(y.ToString("0.00"), font, Brushes.Black,
                                     ints_array[index++], sf);
                             }
-                        }*/
+                        }
 
                         // Draw the curve.
                         gr.Transform = transform;

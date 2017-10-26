@@ -12,7 +12,7 @@ namespace GaltonMachineWPF.Model
     {
         public ObservableCollection<Histogram> HistogramsList { get; set; }
 
-        private NormalCurve curve;
+        private BellCurve curve;
 
         public HistogramChart()
         {

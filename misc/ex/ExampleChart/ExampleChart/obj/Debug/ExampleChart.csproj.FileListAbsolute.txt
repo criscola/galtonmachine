@@ -1,1 +1,14 @@
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\bin\Debug\ExampleChart.exe.config
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\bin\Debug\ExampleChart.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\bin\Debug\ExampleChart.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.csprojResolveAssemblyReference.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\MainWindow.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\App.g.cs
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart_MarkupCompile.cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart_MarkupCompile.lref
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\MainWindow.baml
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.g.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.Properties.Resources.resources
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.csproj.GenerateResource.Cache
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.exe
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\ExampleChart\ExampleChart\obj\Debug\ExampleChart.pdb

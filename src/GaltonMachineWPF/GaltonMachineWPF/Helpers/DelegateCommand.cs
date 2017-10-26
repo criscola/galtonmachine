@@ -42,6 +42,7 @@ namespace GaltonMachineWPF.Helpers
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
         #endregion
     }
 }
