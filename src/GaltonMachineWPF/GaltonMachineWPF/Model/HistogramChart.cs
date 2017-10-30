@@ -10,22 +10,39 @@ namespace GaltonMachineWPF.Model
 {
     public class HistogramChart
     {
-        public ObservableCollection<Histogram> HistogramsList { get; set; }
-
+        private Histogram[] Histograms { get; set; }
         private BellCurve curve;
 
-        public HistogramChart()
+        private int size;
+
+        public int Size
         {
-            HistogramsList = new ObservableCollection<Histogram>();
+            get { return size; }
+            set { size = value; }
+        }
+
+        public HistogramChart(int size)
+        {
+            Histograms = new Histogram[size];
+        }
+
+        public int GetValue(int index)
+        {
+            return Histograms[index].Value;
+        }
+
+        public void IncrementValue(int index)
+        {
+            Histograms[index].Value++;
         }
 
         // DEBUG
         public void PrintHistogramValues()
         {
             Console.WriteLine("---------------------------------------------------");
-            for (int i = 0; i < HistogramsList.Count; i++)
+            for (int i = 0; i < size; i++)
             {   
-                Console.WriteLine(HistogramsList[i].Value);
+                Console.WriteLine(Histograms[i]);
             }
             Console.WriteLine("---------------------------------------------------");
         }

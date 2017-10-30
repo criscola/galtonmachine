@@ -110,13 +110,7 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
         public ObservableCollection<Ball> SticksList { get; private set; }
-        public ObservableCollection<Histogram> HistogramsList
-        {
-            get
-            {
-                return model?.HistogramChart?.HistogramsList;
-            }
-        }
+        public ObservableCollection<Histogram> HistogramsList { get; private set; }
         public double BallDiameter { get; private set; }
         public double BallX
         {
@@ -185,6 +179,7 @@ namespace GaltonMachineWPF.ViewModel
             model = new GaltonMachine(SimulationSize);
 
             SticksList = new ObservableCollection<Ball>();
+            HistogramsList = new ObservableCollection<Histogram>();
             GenerateSticks();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
@@ -233,7 +228,7 @@ namespace GaltonMachineWPF.ViewModel
                     currentHistogram.Value++;
                     currentHistogram.Y -= DEFAULT_HISTOGRAM_STEP;
                     currentHistogram.Height += DEFAULT_HISTOGRAM_STEP;
-
+                    // GenerateChart();
                     CurrentIteration++;
 
                     Thread.Sleep(SimulationSpeed);
@@ -344,7 +339,7 @@ namespace GaltonMachineWPF.ViewModel
                 {
                     x += dx + HISTOGRAM_WIDTH;
                     HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
-                }
+                }           
             }
         }
 

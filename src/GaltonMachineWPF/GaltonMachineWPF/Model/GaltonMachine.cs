@@ -31,7 +31,7 @@ namespace GaltonMachineWPF.Model
             Ball = new Ball();
             BallRow = 0;
             BallColumn = 0;
-            HistogramChart.HistogramsList.Clear();
+            HistogramChart.Values.Clear();
         }
     }
 }
