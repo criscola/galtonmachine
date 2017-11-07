@@ -28,8 +28,10 @@ namespace GaltonMachineWPF.ViewModel
 
         public const int CANVAS_WIDTH = 440;
         public const int CANVAS_HEIGHT = 400;
+        public const int CANVAS_HOFFSET = 50;
+        public const int CANVAS_VOFFSET = 50;
 
-        public int DEFAULT_SIMULATION_SIZE { get { return 8; } }
+        public int DEFAULT_SIMULATION_SIZE { get { return 7; } }
         public int DEFAULT_SIMULATION_LENGTH { get { return 50; } }
         public int DEFAULT_SIMULATION_SPEED { get { return 500; } }
         public int DEFAULT_HISTOGRAM_STEP { get { return 50; } }
@@ -79,6 +81,7 @@ namespace GaltonMachineWPF.ViewModel
                 if (model != null)
                 {
                     model.Grid.Size = value;
+                    model.HistogramChart.Size = value;
                 }
                 GenerateSticks();
                 GenerateChart();
@@ -223,12 +226,23 @@ namespace GaltonMachineWPF.ViewModel
                         // Riceve la stecca su cui posizionare la pallina
                         PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
                     }
+
                     // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
                     Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
                     currentHistogram.Value++;
-                    currentHistogram.Y -= DEFAULT_HISTOGRAM_STEP;
-                    currentHistogram.Height += DEFAULT_HISTOGRAM_STEP;
-                    // GenerateChart();
+
+                    Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
+
+                    for (int j = 0; j < HistogramsList.Count; j++)
+                    {
+                        Histogram h = HistogramsList.ElementAt(j);
+                        int value = h.Value;
+                        float perc = value / (float)maxHistogram.Value;
+                        double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
+                        h.Height = barHeight;
+                        h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                    }
+                    
                     CurrentIteration++;
 
                     Thread.Sleep(SimulationSpeed);
@@ -257,13 +271,9 @@ namespace GaltonMachineWPF.ViewModel
             {
                 SticksList.Clear();
 
-                // Offset orizzontale e verticale
-                double hoffset = 50;
-                double voffset = 50;
-
                 // Larghezza e altezza canvas 
-                double cw = CanvasWidth - hoffset;
-                double ch = CanvasHeight - voffset;
+                double cw = CanvasWidth - CANVAS_HOFFSET;
+                double ch = CanvasHeight - CANVAS_VOFFSET;
 
                 // Grandezza della base
                 double n = model.Grid.Size;
@@ -290,7 +300,7 @@ namespace GaltonMachineWPF.ViewModel
                             x += dx * 2;
                         }
 
-                        SticksList.Add(new Ball(x + (hoffset / 2), y + (voffset / 2), STICKS_DIAMETER));
+                        SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET/ 2), STICKS_DIAMETER));
                     }
                     y += dy;
                 }
@@ -339,7 +349,13 @@ namespace GaltonMachineWPF.ViewModel
                 {
                     x += dx + HISTOGRAM_WIDTH;
                     HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
-                }           
+                }
+
+                // Inserisce gli elementi di HistogramList nel model.HistogramChart
+                for (int i = 0; i < model.HistogramChart.Size; i++)
+                {
+                    model.HistogramChart.SetHistogram(i, HistogramsList.ElementAt(i));
+                }
             }
         }
 

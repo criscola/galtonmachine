@@ -23,7 +23,7 @@ namespace GaltonMachineWPF.Model
             Grid = new QuincunxGrid(width);
             BallRow = 0;
             BallColumn = 0;
-            HistogramChart = new HistogramChart();
+            HistogramChart = new HistogramChart(width);
         }
 
         public void Reset()
@@ -31,7 +31,10 @@ namespace GaltonMachineWPF.Model
             Ball = new Ball();
             BallRow = 0;
             BallColumn = 0;
-            HistogramChart.Values.Clear();
+            for (int i = 0; i < HistogramChart.Size; i++)
+            {
+                HistogramChart.SetValue(i, 0);
+            }
         }
     }
 }

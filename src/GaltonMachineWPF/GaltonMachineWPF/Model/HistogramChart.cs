@@ -18,12 +18,21 @@ namespace GaltonMachineWPF.Model
         public int Size
         {
             get { return size; }
-            set { size = value; }
+            set
+            {
+                size = value;
+                GenerateChart();
+            }
         }
+
+        /*public HistogramChart()
+        {
+
+        }*/
 
         public HistogramChart(int size)
         {
-            Histograms = new Histogram[size];
+            GenerateChart();
         }
 
         public int GetValue(int index)
@@ -31,9 +40,28 @@ namespace GaltonMachineWPF.Model
             return Histograms[index].Value;
         }
 
+        public void SetValue(int index, int value)
+        {
+            Histograms[index].Value = value;
+        }
+
+        public void SetHistogram(int index, Histogram h)
+        {
+            Histograms[index] = h;
+        }
+
         public void IncrementValue(int index)
         {
             Histograms[index].Value++;
+        }
+
+        public void GenerateChart()
+        {
+            Histograms = new Histogram[size];
+            for (int i = 0; i < Histograms.Length; i++)
+            {
+                Histograms[i] = new Histogram();
+            }
         }
 
         // DEBUG
