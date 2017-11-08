@@ -77,6 +77,7 @@
     <Compile Include="Model\Histogram.cs" />
     <Compile Include="Model\HistogramChart.cs" />
     <Compile Include="Model\BellCurve.cs" />
+    <Compile Include="Model\ChartLabel.cs" />
     <Compile Include="Model\QuincunxGrid.cs" />
     <Compile Include="ViewModel\GaltonMachineViewModel.cs" />
     <Compile Include="View\GaltonMachineView.xaml.cs">

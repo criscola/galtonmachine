@@ -1,20 +1,13 @@
-﻿using GaltonMachineWPF;
-using GaltonMachineWPF.Model;
+﻿using GaltonMachineWPF.Model;
 using GaltonMachineWPF.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
-using GaltonMachineWPF.View;
 using System.Windows;
 using System.Threading;
-using System.Collections.Specialized;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -41,6 +34,12 @@ namespace GaltonMachineWPF.ViewModel
         public int MAX_SIMULATION_SIZE { get { return 12; } }
         public int MAX_SIMULATION_LENGTH { get { return 100; } }
         public int MAX_SIMULATION_SPEED { get { return 2000; } }
+        public FontFamily DEFAULT_HLABELS_FONTFAMILY { get { return new FontFamily("Arial"); } }
+        public FontStyle DEFAULT_HLABELS_FONTSTYLE { get { return FontStyles.Normal; } }
+        public FontWeight DEFAULT_HLABELS_FONTWEIGHT { get { return FontWeights.Bold; } }
+        public FontStretch DEFAULT_HLABELS_FONTSTRETCH { get { return FontStretches.Normal; } }
+        public double DEFAULT_HLABELS_FONTSIZE { get { return 13; } }
+
         #endregion
 
         #region ================== Attributi & proprietà =================
@@ -114,6 +113,8 @@ namespace GaltonMachineWPF.ViewModel
         }
         public ObservableCollection<Ball> SticksList { get; private set; }
         public ObservableCollection<Histogram> HistogramsList { get; private set; }
+        public ObservableCollection<Label> HistogramsLabels { get; private set; }
+        public CompositeCollection ChartItemsCollection { get; private set; }
         public double BallDiameter { get; private set; }
         public double BallX
         {
@@ -153,7 +154,7 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
         public bool IsSimulationNotRunning { get { return !isSimulationRunning; } }
-        //public bool IsSliderSimulationLengthEnabled { get; set; }
+
         #endregion
 
         #region ================== Delegati=================
@@ -183,6 +184,10 @@ namespace GaltonMachineWPF.ViewModel
 
             SticksList = new ObservableCollection<Ball>();
             HistogramsList = new ObservableCollection<Histogram>();
+            ChartItemsCollection = new CompositeCollection();
+
+            ChartItemsCollection.Add(HistogramsList);
+            ChartItemsCollection.Add(HistogramsLabels);
             GenerateSticks();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
@@ -348,7 +353,11 @@ namespace GaltonMachineWPF.ViewModel
                 for (int i = 0; i < n - 1; i++)
                 {
                     x += dx + HISTOGRAM_WIDTH;
-                    HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
+                    Histogram currentHistogram = new Histogram(x, y, HISTOGRAM_WIDTH, 0);
+                    //currentHistogram.ValueX = currentHistogram.X;
+                    //currentHistogram.ValueY = currentHistogram.Y + currentHistogram.Height;
+                    
+                    HistogramsList.Add(currentHistogram);
                 }
 
                 // Inserisce gli elementi di HistogramList nel model.HistogramChart
@@ -391,6 +400,11 @@ namespace GaltonMachineWPF.ViewModel
             animationThread?.Interrupt();
         }
 
+        #endregion
+
+        #region ================== Metodi helper ===================
+
+
         private void PlaceBallOnStick(Ball stick)
         {
             BallX = stick.X + stick.Radius / 2 - BallDiameter / 2;
@@ -402,6 +416,19 @@ namespace GaltonMachineWPF.ViewModel
             model.BallRow = 0;
             model.BallColumn = 0;
             PlaceBallOnStick(model.Grid.GetCell(0, 0));
+        }
+
+        private Size MeasureLabelsUISize(string str)
+        {
+            var formattedText = new FormattedText(
+                str,
+                CultureInfo.CurrentUICulture,
+                FlowDirection.LeftToRight,
+                new Typeface(DEFAULT_HLABELS_FONTFAMILY, DEFAULT_HLABELS_FONTSTYLE, DEFAULT_HLABELS_FONTWEIGHT, DEFAULT_HLABELS_FONTSTRETCH), 
+                DEFAULT_HLABELS_FONTSIZE,
+                Brushes.Black);
+
+            return new Size(formattedText.Width, formattedText.Height);
         }
 
         #endregion
