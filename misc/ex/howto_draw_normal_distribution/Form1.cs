@@ -39,9 +39,12 @@ namespace howto_draw_normal_distribution
                 
                 // Define the mapping from world
                 // coordinates onto the PictureBox.
+                // Ampiezza orizzontale
                 const float wxmin = -5.1f;
+                // Traslazione verticale
                 const float wymin = -0.2f;
                 const float wxmax = -wxmin;
+                // Ampiezza verticale
                 const float wymax = 1.1f;
                 const float wwid = wxmax - wxmin;
                 const float whgt = wymax - wymin;
@@ -59,6 +62,7 @@ namespace howto_draw_normal_distribution
                 {
                     using (Font font = new Font("Arial", 8))
                     {
+                        /*
                         // Draw the X axis.
                         gr.Transform = transform;
                         pen.Color = Color.Black;
@@ -123,7 +127,7 @@ namespace howto_draw_normal_distribution
                                 gr.DrawString(y.ToString("0.00"), font, Brushes.Black,
                                     ints_array[index++], sf);
                             }
-                        }
+                        }*/
 
                         // Draw the curve.
                         gr.Transform = transform;
@@ -139,6 +143,7 @@ namespace howto_draw_normal_distribution
                         }
                         pen.Color = Color.Red;
                         gr.DrawLines(pen, points.ToArray());
+                        
                     } // Font
                 } // Pen
 

@@ -8,6 +8,8 @@ using System.Windows;
 using System.Threading;
 using System.Globalization;
 using System.Windows.Data;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -34,11 +36,6 @@ namespace GaltonMachineWPF.ViewModel
         public int MAX_SIMULATION_SIZE { get { return 12; } }
         public int MAX_SIMULATION_LENGTH { get { return 100; } }
         public int MAX_SIMULATION_SPEED { get { return 2000; } }
-        public FontFamily DEFAULT_HLABELS_FONTFAMILY { get { return new FontFamily("Arial"); } }
-        public FontStyle DEFAULT_HLABELS_FONTSTYLE { get { return FontStyles.Normal; } }
-        public FontWeight DEFAULT_HLABELS_FONTWEIGHT { get { return FontWeights.Bold; } }
-        public FontStretch DEFAULT_HLABELS_FONTSTRETCH { get { return FontStretches.Normal; } }
-        public double DEFAULT_HLABELS_FONTSIZE { get { return 13; } }
 
         #endregion
 
@@ -113,7 +110,7 @@ namespace GaltonMachineWPF.ViewModel
         }
         public ObservableCollection<Ball> SticksList { get; private set; }
         public ObservableCollection<Histogram> HistogramsList { get; private set; }
-        public ObservableCollection<Label> HistogramsLabels { get; private set; }
+        public ObservableCollection<ChartLabel> HistogramsLabels { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
         public double BallDiameter { get; private set; }
         public double BallX
@@ -178,16 +175,16 @@ namespace GaltonMachineWPF.ViewModel
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
 
-            //IsSliderSimulationLengthEnabled = true;
             // Inizializzazione model/proprietà vm
             model = new GaltonMachine(SimulationSize);
 
             SticksList = new ObservableCollection<Ball>();
             HistogramsList = new ObservableCollection<Histogram>();
+            HistogramsLabels = new ObservableCollection<ChartLabel>();
             ChartItemsCollection = new CompositeCollection();
-
-            ChartItemsCollection.Add(HistogramsList);
-            ChartItemsCollection.Add(HistogramsLabels);
+            
+            ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsList });
+            ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsLabels });
             GenerateSticks();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
@@ -235,9 +232,11 @@ namespace GaltonMachineWPF.ViewModel
                     // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
                     Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
                     currentHistogram.Value++;
-
+                    
+                    // Prende l'istogramma più grande
                     Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
 
+                    // Aggiorna altezza e valore degli istogrammi
                     for (int j = 0; j < HistogramsList.Count; j++)
                     {
                         Histogram h = HistogramsList.ElementAt(j);
@@ -246,6 +245,10 @@ namespace GaltonMachineWPF.ViewModel
                         double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
                         h.Height = barHeight;
                         h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                        // Aggiorna l'etichetta dell'istogramma corrente
+                        ChartLabel c = HistogramsLabels.ElementAt(model.BallColumn);
+                        c.Text = h.Value.ToString();
+                        
                     }
                     
                     CurrentIteration++;
@@ -358,6 +361,12 @@ namespace GaltonMachineWPF.ViewModel
                     //currentHistogram.ValueY = currentHistogram.Y + currentHistogram.Height;
                     
                     HistogramsList.Add(currentHistogram);
+
+                    ChartLabel c = new ChartLabel(0, 0, "0");
+                    Size labelSize = MeasureLabelsUISize(c);
+                    c.X = currentHistogram.X + ((currentHistogram.Width - labelSize.Width) / 2);
+                    c.Y = currentHistogram.Y;
+                    HistogramsLabels.Add(c);
                 }
 
                 // Inserisce gli elementi di HistogramList nel model.HistogramChart
@@ -367,6 +376,24 @@ namespace GaltonMachineWPF.ViewModel
                 }
             }
         }
+
+        /*
+        private void GenerateBellCurve()
+        {
+            List<Point> points = new List<Point>();
+            float one_over_2pi =
+                (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
+
+            float dx = (wxmax - wxmin) / CanvasWidth;
+            for (float x = wxmin; x <= wxmax; x += dx)
+            {
+                float y = F(x, one_over_2pi, mean, stddev, var);
+                points.Add(new Point(x, y));
+            }
+            pen.Color = Color.Red;
+            gr.DrawLines(pen, points.ToArray());
+
+        }*/
 
         private void StartSimulation()
         {
@@ -418,14 +445,14 @@ namespace GaltonMachineWPF.ViewModel
             PlaceBallOnStick(model.Grid.GetCell(0, 0));
         }
 
-        private Size MeasureLabelsUISize(string str)
+        private Size MeasureLabelsUISize(ChartLabel label)
         {
             var formattedText = new FormattedText(
-                str,
+                label.Text,
                 CultureInfo.CurrentUICulture,
                 FlowDirection.LeftToRight,
-                new Typeface(DEFAULT_HLABELS_FONTFAMILY, DEFAULT_HLABELS_FONTSTYLE, DEFAULT_HLABELS_FONTWEIGHT, DEFAULT_HLABELS_FONTSTRETCH), 
-                DEFAULT_HLABELS_FONTSIZE,
+                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch), 
+                label.FontSize,
                 Brushes.Black);
 
             return new Size(formattedText.Width, formattedText.Height);

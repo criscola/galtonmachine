@@ -4,9 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RescalingHistograms"
+        xmlns:model="clr-namespace:RescalingHistograms.Model"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+    <Window.DataContext>
+        <local:ViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+        <ItemsControl ItemsSource="{Binding Data}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type model:Employee}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text=" ("/>
+                        <TextBlock Text="{Binding Occupation}"/>
+                        <TextBlock Text=")"/>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type model:Machine}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Model}"/>
+                        <TextBlock Text=" - "/>
+                        <TextBlock Text="{Binding Manufacturer}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
     </Grid>
 </Window>

@@ -1,28 +1,59 @@
-﻿using System;
+﻿using GaltonMachineWPF.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace GaltonMachineWPF.Model
 {
-    public class Label
+    public class ChartLabel : BindableBase
     {
+        public FontFamily DEFAULT_FONTFAMILY { get { return new FontFamily("Arial"); } }
+        public FontStyle DEFAULT_FONTSTYLE { get { return FontStyles.Normal; } }
+        public FontWeight DEFAULT_FONTWEIGHT { get { return FontWeights.Bold; } }
+        public FontStretch DEFAULT_FONTSTRETCH { get { return FontStretches.Normal; } }
+        public double DEFAULT_FONTSIZE { get { return 13; } }
+
+        public FontFamily FontFamily { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public FontWeight FontWeight { get; set; }
+        public FontStretch FontStretch { get; set; }
+        public double FontSize { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
-        public string Text { get; set; }
 
-        public Label()
+        private string text;
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
+            {
+                text = value;
+                OnPropertyChanged(() => text);
+            }
+        }
+
+        public ChartLabel()
         {
 
         }
 
-        public Label(double x, double y, string text)
+        public ChartLabel(double x, double y, string text)
         {
             X = x;
             Y = y;
             Text = text;
+            FontFamily = DEFAULT_FONTFAMILY;
+            FontStyle = DEFAULT_FONTSTYLE;
+            FontWeight = DEFAULT_FONTWEIGHT;
+            FontStretch = DEFAULT_FONTSTRETCH;
+            FontSize = DEFAULT_FONTSIZE;
         }
     }
 }

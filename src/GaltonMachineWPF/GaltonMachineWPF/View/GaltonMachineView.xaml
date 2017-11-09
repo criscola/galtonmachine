@@ -68,7 +68,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>-->
 
-        <ItemsControl ItemsSource="{Binding Path=ChartItemsCollection}">
+        <ItemsControl ItemsSource="{Binding Path=ChartItemsCollection}" Panel.ZIndex="1" Grid.Column="1">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
@@ -82,11 +82,11 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type model:Histogram}">
-                    <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Red" />
+                    <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Blue" />
                 </DataTemplate>
-                <!--<DataTemplate DataType="{x:Type model:ChartLabel}">
-                    <TextBlock Text="{Binding Path=Text}" Background="Brown"/>
-                </DataTemplate>-->
+                <DataTemplate DataType="{x:Type model:ChartLabel}">
+                    <TextBlock Text="{Binding Path=Text, Mode=OneWay}" Background="Yellow"/>
+                </DataTemplate>
             </ItemsControl.Resources>
         </ItemsControl>
 
@@ -109,10 +109,10 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0">
-                <Run Text="Simulazione n° " />
-                <Run Text="{Binding Path=CurrentIteration, Mode=OneWay}" />
-                <Run Text=" di " />
-                <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
+                    <Run Text="Simulazione n° " />
+                    <Run Text="{Binding Path=CurrentIteration, Mode=OneWay}" />
+                    <Run Text=" di " />
+                    <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
                 </TextBlock>
 
                 <!-- Riga 1 -->

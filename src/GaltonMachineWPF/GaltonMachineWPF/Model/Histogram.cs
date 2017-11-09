@@ -15,7 +15,8 @@ namespace GaltonMachineWPF.Model
         private double height;
         private int value;
 
-        public double X {
+        public double X
+        {
             get
             {
                 return x;

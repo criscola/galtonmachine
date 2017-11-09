@@ -1,0 +1,31 @@
+Hello everyone. I'm having an issue I can't solve lately. [I copied this example here][1] but it isn't working yet. I have 2 `ObservableCollections` joined together using a `CompositeCollection`. Here's my ViewModel
+
+    public class ViewModel 
+    {
+        public ObservableCollection<Histogram> HistogramsList { get; private set; }
+        public ObservableCollection<ChartLabel> HistogramsLabels { get; private set; }
+        public CompositeCollection ChartItemsCollection { get; private set; }
+            
+        public ViewModel() 
+        {
+            ChartItemsCollection = new CompositeCollection();
+            ChartItemsCollection.Add(HistogramsList);
+            ChartItemsCollection.Add(HistogramsLabels);
+        }
+    
+    }
+
+My View
+
+    <ItemsControl ItemsSource="{Binding ChartItemsCollection}">
+        <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type model:Histogram}">
+                <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Red" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type model:ChartLabel}">
+                <Rectangle Text="Red" />
+            </DataTemplate>
+        </ItemsControl.Resources>
+    </ItemsControl>
+
+  [1]: https://stackoverflow.com/questions/5473001/itemscontrol-with-multiple-datatemplates-for-a-viewmodel
