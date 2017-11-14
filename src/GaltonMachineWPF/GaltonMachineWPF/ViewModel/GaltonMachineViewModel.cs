@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -26,7 +27,7 @@ namespace GaltonMachineWPF.ViewModel
         public const int CANVAS_HOFFSET = 50;
         public const int CANVAS_VOFFSET = 50;
 
-        public int DEFAULT_SIMULATION_SIZE { get { return 7; } }
+        public int DEFAULT_SIMULATION_SIZE { get { return 5; } }
         public int DEFAULT_SIMULATION_LENGTH { get { return 50; } }
         public int DEFAULT_SIMULATION_SPEED { get { return 500; } }
         public int DEFAULT_HISTOGRAM_STEP { get { return 50; } }
@@ -186,6 +187,7 @@ namespace GaltonMachineWPF.ViewModel
             ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsList });
             ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsLabels });
             GenerateSticks();
+            GenerateChart();
 
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
             BallDiameter = BALL_DIAMETER;
@@ -225,7 +227,7 @@ namespace GaltonMachineWPF.ViewModel
                             model.BallColumn++;
                         }
 
-                        // Riceve la stecca su cui posizionare la pallina
+                        // Piazza la palla sulla stecca
                         PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
                     }
 
@@ -233,10 +235,10 @@ namespace GaltonMachineWPF.ViewModel
                     Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
                     currentHistogram.Value++;
                     
-                    // Prende l'istogramma più grande
+                    // Prende l'istogramma con valore più grande
                     Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
 
-                    // Aggiorna altezza e valore degli istogrammi
+                    // Aggiorna altezza degli istogrammi
                     for (int j = 0; j < HistogramsList.Count; j++)
                     {
                         Histogram h = HistogramsList.ElementAt(j);
@@ -245,12 +247,11 @@ namespace GaltonMachineWPF.ViewModel
                         double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
                         h.Height = barHeight;
                         h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
-                        // Aggiorna l'etichetta dell'istogramma corrente
-                        ChartLabel c = HistogramsLabels.ElementAt(model.BallColumn);
-                        c.Text = h.Value.ToString();
-                        
                     }
-                    
+
+                    // Aggiorna la label dell'istogramma
+                    HistogramsLabels.ElementAt(model.BallColumn).Text = currentHistogram.Value.ToString();
+
                     CurrentIteration++;
 
                     Thread.Sleep(SimulationSpeed);
@@ -308,7 +309,7 @@ namespace GaltonMachineWPF.ViewModel
                             x += dx * 2;
                         }
 
-                        SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET/ 2), STICKS_DIAMETER));
+                        SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER));
                     }
                     y += dy;
                 }
@@ -331,9 +332,7 @@ namespace GaltonMachineWPF.ViewModel
             if (HistogramsList != null)
             {
                 HistogramsList.Clear();
-
-                // Offset orizzontale e verticale
-                double hoffset = 50;
+                HistogramsLabels.Clear();
 
                 // Larghezza e altezza canvas 
                 double cw = CanvasWidth;
@@ -343,30 +342,22 @@ namespace GaltonMachineWPF.ViewModel
                 double n = SimulationSize;
 
                 // Distanza fra gli istogrammi
-                double dx = ((cw - hoffset * 2) - (HISTOGRAM_WIDTH * n)) / (n - 1);
+                double dx = (cw - (HISTOGRAM_WIDTH * n)) / (n + 1);
 
-                // Coordinate x y degli istogrammi iniziali
-                double x = hoffset;
-                // Garantisce che il grafico sia allineato alla base delle stecche
+                // Coordinate iniziali x y degli istogrammi 
+                double x = 0;
                 double y = SticksList.Last().Y + STICKS_DIAMETER;
-
-                HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
+                
+                //HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
 
                 // Crea i nuovi istogrammi
-                for (int i = 0; i < n - 1; i++)
+                for (int i = 0; i < n; i++)
                 {
                     x += dx + HISTOGRAM_WIDTH;
-                    Histogram currentHistogram = new Histogram(x, y, HISTOGRAM_WIDTH, 0);
-                    //currentHistogram.ValueX = currentHistogram.X;
-                    //currentHistogram.ValueY = currentHistogram.Y + currentHistogram.Height;
-                    
-                    HistogramsList.Add(currentHistogram);
 
-                    ChartLabel c = new ChartLabel(0, 0, "0");
-                    Size labelSize = MeasureLabelsUISize(c);
-                    c.X = currentHistogram.X + ((currentHistogram.Width - labelSize.Width) / 2);
-                    c.Y = currentHistogram.Y;
-                    HistogramsLabels.Add(c);
+                    Histogram currentHistogram = new Histogram(x, y, HISTOGRAM_WIDTH, 0);
+                    HistogramsList.Add(currentHistogram);
+                    HistogramsLabels.Add(new ChartLabel(x, y, HISTOGRAM_WIDTH, "0"));
                 }
 
                 // Inserisce gli elementi di HistogramList nel model.HistogramChart
@@ -377,7 +368,6 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
 
-        /*
         private void GenerateBellCurve()
         {
             List<Point> points = new List<Point>();
@@ -393,7 +383,7 @@ namespace GaltonMachineWPF.ViewModel
             pen.Color = Color.Red;
             gr.DrawLines(pen, points.ToArray());
 
-        }*/
+        }
 
         private void StartSimulation()
         {
@@ -443,19 +433,6 @@ namespace GaltonMachineWPF.ViewModel
             model.BallRow = 0;
             model.BallColumn = 0;
             PlaceBallOnStick(model.Grid.GetCell(0, 0));
-        }
-
-        private Size MeasureLabelsUISize(ChartLabel label)
-        {
-            var formattedText = new FormattedText(
-                label.Text,
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch), 
-                label.FontSize,
-                Brushes.Black);
-
-            return new Size(formattedText.Width, formattedText.Height);
         }
 
         #endregion

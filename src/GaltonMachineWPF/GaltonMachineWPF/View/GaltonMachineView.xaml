@@ -85,7 +85,7 @@
                     <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Blue" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type model:ChartLabel}">
-                    <TextBlock Text="{Binding Path=Text, Mode=OneWay}" Background="Yellow"/>
+                    <TextBlock Text="{Binding Path=Text}" Width="{Binding Path=Width}" TextAlignment="Center" Background="Yellow"/>
                 </DataTemplate>
             </ItemsControl.Resources>
         </ItemsControl>

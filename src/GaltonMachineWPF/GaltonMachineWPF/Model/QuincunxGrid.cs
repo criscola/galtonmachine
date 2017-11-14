@@ -54,11 +54,6 @@ namespace GaltonMachineWPF.Model
                 for (int i = 0; i < size; i++)
                 {
                     grid[i] = new Ball[count];
-                    // Popola l'array con valori null
-                    for (int j = 0; j < grid[i].Length - 1; j++)
-                    {
-                        grid[i][j] = null;
-                    }
                     count++;
                 }
             }

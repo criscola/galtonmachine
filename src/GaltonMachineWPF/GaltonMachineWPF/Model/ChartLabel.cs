@@ -24,6 +24,8 @@ namespace GaltonMachineWPF.Model
         public double FontSize { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
+        public double Width { get; set; }
+
 
         private string text;
         public string Text
@@ -44,10 +46,11 @@ namespace GaltonMachineWPF.Model
 
         }
 
-        public ChartLabel(double x, double y, string text)
+        public ChartLabel(double x, double y, double width, string text)
         {
             X = x;
             Y = y;
+            Width = width;
             Text = text;
             FontFamily = DEFAULT_FONTFAMILY;
             FontStyle = DEFAULT_FONTSTYLE;
