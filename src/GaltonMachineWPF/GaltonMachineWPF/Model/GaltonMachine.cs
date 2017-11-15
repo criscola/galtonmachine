@@ -17,13 +17,13 @@ namespace GaltonMachineWPF.Model
         public HistogramChart HistogramChart { get; set; }
         public int[] ResultSet { get; set; }
 
-        public GaltonMachine(int width)
+        public GaltonMachine(int width, int gDeviceWidth)
         {
             Ball = new Ball();
             Grid = new QuincunxGrid(width);
             BallRow = 0;
             BallColumn = 0;
-            HistogramChart = new HistogramChart(width);
+            HistogramChart = new HistogramChart(width, gDeviceWidth);
         }
 
         public void Reset()

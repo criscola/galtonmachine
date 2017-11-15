@@ -62,7 +62,7 @@ namespace howto_draw_normal_distribution
                 {
                     using (Font font = new Font("Arial", 8))
                     {
-                        /*
+                        
                         // Draw the X axis.
                         gr.Transform = transform;
                         pen.Color = Color.Black;
@@ -127,23 +127,25 @@ namespace howto_draw_normal_distribution
                                 gr.DrawString(y.ToString("0.00"), font, Brushes.Black,
                                     ints_array[index++], sf);
                             }
-                        }*/
+                        }
 
                         // Draw the curve.
                         gr.Transform = transform;
                         List<PointF> points = new List<PointF>();
-                        float one_over_2pi =
-                            (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
-                        
+                        float one_over_2pi = (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
+
+                        string str = "";
+
                         float dx = (wxmax - wxmin) / picGraph.ClientSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
                             float y = F(x, one_over_2pi, mean, stddev, var);
                             points.Add(new PointF(x, y));
+                            str += x + "," + y + " ";
                         }
                         pen.Color = Color.Red;
                         gr.DrawLines(pen, points.ToArray());
-                        
+                        Console.WriteLine(str);
                     } // Font
                 } // Pen
 

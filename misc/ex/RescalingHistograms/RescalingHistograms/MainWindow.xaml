@@ -3,37 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
         xmlns:local="clr-namespace:RescalingHistograms"
         xmlns:model="clr-namespace:RescalingHistograms.Model"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="{Binding Path=GDeviceHeight}" Width="{Binding Path=GDeviceWidth}">
     <Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>
     <Grid>
-        <ItemsControl ItemsSource="{Binding Data}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type model:Employee}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}"/>
-                        <TextBlock Text=" ("/>
-                        <TextBlock Text="{Binding Occupation}"/>
-                        <TextBlock Text=")"/>
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type model:Machine}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Model}"/>
-                        <TextBlock Text=" - "/>
-                        <TextBlock Text="{Binding Manufacturer}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.Resources>
-        </ItemsControl>
+        <Rectangle Width="300" Height="300" Fill="GreenYellow"></Rectangle>
+        <Image Stretch="None">
+            <Image.Source>
+                <DrawingImage PresentationOptions:Freeze="True">
+                    <DrawingImage.Drawing>
+                        <DrawingGroup>
+
+                            <!-- The Rect property specifies that the image only fill a 100 by 100
+                   rectangular area. -->
+                            <ImageDrawing Rect="0, 0, 300, 300" ImageSource="{Binding Path=Bm}"/>
+
+                        </DrawingGroup>
+                    </DrawingImage.Drawing>
+                </DrawingImage>
+            </Image.Source>
+        </Image>
     </Grid>
 </Window>

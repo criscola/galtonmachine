@@ -177,7 +177,7 @@ namespace GaltonMachineWPF.ViewModel
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
 
             // Inizializzazione model/proprietà vm
-            model = new GaltonMachine(SimulationSize);
+            model = new GaltonMachine(SimulationSize, CanvasWidth);
 
             SticksList = new ObservableCollection<Ball>();
             HistogramsList = new ObservableCollection<Histogram>();
@@ -345,7 +345,7 @@ namespace GaltonMachineWPF.ViewModel
                 double dx = (cw - (HISTOGRAM_WIDTH * n)) / (n + 1);
 
                 // Coordinate iniziali x y degli istogrammi 
-                double x = 0;
+                double x = dx;
                 double y = SticksList.Last().Y + STICKS_DIAMETER;
                 
                 //HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
@@ -353,11 +353,11 @@ namespace GaltonMachineWPF.ViewModel
                 // Crea i nuovi istogrammi
                 for (int i = 0; i < n; i++)
                 {
-                    x += dx + HISTOGRAM_WIDTH;
-
                     Histogram currentHistogram = new Histogram(x, y, HISTOGRAM_WIDTH, 0);
                     HistogramsList.Add(currentHistogram);
                     HistogramsLabels.Add(new ChartLabel(x, y, HISTOGRAM_WIDTH, "0"));
+
+                    x += dx + HISTOGRAM_WIDTH;
                 }
 
                 // Inserisce gli elementi di HistogramList nel model.HistogramChart
@@ -370,19 +370,7 @@ namespace GaltonMachineWPF.ViewModel
 
         private void GenerateBellCurve()
         {
-            List<Point> points = new List<Point>();
-            float one_over_2pi =
-                (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
-
-            float dx = (wxmax - wxmin) / CanvasWidth;
-            for (float x = wxmin; x <= wxmax; x += dx)
-            {
-                float y = F(x, one_over_2pi, mean, stddev, var);
-                points.Add(new Point(x, y));
-            }
-            pen.Color = Color.Red;
-            gr.DrawLines(pen, points.ToArray());
-
+            
         }
 
         private void StartSimulation()
@@ -420,7 +408,6 @@ namespace GaltonMachineWPF.ViewModel
         #endregion
 
         #region ================== Metodi helper ===================
-
 
         private void PlaceBallOnStick(Ball stick)
         {

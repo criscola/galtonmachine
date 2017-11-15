@@ -11,7 +11,7 @@ namespace GaltonMachineWPF.Model
     public class HistogramChart
     {
         private Histogram[] Histograms { get; set; }
-        private BellCurve curve;
+        public BellCurve Curve { get; set; }
 
         private int size;
 
@@ -30,9 +30,16 @@ namespace GaltonMachineWPF.Model
 
         }*/
 
-        public HistogramChart(int size)
+        public HistogramChart(int size, int gDeviceWidth)
         {
             GenerateChart();
+            List<float> l = new List<float>();
+            foreach (Histogram h in Histograms)
+            {
+                l.Add(h.Value);
+            }
+            //curve = new BellCurve(l, gDeviceWidth);
+            
         }
 
         public int GetValue(int index)

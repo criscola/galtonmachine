@@ -12,3 +12,4 @@ D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\RescalingH
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\RescalingHistograms\RescalingHistograms\obj\Debug\RescalingHistograms.csproj.GenerateResource.Cache
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\RescalingHistograms\RescalingHistograms\obj\Debug\RescalingHistograms.exe
 D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\RescalingHistograms\RescalingHistograms\obj\Debug\RescalingHistograms.pdb
+D:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\misc\ex\RescalingHistograms\RescalingHistograms\obj\Debug\RescalingHistograms.csprojResolveAssemblyReference.cache

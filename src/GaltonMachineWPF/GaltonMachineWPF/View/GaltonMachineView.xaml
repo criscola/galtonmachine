@@ -78,6 +78,13 @@
                 <Style>
                     <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
                     <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
+                    <Setter Property="Canvas.">
+                        <Setter.Value>
+                            <ItemContainerTemplate>
+                                <TextBlock Text="PROVA"/>
+                            </ItemContainerTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.Resources>
