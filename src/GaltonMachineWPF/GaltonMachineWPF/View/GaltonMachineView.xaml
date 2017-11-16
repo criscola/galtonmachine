@@ -7,12 +7,20 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:model="clr-namespace:GaltonMachineWPF.Model"
              xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
+             xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
              mc:Ignorable="d"
              Height="710" Width="1200" MinHeight="710" MinWidth="460">
 
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="SticksList" Source="{Binding Path=SticksList, Mode=OneTime}"/>
+        <CollectionViewSource x:Key="ChartItemsCollection" Source="{Binding Path=ChartItemsCollection, Mode=OneTime}"/>
+        <Ellipse x:Key="p2" Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX }"
+                    Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}"
+                    Fill="Black" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,34 +30,17 @@
             <RowDefinition Height="{Binding Path=CanvasHeight}"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-            <!-- Pallina che cade -->
-            <Canvas Panel.ZIndex="2" Width="{Binding Path=CanvasWidth}">
-                <Ellipse Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX}"
-                     Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}"
-                     Fill="Black" />
-            </Canvas>
 
-            <!-- Stecche -->
-            <ItemsControl ItemsSource="{Binding Path=SticksList}" Panel.ZIndex="1">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Ellipse Width="{Binding Path=Radius}" Height="{Binding Path=Radius}" Fill="Red"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        <!-- Grafico -->
-        <!--<ItemsControl ItemsSource="{Binding Path=HistogramsList}" Panel.ZIndex="1" Grid.Column="1">
+        <!-- Stecche -->
+        <ItemsControl Panel.ZIndex="1">
+            <ItemsControl.ItemsSource>
+                <CompositeCollection>
+                    <CollectionContainer Collection="{Binding Source={StaticResource SticksList}}"/>
+                    <!-- Pallina che cade -->
+                    <Ellipse Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX}"
+                        Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}" Fill="Black" />
+                </CompositeCollection>
+            </ItemsControl.ItemsSource>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
@@ -63,12 +54,30 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Blue"/>
+                    <Ellipse Width="{Binding Path=Radius}" Height="{Binding Path=Radius}" Fill="Red"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        </ItemsControl>
+        
+        <!-- Grafico -->
+        <ItemsControl Panel.ZIndex="1" Grid.Column="1">
+            <ItemsControl.ItemsSource>
+                <CompositeCollection>
+                    <CollectionContainer Collection="{Binding Source={StaticResource ChartItemsCollection}}"/>
+                    <Image Stretch="None">
+                        <Image.Source>
+                            <DrawingImage PresentationOptions:Freeze="True">
+                                <DrawingImage.Drawing>
+                                    <DrawingGroup>
+                                        <ImageDrawing Rect="{Binding Path=CurveDimensions}" ImageSource="{Binding Path=Curve}"/>
 
-        <ItemsControl ItemsSource="{Binding Path=ChartItemsCollection}" Panel.ZIndex="1" Grid.Column="1">
+                                    </DrawingGroup>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                </CompositeCollection>
+            </ItemsControl.ItemsSource>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
@@ -78,13 +87,6 @@
                 <Style>
                     <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
                     <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
-                    <Setter Property="Canvas.">
-                        <Setter.Value>
-                            <ItemContainerTemplate>
-                                <TextBlock Text="PROVA"/>
-                            </ItemContainerTemplate>
-                        </Setter.Value>
-                    </Setter>
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.Resources>

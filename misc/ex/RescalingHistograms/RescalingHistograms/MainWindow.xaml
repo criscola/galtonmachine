@@ -21,7 +21,7 @@
 
                             <!-- The Rect property specifies that the image only fill a 100 by 100
                    rectangular area. -->
-                            <ImageDrawing Rect="0, 0, 300, 300" ImageSource="{Binding Path=Bm}"/>
+                            <ImageDrawing ImageSource="{Binding Path=Bm}"/>
 
                         </DrawingGroup>
                     </DrawingImage.Drawing>

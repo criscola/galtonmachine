@@ -12,7 +12,7 @@ namespace RescalingHistograms
         public List<float> Data { get; private set; }
         public float Mean { get; private set; }
         public float Variance { get; private set; }
-        public float Stdd { get; private set; }
+        public float StdDev { get; private set; }
         public List<Point> CurvePoints { get; private set; }
 
         public BellCurve(List<float> data, float gDeviceWidth)
@@ -20,9 +20,9 @@ namespace RescalingHistograms
             Data = data;
             Mean = GetMean(Data);
             Variance = GetVariance(Data, Mean);
-            Stdd = (float)Math.Sqrt(Variance);
+            StdDev = (float)Math.Sqrt(Variance);
 
-            float one_over_2pi = (float)(1.0 / (Stdd * Math.Sqrt(2 * Math.PI)));
+            float one_over_2pi = (float)(1.0 / (StdDev * Math.Sqrt(2 * Math.PI)));
 
             const float wxmin = -5.1f;
             // Traslazione verticale
@@ -31,7 +31,7 @@ namespace RescalingHistograms
             float dx = (wxmax - wxmin) / gDeviceWidth;
             for (float x = wxmin; x <= wxmax; x += dx)
             {
-                float y = F(x, one_over_2pi, Mean, Stdd, Variance);
+                float y = F(x, one_over_2pi, Mean, StdDev, Variance);
                 Console.WriteLine(y);
                 CurvePoints = new List<Point>();
                 CurvePoints.Add(new Point(x, y));

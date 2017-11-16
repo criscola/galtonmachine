@@ -16,14 +16,14 @@ namespace GaltonMachineWPF.Model
     {
         public const int DEVIATIONS = 3;
 
-        public List<float> Data { get; private set; }
+        private List<float> Data { get; set; }
         public float Mean { get; private set; }
         public float Variance { get; private set; }
-        public float Sttdev { get; private set; }
+        public float StdDev { get; private set; }
         public System.Drawing.Size GDeviceSize { get; set; }
-        public BitmapImage Image { get; set; }
+        public BitmapImage Image { get; private set; }
 
-        public BellCurve()
+        public BellCurve(List<float> data, float gDeviceWidth)
         {
 
         }
@@ -32,45 +32,27 @@ namespace GaltonMachineWPF.Model
         {
             Mean = GetMean(data);
             Variance = GetVariance(data, Mean);
-            Sttdev = (float)Math.Sqrt(Variance);
+            StdDev = (float)Math.Sqrt(Variance);
             GDeviceSize = gDeviceSize;
 
-            Image = BitmapToImageSource(DrawDistribution(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height,
-                    Mean, Sttdev, Variance));
+            DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
         }
 
-        // The normal distribution function.
-        private static float F(float x, float one_over_2pi, float mean, float stddev, float var)
+        public void UpdateData(int index, float value)
         {
-            return (float)(one_over_2pi * Math.Exp(-(x - mean) * (x - mean) / (2 * var)));
+            Data[index] = value;
+
+            Mean = GetMean(Data);
+            Variance = GetVariance(Data, Mean);
+            StdDev = (float)Math.Sqrt(Variance);
+            GDeviceSize = GDeviceSize;
+
+            
+
+            DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
         }
 
-        private static float GetMean(List<float> values)
-        {
-            // Calcola la media dei numeri
-            float mean = 0;
-
-            for (int i = 0; i < values.Count; i++)
-            {
-                mean += values[i];
-            }
-
-            return mean /= values.Count;
-        }
-
-        private static float GetVariance(List<float> values, float mean)
-        {
-            float dist = 0;
-
-            for (int i = 0; i < values.Count; i++)
-            {
-                dist = (Math.Abs(values[i] - mean)) * 2;
-            }
-
-            return dist /= values.Count;
-        }
-
-        private Bitmap DrawDistribution(float stddev_multiple, int wid, int hgt, float mean, float stddev, float var)
+        private void DrawCurve(float stddev_multiple, int wid, int hgt, float mean, float stddev, float var)
         {
             // Make a bitmap.
             Bitmap bm = new Bitmap(GDeviceSize.Width, GDeviceSize.Height);
@@ -197,7 +179,39 @@ namespace GaltonMachineWPF.Model
                 } // Pen
             }
 
-            return bm;
+            Image = BitmapToImageSource(bm);
+        }
+
+
+        // The normal distribution function.
+        private static float F(float x, float one_over_2pi, float mean, float stddev, float var)
+        {
+            return (float)(one_over_2pi * Math.Exp(-(x - mean) * (x - mean) / (2 * var)));
+        }
+
+        private static float GetMean(List<float> values)
+        {
+            // Calcola la media dei numeri
+            float mean = 0;
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                mean += values[i];
+            }
+
+            return mean /= values.Count;
+        }
+
+        private static float GetVariance(List<float> values, float mean)
+        {
+            float dist = 0;
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                dist = (Math.Abs(values[i] - mean)) * 2;
+            }
+
+            return dist /= values.Count;
         }
 
         public static BitmapImage BitmapToImageSource(Bitmap bitmap)

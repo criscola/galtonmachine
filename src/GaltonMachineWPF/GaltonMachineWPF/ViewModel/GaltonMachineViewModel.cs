@@ -2,15 +2,11 @@
 using GaltonMachineWPF.Helpers;
 using System;
 using System.Linq;
-using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading;
-using System.Globalization;
 using System.Windows.Data;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -113,6 +109,8 @@ namespace GaltonMachineWPF.ViewModel
         public ObservableCollection<Histogram> HistogramsList { get; private set; }
         public ObservableCollection<ChartLabel> HistogramsLabels { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
+        public BitmapImage Curve { get; private set; }
+        public string CurveDimensions { get { return "0, 0, " + CanvasWidth + ", " + CanvasHeight; } }
         public double BallDiameter { get; private set; }
         public double BallX
         {
@@ -247,10 +245,18 @@ namespace GaltonMachineWPF.ViewModel
                         double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
                         h.Height = barHeight;
                         h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                        // Aggiorna l'istogramma anche nel model in modo che l'aggiornamento dell'istogramma
+                        // si propaghi nell'applicazione/grafico
+                        if (model.HistogramChart.GetHistogram(j) != null)
+                        {
+                            model.HistogramChart.SetHistogram(j, h);
+                        }
                     }
 
                     // Aggiorna la label dell'istogramma
                     HistogramsLabels.ElementAt(model.BallColumn).Text = currentHistogram.Value.ToString();
+
+                    Curve = model.HistogramChart.Curve.Image;
 
                     CurrentIteration++;
 
@@ -299,14 +305,15 @@ namespace GaltonMachineWPF.ViewModel
                 {
                     for (int j = 0; j < i + 1; j++)
                     {
-                        // Se è la prima stecca   
-                        if (j == 0)
+                        // Se non è la prima stecca
+                        if (j != 0)
                         {
-                            x = dx * (n - i - 1);
+                            x += dx * 2;
+                            
                         }
                         else
                         {
-                            x += dx * 2;
+                            x = dx * (n - i - 1);
                         }
 
                         SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER));
@@ -347,8 +354,6 @@ namespace GaltonMachineWPF.ViewModel
                 // Coordinate iniziali x y degli istogrammi 
                 double x = dx;
                 double y = SticksList.Last().Y + STICKS_DIAMETER;
-                
-                //HistogramsList.Add(new Histogram(x, y, HISTOGRAM_WIDTH, 0));
 
                 // Crea i nuovi istogrammi
                 for (int i = 0; i < n; i++)
@@ -366,11 +371,6 @@ namespace GaltonMachineWPF.ViewModel
                     model.HistogramChart.SetHistogram(i, HistogramsList.ElementAt(i));
                 }
             }
-        }
-
-        private void GenerateBellCurve()
-        {
-            
         }
 
         private void StartSimulation()

@@ -1,0 +1,4 @@
+- Aggiungere animazione rimbalzo pallina 
+- Fare in modo che le palline vengano generate una dopo l'altra
+- Generazione report
+- Migliorare grafica in modo da farla un po' più "3D" 

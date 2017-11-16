@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GaltonMachineWPF.Model
 {
@@ -25,10 +19,10 @@ namespace GaltonMachineWPF.Model
             }
         }
 
-        /*public HistogramChart()
+        public HistogramChart()
         {
 
-        }*/
+        }
 
         public HistogramChart(int size, int gDeviceWidth)
         {
@@ -38,7 +32,7 @@ namespace GaltonMachineWPF.Model
             {
                 l.Add(h.Value);
             }
-            //curve = new BellCurve(l, gDeviceWidth);
+            Curve = new BellCurve(l, gDeviceWidth);
             
         }
 
@@ -51,10 +45,19 @@ namespace GaltonMachineWPF.Model
         {
             Histograms[index].Value = value;
         }
+        public Histogram GetHistogram(int index)
+        {
+            if (Histograms.Length > index)
+            {
+                return Histograms[index];
+            }
+            return null;
+        }
 
         public void SetHistogram(int index, Histogram h)
         {
             Histograms[index] = h;
+            Curve.UpdateData(index, h.Value);
         }
 
         public void IncrementValue(int index)
@@ -69,17 +72,6 @@ namespace GaltonMachineWPF.Model
             {
                 Histograms[i] = new Histogram();
             }
-        }
-
-        // DEBUG
-        public void PrintHistogramValues()
-        {
-            Console.WriteLine("---------------------------------------------------");
-            for (int i = 0; i < size; i++)
-            {   
-                Console.WriteLine(Histograms[i]);
-            }
-            Console.WriteLine("---------------------------------------------------");
         }
     }
 }
