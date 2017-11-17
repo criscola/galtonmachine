@@ -23,11 +23,6 @@ namespace GaltonMachineWPF.Model
         public System.Drawing.Size GDeviceSize { get; set; }
         public BitmapImage Image { get; private set; }
 
-        public BellCurve(List<float> data, float gDeviceWidth)
-        {
-
-        }
-
         public BellCurve(List<float> data, System.Drawing.Size gDeviceSize)
         {
             Mean = GetMean(data);
@@ -45,11 +40,8 @@ namespace GaltonMachineWPF.Model
             Mean = GetMean(Data);
             Variance = GetVariance(Data, Mean);
             StdDev = (float)Math.Sqrt(Variance);
-            GDeviceSize = GDeviceSize;
 
-            
-
-            DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
+            //DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
         }
 
         private void DrawCurve(float stddev_multiple, int wid, int hgt, float mean, float stddev, float var)

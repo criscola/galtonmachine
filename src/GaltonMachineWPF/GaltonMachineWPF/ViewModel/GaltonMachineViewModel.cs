@@ -175,7 +175,7 @@ namespace GaltonMachineWPF.ViewModel
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
 
             // Inizializzazione model/proprietà vm
-            model = new GaltonMachine(SimulationSize, CanvasWidth);
+            model = new GaltonMachine(SimulationSize, new System.Drawing.Size(CanvasWidth, CanvasHeight));
 
             SticksList = new ObservableCollection<Ball>();
             HistogramsList = new ObservableCollection<Histogram>();
@@ -247,10 +247,7 @@ namespace GaltonMachineWPF.ViewModel
                         h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
                         // Aggiorna l'istogramma anche nel model in modo che l'aggiornamento dell'istogramma
                         // si propaghi nell'applicazione/grafico
-                        if (model.HistogramChart.GetHistogram(j) != null)
-                        {
-                            model.HistogramChart.SetHistogram(j, h);
-                        }
+                        model.HistogramChart.SetHistogram(j, h);
                     }
 
                     // Aggiorna la label dell'istogramma

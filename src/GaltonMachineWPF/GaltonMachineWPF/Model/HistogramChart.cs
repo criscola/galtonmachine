@@ -24,7 +24,7 @@ namespace GaltonMachineWPF.Model
 
         }
 
-        public HistogramChart(int size, int gDeviceWidth)
+        public HistogramChart(int size, System.Drawing.Size gDeviceSize)
         {
             GenerateChart();
             List<float> l = new List<float>();
@@ -32,7 +32,7 @@ namespace GaltonMachineWPF.Model
             {
                 l.Add(h.Value);
             }
-            Curve = new BellCurve(l, gDeviceWidth);
+            Curve = new BellCurve(l, gDeviceSize);
             
         }
 

@@ -9,13 +9,13 @@
         public HistogramChart HistogramChart { get; set; }
         public int[] ResultSet { get; set; }
 
-        public GaltonMachine(int width, int gDeviceWidth)
+        public GaltonMachine(int width, System.Drawing.Size gDeviceSize)
         {
             Ball = new Ball();
             Grid = new QuincunxGrid(width);
             BallRow = 0;
             BallColumn = 0;
-            HistogramChart = new HistogramChart(width, gDeviceWidth);
+            HistogramChart = new HistogramChart(width, gDeviceSize);
         }
 
         public void Reset()
