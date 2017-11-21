@@ -34,3 +34,21 @@ E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\
 E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.g.resources
 E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.Properties.Resources.resources
 E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csproj.GenerateResource.Cache
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe.config
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.exe
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\GaltonMachineWPF.pdb
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csprojResolveAssemblyReference.cache
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\GaltonMachineView.g.cs
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\MainWindow.g.cs
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\App.g.cs
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF_MarkupCompile.cache
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF_MarkupCompile.lref
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\GaltonMachineView.baml
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\View\MainWindow.baml
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.g.resources
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.Properties.Resources.resources
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.csproj.GenerateResource.Cache
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.exe
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachineWPF\GaltonMachineWPF\obj\Debug\GaltonMachineWPF.pdb

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaltonMachineWPF.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -9,39 +10,65 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace GaltonMachineWPF.Model
 {
-    public class BellCurve
+    public class BellCurve : BindableBase
     {
-        public const int DEVIATIONS = 3;
+        public const float DEVIATIONS = 3;
 
-        private List<float> Data { get; set; }
+        private float[] Data { get; set; }
         public float Mean { get; private set; }
         public float Variance { get; private set; }
         public float StdDev { get; private set; }
         public System.Drawing.Size GDeviceSize { get; set; }
-        public BitmapImage Image { get; private set; }
-
-        public BellCurve(List<float> data, System.Drawing.Size gDeviceSize)
+        private BitmapImage image;
+        public BitmapImage Image
         {
-            Mean = GetMean(data);
-            Variance = GetVariance(data, Mean);
-            StdDev = (float)Math.Sqrt(Variance);
-            GDeviceSize = gDeviceSize;
+            get
+            {
+                return image;
+            }
+            private set
+            {
+                image = value;
+            }
+        }
 
-            DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
+        public BellCurve(int size, System.Drawing.Size gDeviceSize)
+        {
+            GDeviceSize = gDeviceSize;
+            Data = new float[size];
         }
 
         public void UpdateData(int index, float value)
         {
             Data[index] = value;
 
-            Mean = GetMean(Data);
-            Variance = GetVariance(Data, Mean);
-            StdDev = (float)Math.Sqrt(Variance);
+            int count = 0;
+            for (int i = 0; i < Data.Length; i++)
+            {
+                if (Data[i] != 0)
+                {
+                    count++;
+                }
+            }
+            if (count > 2)
+            {
+                Mean = GetMean(Data);
+                Variance = GetVariance(Data, Mean);
+                StdDev = (float)Math.Sqrt(Variance);
 
-            //DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
+                Console.WriteLine("Mean: {0} Variance: {1} StdDev {2}", Mean, Variance, StdDev);
+
+                DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
+            }
+            else
+            {
+                Console.WriteLine("Sono necessari almeno 3 dati");
+            }
+            
         }
 
         private void DrawCurve(float stddev_multiple, int wid, int hgt, float mean, float stddev, float var)
@@ -73,6 +100,9 @@ namespace GaltonMachineWPF.Model
 
                 // Get the inverse transform.
                 Matrix inverse = transform.Clone();
+
+                //Console.WriteLine("wxmin {0} wxmax {1} wymax {2} wymin {3} wwid {4} whgt {5}", wxmin.ToString(),wxmax,wymax,wymin,wwid,whgt);
+
                 inverse.Invert();
 
                 // Get tick mark lengths.
@@ -181,29 +211,29 @@ namespace GaltonMachineWPF.Model
             return (float)(one_over_2pi * Math.Exp(-(x - mean) * (x - mean) / (2 * var)));
         }
 
-        private static float GetMean(List<float> values)
+        private static float GetMean(float[] values)
         {
             // Calcola la media dei numeri
             float mean = 0;
 
-            for (int i = 0; i < values.Count; i++)
+            for (int i = 0; i < values.Length; i++)
             {
                 mean += values[i];
             }
 
-            return mean /= values.Count;
+            return mean /= values.Length;
         }
 
-        private static float GetVariance(List<float> values, float mean)
+        private static float GetVariance(float[] values, float mean)
         {
             float dist = 0;
 
-            for (int i = 0; i < values.Count; i++)
+            for (int i = 0; i < values.Length; i++)
             {
-                dist = (Math.Abs(values[i] - mean)) * 2;
+                dist += (values[i] - mean) * (values[i] - mean);
             }
 
-            return dist /= values.Count;
+            return dist /= values.Length;
         }
 
         public static BitmapImage BitmapToImageSource(Bitmap bitmap)

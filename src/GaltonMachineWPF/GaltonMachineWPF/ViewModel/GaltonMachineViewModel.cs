@@ -7,6 +7,9 @@ using System.Windows;
 using System.Threading;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Threading;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -44,6 +47,7 @@ namespace GaltonMachineWPF.ViewModel
         private int simulationSize;
         private int simulationLength;
         private int iterationCount;
+        private BitmapImage curve;
 
         private Thread animationThread;
 
@@ -78,6 +82,7 @@ namespace GaltonMachineWPF.ViewModel
                 }
                 GenerateSticks();
                 GenerateChart();
+                if (model != null) PlaceBallOnTopStick();
             }
         }
         public int SimulationLength
@@ -109,7 +114,18 @@ namespace GaltonMachineWPF.ViewModel
         public ObservableCollection<Histogram> HistogramsList { get; private set; }
         public ObservableCollection<ChartLabel> HistogramsLabels { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
-        public BitmapImage Curve { get; private set; }
+        public BitmapImage Curve
+        {
+            get
+            {
+                return curve;
+            }
+            private set
+            {
+                curve = value;
+                OnPropertyChanged(() => Curve);
+            }
+        }
         public string CurveDimensions { get { return "0, 0, " + CanvasWidth + ", " + CanvasHeight; } }
         public double BallDiameter { get; private set; }
         public double BallX
@@ -170,6 +186,7 @@ namespace GaltonMachineWPF.ViewModel
             // Inizializzazione valori di default
             CanvasWidth = CANVAS_WIDTH;
             CanvasHeight = CANVAS_HEIGHT;
+            
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
@@ -186,13 +203,14 @@ namespace GaltonMachineWPF.ViewModel
             ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsLabels });
             GenerateSticks();
             GenerateChart();
-
+            
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
             BallDiameter = BALL_DIAMETER;
 
             PlaceBallOnTopStick();
 
             RegisterCommands();
+
         }
 
         #endregion
@@ -232,7 +250,13 @@ namespace GaltonMachineWPF.ViewModel
                     // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
                     Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
                     currentHistogram.Value++;
-                    
+
+                    // Aggiorna la curva
+                    model.HistogramChart.Curve.UpdateData(model.BallColumn, (float)currentHistogram.Value);
+                    Console.WriteLine("Aggiornati i dati all'indice {0} con valore {1}", model.BallColumn, currentHistogram.Value);
+                    model.HistogramChart.Curve.Image?.Freeze();
+                    Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
+
                     // Prende l'istogramma con valore più grande
                     Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
 
@@ -245,18 +269,13 @@ namespace GaltonMachineWPF.ViewModel
                         double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
                         h.Height = barHeight;
                         h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
-                        // Aggiorna l'istogramma anche nel model in modo che l'aggiornamento dell'istogramma
-                        // si propaghi nell'applicazione/grafico
-                        model.HistogramChart.SetHistogram(j, h);
                     }
 
                     // Aggiorna la label dell'istogramma
                     HistogramsLabels.ElementAt(model.BallColumn).Text = currentHistogram.Value.ToString();
 
-                    Curve = model.HistogramChart.Curve.Image;
-
                     CurrentIteration++;
-
+                    
                     Thread.Sleep(SimulationSpeed);
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
@@ -361,12 +380,8 @@ namespace GaltonMachineWPF.ViewModel
 
                     x += dx + HISTOGRAM_WIDTH;
                 }
-
-                // Inserisce gli elementi di HistogramList nel model.HistogramChart
-                for (int i = 0; i < model.HistogramChart.Size; i++)
-                {
-                    model.HistogramChart.SetHistogram(i, HistogramsList.ElementAt(i));
-                }
+                // Genera la curva normale
+                model.HistogramChart.Curve = new BellCurve(SimulationSize, new System.Drawing.Size(CanvasWidth, CanvasHeight));
             }
         }
 

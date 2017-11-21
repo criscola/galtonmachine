@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GaltonMachineWPF.Model
 {
@@ -27,13 +28,6 @@ namespace GaltonMachineWPF.Model
         public HistogramChart(int size, System.Drawing.Size gDeviceSize)
         {
             GenerateChart();
-            List<float> l = new List<float>();
-            foreach (Histogram h in Histograms)
-            {
-                l.Add(h.Value);
-            }
-            Curve = new BellCurve(l, gDeviceSize);
-            
         }
 
         public int GetValue(int index)

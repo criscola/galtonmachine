@@ -11,7 +11,6 @@ namespace GaltonMachineWPF.Model
         public FontWeight DEFAULT_FONTWEIGHT { get { return FontWeights.Bold; } }
         public FontStretch DEFAULT_FONTSTRETCH { get { return FontStretches.Normal; } }
         public double DEFAULT_FONTSIZE { get { return 13; } }
-
         public FontFamily FontFamily { get; set; }
         public FontStyle FontStyle { get; set; }
         public FontWeight FontWeight { get; set; }
@@ -20,7 +19,6 @@ namespace GaltonMachineWPF.Model
         public double X { get; set; }
         public double Y { get; set; }
         public double Width { get; set; }
-
 
         private string text;
         public string Text
