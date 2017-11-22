@@ -44,7 +44,7 @@ namespace GaltonMachineWPF.Model
 
         public void UpdateData(int index, float value)
         {
-            Data[index] = value;
+            Data[index] = value / 10;
 
             int count = 0;
             for (int i = 0; i < Data.Length; i++)
@@ -66,7 +66,7 @@ namespace GaltonMachineWPF.Model
             }
             else
             {
-                Console.WriteLine("Sono necessari almeno 3 dati");
+                //Console.WriteLine("Sono necessari almeno 3 dati");
             }
             
         }
@@ -81,14 +81,15 @@ namespace GaltonMachineWPF.Model
 
                 // Define the mapping from world
                 // coordinates onto the PictureBox.
-                float wxmin = mean - stddev * stddev_multiple;
-                float wxmax = mean + stddev * stddev_multiple;
-                float one_over_2pi = (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
-                float wymax = F(mean, one_over_2pi, mean, stddev_multiple, var) * 1.1f;
-                float wymin = -0.2f * wymax;
-
-                float wwid = wxmax - wxmin;
-                float whgt = wymax - wymin;
+                // Ampiezza orizzontale
+                const float wxmin = -5.1f;
+                // Traslazione verticale
+                const float wymin = -0.2f;
+                const float wxmax = -wxmin;
+                // Ampiezza verticale
+                const float wymax = 1.1f;
+                const float wwid = wxmax - wxmin;
+                const float whgt = wymax - wymin;
                 RectangleF world = new RectangleF(wxmin, wymin, wwid, whgt);
                 PointF[] device_points =
                 {
@@ -98,34 +99,22 @@ namespace GaltonMachineWPF.Model
                 };
                 Matrix transform = new Matrix(world, device_points);
 
-                // Get the inverse transform.
-                Matrix inverse = transform.Clone();
-
-                //Console.WriteLine("wxmin {0} wxmax {1} wymax {2} wymin {3} wwid {4} whgt {5}", wxmin.ToString(),wxmax,wymax,wymin,wwid,whgt);
-
-                inverse.Invert();
-
-                // Get tick mark lengths.
-                PointF[] ticks = { new PointF(5, 5) };
-                inverse.TransformVectors(ticks);
-                float tick_dx = ticks[0].X;
-                float tick_dy = -ticks[0].Y;
-
                 // Make a thin Pen to use.
                 using (Pen pen = new Pen(Color.Red, 0))
                 {
                     using (Font font = new Font("Arial", 8))
                     {
+
                         // Draw the X axis.
                         gr.Transform = transform;
                         pen.Color = Color.Black;
                         gr.DrawLine(pen, wxmin, 0, wxmax, 0);
-                        for (int x = (int)wxmin - 1; x <= wxmax; x++)
+                        for (int x = (int)wxmin; x <= wxmax; x++)
                         {
-                            gr.DrawLine(pen, x, -tick_dy * 2, x, tick_dy * 2);
-                            gr.DrawLine(pen, x + 0.25f, -tick_dy, x + 0.25f, tick_dy);
-                            gr.DrawLine(pen, x + 0.50f, -tick_dy, x + 0.50f, tick_dy);
-                            gr.DrawLine(pen, x + 0.75f, -tick_dy, x + 0.75f, tick_dy);
+                            gr.DrawLine(pen, x, -0.05f, x, 0.05f);
+                            gr.DrawLine(pen, x + 0.25f, -0.025f, x + 0.25f, 0.025f);
+                            gr.DrawLine(pen, x + 0.50f, -0.025f, x + 0.50f, 0.025f);
+                            gr.DrawLine(pen, x + 0.75f, -0.025f, x + 0.75f, 0.025f);
                         }
 
                         // Label the X axis.
@@ -133,7 +122,7 @@ namespace GaltonMachineWPF.Model
                         gr.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                         List<PointF> ints = new List<PointF>();
                         for (int x = (int)wxmin; x <= wxmax; x++)
-                            ints.Add(new PointF(x, -2 * tick_dy));
+                            ints.Add(new PointF(x, -0.07f));
                         PointF[] ints_array = ints.ToArray();
                         transform.TransformPoints(ints_array);
 
@@ -153,41 +142,76 @@ namespace GaltonMachineWPF.Model
                         gr.Transform = transform;
                         pen.Color = Color.Black;
                         gr.DrawLine(pen, 0, wymin, 0, wymax);
-                        for (int y = (int)wymin - 1; y <= wymax; y++)
+                        for (int y = (int)wymin; y <= wymax; y++)
                         {
-                            gr.DrawLine(pen, -tick_dx * 2, y, tick_dx * 2, y);
-                            gr.DrawLine(pen, -tick_dx, y + 0.25f, tick_dx, y + 0.25f);
-                            gr.DrawLine(pen, -tick_dx, y + 0.50f, tick_dx, y + 0.50f);
-                            gr.DrawLine(pen, -tick_dx, y + 0.75f, tick_dx, y + 0.75f);
+                            gr.DrawLine(pen, -0.2f, y, 0.2f, y);
+                            gr.DrawLine(pen, -0.1f, y + 0.25f, 0.1f, y + 0.25f);
+                            gr.DrawLine(pen, -0.1f, y + 0.50f, 0.1f, y + 0.50f);
+                            gr.DrawLine(pen, -0.1f, y + 0.75f, 0.1f, y + 0.75f);
                         }
 
                         // Label the Y axis.
                         gr.Transform = new Matrix();
                         gr.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                         ints = new List<PointF>();
-                        for (float y = 0.25f; y < wymax; y += 0.25f)
-                            ints.Add(new PointF(2 * tick_dx, y));
-                        if (ints.Count > 0)
-                        {
-                            ints_array = ints.ToArray();
-                            transform.TransformPoints(ints_array);
-                        }
+                        for (float y = 0.25f; y < 1.01; y += 0.25f)
+                            ints.Add(new PointF(0.2f, y));
+                        ints_array = ints.ToArray();
+                        transform.TransformPoints(ints_array);
 
                         using (StringFormat sf = new StringFormat())
                         {
                             sf.Alignment = StringAlignment.Near;
                             sf.LineAlignment = StringAlignment.Center;
                             int index = 0;
-                            for (float y = 0.25f; y < wymax; y += 0.25f)
+                            foreach (float y in new float[] { 0.25f, 0.5f, 0.75f, 1.0f })
                             {
                                 gr.DrawString(y.ToString("0.00"), font, Brushes.Black,
                                     ints_array[index++], sf);
                             }
                         }
 
+                        // Disegno curva di bezier
+                        pen.Color = Color.Red;
+                        /*
+                        PointF[] bezierPoints = new PointF[Data.Length+2];
+                        float step = 10 / 5;
+                        bezierPoints[0] = new PointF(-5f, Data[0]);
+                        float bezierX = -5 + step;
+                        for (int i = 0; i < Data.Length; i++)
+                        {
+                            bezierPoints[i+1] = new PointF(bezierX, Data[i]);
+                            bezierX += step;
+                        }
+                        bezierPoints[bezierPoints.Length - 1] = new PointF(bezierX, Data[Data.Length - 1]);
+
+                        foreach(PointF f in bezierPoints)
+                        {
+                            Console.WriteLine("POINTFX: {0} POINTFY: {1}", f.X, f.Y);
+                        }
+
+                        // Draw arc to screen.
+                        gr.DrawBeziers(pen, bezierPoints);*/
+
+                        PointF start = new PointF(-1.0F, 1.0F);
+                        PointF control1 = new PointF(-2.0F, 1.0F);
+                        PointF control2 = new PointF(-35.0F, 5.0F);
+                        PointF end1 = new PointF(-5.0F, 1.0F);
+                        PointF control3 = new PointF(-6.0F, 15.0F);
+                        PointF control4 = new PointF(-65.0F, 25.0F);
+                        PointF end2 = new PointF(-5.0F, 3.0F);
+                        PointF[] bezierPoints = { start, control1, control2, end1,
+         control3, control4, end2 };
+
+                        // Draw arc to screen.
+                        gr.DrawBeziers(pen, bezierPoints);
+
+                        pen.Color = Color.DarkGreen;
+
                         // Draw the curve.
                         gr.Transform = transform;
                         List<PointF> points = new List<PointF>();
+                        float one_over_2pi = (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
 
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
@@ -197,11 +221,11 @@ namespace GaltonMachineWPF.Model
                         }
                         pen.Color = Color.Red;
                         gr.DrawLines(pen, points.ToArray());
+
                     } // Font
                 } // Pen
+                Image = BitmapToImageSource(bm);
             }
-
-            Image = BitmapToImageSource(bm);
         }
 
 
@@ -221,7 +245,46 @@ namespace GaltonMachineWPF.Model
                 mean += values[i];
             }
 
-            return mean /= values.Length;
+            mean = mean / values.Length;
+
+            // Guarda se i valori sono distribuiti più verso sinistra o verso destra o idealmente distribuiti
+            int half = values.Length / 2;
+            float[] n1 = new float[half];
+            float[] n2 = new float[half];
+            bool isValuesCountEven = true;
+            // Calcola se la lunghezza del set è dispari
+            if (values.Length % 2 == 1)
+            {
+                isValuesCountEven = false;
+            }
+
+            n1 = SubArray<float>(values, 0, half);
+            if (isValuesCountEven)
+            {   
+                n2 = SubArray<float>(values, half, half);
+            }
+            else
+            {
+                n2 = SubArray<float>(values, half + 1, half);
+            }
+            float n1Sum = 0;
+            float n2Sum = 0;
+            for (int i = 0; i < n1.Length; i++)
+            {
+                n1Sum += n1[i];
+                n2Sum += n2[i];
+            }
+
+            if (n1Sum > n2Sum)
+            {
+                mean = -mean;
+            }
+            else if (n1Sum == n2Sum)
+            {
+                mean = 0;
+            }
+
+            return mean;
         }
 
         private static float GetVariance(float[] values, float mean)
@@ -251,6 +314,11 @@ namespace GaltonMachineWPF.Model
                 return bitmapimage;
             }
         }
-
+        public static float[] SubArray<T>(float[] data, int index, int length)
+        {
+            float[] result = new float[length];
+            Array.Copy(data, index, result, 0, length);
+            return result;
+        }
     }
 }
