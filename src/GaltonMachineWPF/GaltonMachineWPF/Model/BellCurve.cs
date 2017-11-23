@@ -151,6 +151,7 @@ namespace GaltonMachineWPF.Model
                         }
 
                         // Label the Y axis.
+                        /*
                         gr.Transform = new Matrix();
                         gr.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                         ints = new List<PointF>();
@@ -170,7 +171,7 @@ namespace GaltonMachineWPF.Model
                                     ints_array[index++], sf);
                             }
                         }
-
+                        */
                         // Disegno curva di bezier
                         pen.Color = Color.Red;
                         /*
@@ -191,7 +192,7 @@ namespace GaltonMachineWPF.Model
                         }
 
                         // Draw arc to screen.
-                        gr.DrawBeziers(pen, bezierPoints);*/
+                        gr.DrawBeziers(pen, bezierPoints);
 
                         PointF start = new PointF(-1.0F, 1.0F);
                         PointF control1 = new PointF(-2.0F, 1.0F);
@@ -205,18 +206,17 @@ namespace GaltonMachineWPF.Model
 
                         // Draw arc to screen.
                         gr.DrawBeziers(pen, bezierPoints);
-
+                        */
                         pen.Color = Color.DarkGreen;
 
                         // Draw the curve.
                         gr.Transform = transform;
                         List<PointF> points = new List<PointF>();
-                        float one_over_2pi = (float)(1.0 / (stddev * Math.Sqrt(2 * Math.PI)));
 
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
-                            float y = F(x, one_over_2pi, mean, stddev, var);
+                            float y = F(x, mean, stddev, var) / 10;
                             points.Add(new PointF(x, y));
                         }
                         pen.Color = Color.Red;
@@ -230,12 +230,12 @@ namespace GaltonMachineWPF.Model
 
 
         // The normal distribution function.
-        private static float F(float x, float one_over_2pi, float mean, float stddev, float var)
+        public float F(float x, float mean, float stddev, float var)
         {
-            return (float)(one_over_2pi * Math.Exp(-(x - mean) * (x - mean) / (2 * var)));
+            return (float)(1 / stddev * Math.Sqrt(2 * Math.PI)) * (float)(Math.Exp(-(((x - mean) * (x - mean)) / (2 * var))));
         }
 
-        private static float GetMean(float[] values)
+        public float GetMean(float[] values)
         {
             // Calcola la media dei numeri
             float mean = 0;
@@ -243,11 +243,14 @@ namespace GaltonMachineWPF.Model
             for (int i = 0; i < values.Length; i++)
             {
                 mean += values[i];
+                //Console.WriteLine(i + " - " + values[i]);
             }
 
             mean = mean / values.Length;
-
+            //Console.WriteLine("mesia linq"+mean + " - " + values.Average());
+            mean = values.Average();
             // Guarda se i valori sono distribuiti più verso sinistra o verso destra o idealmente distribuiti
+
             int half = values.Length / 2;
             float[] n1 = new float[half];
             float[] n2 = new float[half];
@@ -287,7 +290,7 @@ namespace GaltonMachineWPF.Model
             return mean;
         }
 
-        private static float GetVariance(float[] values, float mean)
+        public float GetVariance(float[] values, float mean)
         {
             float dist = 0;
 
@@ -296,7 +299,11 @@ namespace GaltonMachineWPF.Model
                 dist += (values[i] - mean) * (values[i] - mean);
             }
 
-            return dist /= values.Length;
+            foreach (float val in values)
+            {
+                Console.WriteLine("Valore dataset: " + val);
+            }
+            return dist /= values.Length - 1;
         }
 
         public static BitmapImage BitmapToImageSource(Bitmap bitmap)
@@ -314,7 +321,7 @@ namespace GaltonMachineWPF.Model
                 return bitmapimage;
             }
         }
-        public static float[] SubArray<T>(float[] data, int index, int length)
+        public float[] SubArray<T>(float[] data, int index, int length)
         {
             float[] result = new float[length];
             Array.Copy(data, index, result, 0, length);
