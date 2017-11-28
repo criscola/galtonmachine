@@ -1,0 +1,13 @@
+Hello everyone. It's been 2 weeks now but statistics is not my main field. 
+
+I'm trying to draw a normal distribution curve in C# based on the galton machine experiment. The objective is to represent the number of times a ball falls in the corresponding hole using the density function through the simulation software I'm designing. What I do is:
+
+1. Get the dataset
+2. Get the mean 
+3. Get the variance
+4. Get the standard deviation
+5. Decide a range for the X, min and max (in my case, from -5 to +5)
+6. Set the X for the function from min to max (using a step of 1, so if the range is from -5 to +5, there will 10 x's)
+7. Get the Y using the density function
+8. Insert my X and Y values into an array of points and plot them
+

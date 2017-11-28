@@ -15,11 +15,8 @@
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <CollectionViewSource x:Key="SticksList" Source="{Binding Path=SticksList, Mode=OneTime}"/>
+        <CollectionViewSource x:Key="SimulationItemsCollection" Source="{Binding Path=SimulationItemsCollection, Mode=OneTime}"/>
         <CollectionViewSource x:Key="ChartItemsCollection" Source="{Binding Path=ChartItemsCollection, Mode=OneTime}"/>
-        <Ellipse x:Key="p2" Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX }"
-                    Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}"
-                    Fill="Black" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -35,10 +32,7 @@
         <ItemsControl Panel.ZIndex="1">
             <ItemsControl.ItemsSource>
                 <CompositeCollection>
-                    <CollectionContainer Collection="{Binding Source={StaticResource SticksList}}"/>
-                    <!-- Pallina che cade -->
-                    <Ellipse Canvas.Top="{Binding Path=BallY}" Canvas.Left="{Binding Path=BallX}"
-                        Width="{Binding Path=BallDiameter}" Height="{Binding Path=BallDiameter}" Fill="Black" />
+                    <CollectionContainer Collection="{Binding Source={StaticResource SimulationItemsCollection}}"/>
                 </CompositeCollection>
             </ItemsControl.ItemsSource>
             <ItemsControl.ItemsPanel>
@@ -52,11 +46,11 @@
                     <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Ellipse Width="{Binding Path=Radius}" Height="{Binding Path=Radius}" Fill="Red"/>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type model:Ball}">
+                    <Ellipse Width="{Binding Path=Radius}" Height="{Binding Path=Radius}" Fill="{Binding Path=Color}"/>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ItemsControl.Resources>
         </ItemsControl>
 
         <!-- Grafico -->
@@ -134,6 +128,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button x:Name="btn_start" Content="Start" Width="75" Command="{Binding Path=StartSimulationCommand}"/>
+                    <Button x:Name="btn_pause" Content="Pause" Width="75" />
                     <Button x:Name="btn_stop" Content="Stop" Width="75" Command="{Binding Path=StopSimulationCommand}"/>
                     <Button x:Name="btn_reset" Content="Reset" Width="75" Command="{Binding Path=ResetSimulationCommand}"/>
                     <Button x:Name="btn_about" Content="About" Width="75" Command="{Binding Path=AboutApplicationCommand}"/>

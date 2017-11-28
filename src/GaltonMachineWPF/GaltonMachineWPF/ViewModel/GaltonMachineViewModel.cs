@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Threading;
+using System.Drawing;
 
 namespace GaltonMachineWPF.ViewModel
 {
@@ -18,6 +19,8 @@ namespace GaltonMachineWPF.ViewModel
         #region ================== Costanti =================
 
         public const int STICKS_DIAMETER = 20;
+        public const string STICKS_COLOR = "red";
+        public const string BALL_COLOR = "blue";
         public const int BALL_DIAMETER = 15;
         public const int HISTOGRAM_WIDTH = 20;
 
@@ -43,10 +46,10 @@ namespace GaltonMachineWPF.ViewModel
 
         private GaltonMachine model;
         private volatile bool isSimulationRunning;
+        private int iterationCount;
         private int simulationSpeed;
         private int simulationSize;
         private int simulationLength;
-        private int iterationCount;
         private BitmapImage curve;
 
         private Thread animationThread;
@@ -82,7 +85,8 @@ namespace GaltonMachineWPF.ViewModel
                 }
                 GenerateSticks();
                 GenerateChart();
-                if (model != null) PlaceBallOnTopStick();
+                // TODO: Adattare questo codice alla nuova architettura
+                //if (model != null) GenerateFirstBall();
             }
         }
         public int SimulationLength
@@ -97,7 +101,6 @@ namespace GaltonMachineWPF.ViewModel
                 OnPropertyChanged(() => SimulationLength);
             }
         }
-        public int IterationCount { get; set; }
         public int CurrentIteration
         {
             get
@@ -111,9 +114,11 @@ namespace GaltonMachineWPF.ViewModel
             }
         }
         public ObservableCollection<Ball> SticksList { get; private set; }
+        public ObservableCollection<Ball> FallingBallsList { get; private set; }
         public ObservableCollection<Histogram> HistogramsList { get; private set; }
         public ObservableCollection<ChartLabel> HistogramsLabels { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
+        public CompositeCollection SimulationItemsCollection { get; private set; }
         public BitmapImage Curve
         {
             get
@@ -128,30 +133,6 @@ namespace GaltonMachineWPF.ViewModel
         }
         public string CurveDimensions { get { return "0, 0, " + CanvasWidth + ", " + CanvasHeight; } }
         public double BallDiameter { get; private set; }
-        public double BallX
-        {
-            get
-            {
-                return model.Ball.X;
-            }
-            private set
-            {
-                model.Ball.X = value;
-                OnPropertyChanged(() => BallX);
-            }
-        }
-        public double BallY
-        {
-            get
-            {
-                return model.Ball.Y;
-            }
-            private set
-            {
-                model.Ball.Y = value;
-                OnPropertyChanged(() => BallY);
-            }
-        }
         public bool IsSimulationRunning
         {
             get
@@ -195,19 +176,26 @@ namespace GaltonMachineWPF.ViewModel
             model = new GaltonMachine(SimulationSize, new System.Drawing.Size(CanvasWidth, CanvasHeight));
 
             SticksList = new ObservableCollection<Ball>();
+            FallingBallsList = new ObservableCollection<Ball>();
             HistogramsList = new ObservableCollection<Histogram>();
             HistogramsLabels = new ObservableCollection<ChartLabel>();
+
+            SimulationItemsCollection = new CompositeCollection();
+            SimulationItemsCollection.Add(new CollectionContainer { Collection = SticksList });
+            SimulationItemsCollection.Add(new CollectionContainer { Collection = FallingBallsList });
+
             ChartItemsCollection = new CompositeCollection();
-            
             ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsList });
             ChartItemsCollection.Add(new CollectionContainer { Collection = HistogramsLabels });
+
             GenerateSticks();
             GenerateChart();
             
             // Aggiunta della pallina che cade alla lista di elementi da renderizzare
             BallDiameter = BALL_DIAMETER;
 
-            PlaceBallOnTopStick();
+            // TODO: Adattare pure questo
+            GenerateFirstBall();
 
             RegisterCommands();
 
@@ -225,54 +213,63 @@ namespace GaltonMachineWPF.ViewModel
         {
             try
             {
+                Thread.Sleep(SimulationSpeed);
+                // Loop dei cicli della simulazione
                 for (int i = 0; i < SimulationLength - 1; i++)
                 {
-                    // Piazza la pallina sulla prima stecca
-                    PlaceBallOnTopStick();
-
-                    for (int j = 0; j < model.Grid.Size - 1; j++)
+                    // Loop delle palline che cadono
+                    for (int j = 0; j < model.FallingBallCells.Count; j++)
                     {
-                        IterationCount++;
-
-                        Thread.Sleep(SimulationSpeed);
-                        model.BallRow++;
-
+                        Cell currentCell  = model.FallingBallCells.ElementAt(j);
+                            
                         // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
-                        if (model.Ball.Bounce() && model.BallColumn < model.Grid.GetRowSize(j))
+                        if (currentCell.Content.Bounce() && currentCell.Column < model.Grid.GetRowSize(j) - 1)
                         {
-                            model.BallColumn++;
+                            currentCell.Column++;
                         }
+                        // Se la pallina raggiunge la fine della QuincunxGrid, toglila dalla simulazione
+                        if (currentCell.Row + 1 < model.Grid.Size - 1)
+                        {
+                            currentCell.Row++;
+                        }
+                        else
+                        {
+                            // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
+                            Histogram currentHistogram = HistogramsList.ElementAt(currentCell.Column);
+                            currentHistogram.Value++;
 
-                        // Piazza la palla sulla stecca
-                        PlaceBallOnStick(model.Grid.GetCell(model.BallRow, model.BallColumn));
+                            // Aggiorna la curva
+                            model.HistogramChart.Curve.UpdateData(currentCell.Column, currentHistogram.Value);
+                            model.HistogramChart.Curve.Image?.Freeze();
+                            Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
+
+                            // Prende l'istogramma con valore più grande
+                            Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
+
+                            // Aggiorna altezza degli istogrammi
+                            for (int k = 0; k < HistogramsList.Count; k++)
+                            {
+                                Histogram h = HistogramsList.ElementAt(k);
+                                int value = h.Value;
+                                float perc = value / (float)maxHistogram.Value;
+                                double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
+                                h.Height = barHeight;
+                                h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                            }
+
+                            // Aggiorna la label dell'istogramma
+                            HistogramsLabels.ElementAt(currentCell.Column).Text = currentHistogram.Value.ToString();
+
+                            model.FallingBallCells.Remove(currentCell);
+                        }
+                        PlaceBallOnStick(currentCell, model.Grid.GetCell(currentCell));
+                        
                     }
-
-                    // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
-                    Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
-                    currentHistogram.Value++;
-
-                    // Aggiorna la curva
-                    model.HistogramChart.Curve.UpdateData(model.BallColumn, (float)currentHistogram.Value);
-                    Console.WriteLine("Aggiornati i dati all'indice {0} con valore {1}", model.BallColumn, currentHistogram.Value);
-                    model.HistogramChart.Curve.Image?.Freeze();
-                    Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
-
-                    // Prende l'istogramma con valore più grande
-                    Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
-
-                    // Aggiorna altezza degli istogrammi
-                    for (int j = 0; j < HistogramsList.Count; j++)
-                    {
-                        Histogram h = HistogramsList.ElementAt(j);
-                        int value = h.Value;
-                        float perc = value / (float)maxHistogram.Value;
-                        double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
-                        h.Height = barHeight;
-                        h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
-                    }
-
-                    // Aggiorna la label dell'istogramma
-                    HistogramsLabels.ElementAt(model.BallColumn).Text = currentHistogram.Value.ToString();
+                    Console.WriteLine("---------------------------------------------------------");
+                    // Genera la prossima pallina
+                    model.FallingBallCells.Add(new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR)));
+                    
+                    Thread.Sleep(SimulationSpeed);
 
                     CurrentIteration++;
                     
@@ -332,7 +329,7 @@ namespace GaltonMachineWPF.ViewModel
                             x = dx * (n - i - 1);
                         }
 
-                        SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER));
+                        SticksList.Add(new Ball(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER, STICKS_COLOR));
                     }
                     y += dy;
                 }
@@ -399,7 +396,6 @@ namespace GaltonMachineWPF.ViewModel
             animationThread.IsBackground = true;
             animationThread.Start();
 
-            PlaceBallOnTopStick();
             CurrentIteration = 1;
 
             StartSimulationCommand.RaiseCanExecuteChanged();
@@ -421,19 +417,32 @@ namespace GaltonMachineWPF.ViewModel
 
         #region ================== Metodi helper ===================
 
-        private void PlaceBallOnStick(Ball stick)
+        private void PlaceBallOnStick(Cell cell, Ball stick)
         {
-            BallX = stick.X + stick.Radius / 2 - BallDiameter / 2;
-            BallY = stick.Y - BallDiameter - 0.5;
+            cell.Content.X = stick.X + stick.Radius / 2 - BallDiameter / 2;
+            cell.Content.Y = stick.Y - BallDiameter - 0.5;
         }
 
-        private void PlaceBallOnTopStick()
+        private void PlaceBallOnTopStick(Cell cell)
         {
-            model.BallRow = 0;
-            model.BallColumn = 0;
-            PlaceBallOnStick(model.Grid.GetCell(0, 0));
+            PlaceBallOnStick(cell, model.Grid.GetCell(0, 0));
         }
 
+        private void GenerateFirstBall()
+        {
+            if (model.FallingBallCells.Count == 0)
+            {
+                // Genera la prima pallina che cade
+                Cell newCell = new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR));
+                model.FallingBallCells.Add(newCell);
+
+                PlaceBallOnTopStick(newCell);
+            }
+            else
+            {
+                model.FallingBallCells.Clear();
+            }
+        }
         #endregion
 
         #region ================== Metodi dei delegati =================
@@ -461,7 +470,7 @@ namespace GaltonMachineWPF.ViewModel
         private void OnStop(object obj)
         {
             StopSimulation();
-            PlaceBallOnTopStick();
+            GenerateFirstBall();
         }
 
         private void OnReset(object obj)

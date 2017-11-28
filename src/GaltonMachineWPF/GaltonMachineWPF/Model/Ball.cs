@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace GaltonMachineWPF.Model
 {
@@ -10,20 +11,23 @@ namespace GaltonMachineWPF.Model
 
         public double Radius { get; set; }
 
-        public Ball() : this (0)
+        public string Color { get; set; }
+
+        public Ball() : this (0, "black")
         {
         }
 
-        public Ball(double radius) : this (0, 0, radius)
+        public Ball(double radius, string color) : this (0, 0, radius, color)
         {
 
         }
 
-        public Ball(double x, double y, double radius)
+        public Ball(double x, double y, double radius, string color)
         {
             X = x;
             Y = y;
             Radius = radius;
+            Color = color;
         }
 
         /// <summary>

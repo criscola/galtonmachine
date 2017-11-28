@@ -56,11 +56,19 @@ namespace GaltonMachineWPF.Model
             }
             if (count > 2)
             {
+                /*
+                List<float> f = new List<float>();
+                for (int i = 0; i < Data.Length; i++)
+                {
+                    f.Add(Data[i] * (i + 1));
+                }
+                Data = f.ToArray();*/
+
                 Mean = GetMean(Data);
                 Variance = GetVariance(Data, Mean);
                 StdDev = (float)Math.Sqrt(Variance);
 
-                Console.WriteLine("Mean: {0} Variance: {1} StdDev {2}", Mean, Variance, StdDev);
+                //Console.WriteLine("Mean: {0} Variance: {1} StdDev {2}", Mean, Variance, StdDev);
 
                 DrawCurve(DEVIATIONS, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
             }
@@ -212,13 +220,23 @@ namespace GaltonMachineWPF.Model
                         // Draw the curve.
                         gr.Transform = transform;
                         List<PointF> points = new List<PointF>();
+                        /*
+                        for (int i = 0; i < Data.Length; i++)
+                        {
+                            float z_score = (Data[i] - mean) / stddev;
+                            float y = F(z_score, mean, stddev, var);
+                            points.Add(new PointF(z_score, y));
+                        }*/
 
+                        
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
-                            float y = F(x, mean, stddev, var) / 10;
+                            float z_score = (x - mean) / stddev; 
+                            float y = F(z_score, mean, stddev, var);
                             points.Add(new PointF(x, y));
                         }
+
                         pen.Color = Color.Red;
                         gr.DrawLines(pen, points.ToArray());
 
@@ -299,11 +317,7 @@ namespace GaltonMachineWPF.Model
                 dist += (values[i] - mean) * (values[i] - mean);
             }
 
-            foreach (float val in values)
-            {
-                Console.WriteLine("Valore dataset: " + val);
-            }
-            return dist /= values.Length - 1;
+            return dist;
         }
 
         public static BitmapImage BitmapToImageSource(Bitmap bitmap)

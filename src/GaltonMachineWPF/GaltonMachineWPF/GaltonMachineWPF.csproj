@@ -75,6 +75,7 @@
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\IDelegateCommand.cs" />
     <Compile Include="Model\Ball.cs" />
+    <Compile Include="Model\Cell.cs" />
     <Compile Include="Model\Histogram.cs" />
     <Compile Include="Model\HistogramChart.cs" />
     <Compile Include="Model\BellCurve.cs" />

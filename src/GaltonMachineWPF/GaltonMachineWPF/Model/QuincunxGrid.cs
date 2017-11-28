@@ -1,4 +1,6 @@
-﻿namespace GaltonMachineWPF.Model
+﻿using System;
+
+namespace GaltonMachineWPF.Model
 {
     public class QuincunxGrid
     {
@@ -33,6 +35,13 @@
             return grid[x][y];
         }
 
+        public Ball GetCell(Cell currentCell)
+        {
+            Console.WriteLine("CurrentBall: {0},{1}", currentCell.Row, currentCell.Column);
+            Console.WriteLine("Lunghezza righe {0}, Lunghezza colonne {1}", grid.Length, grid[currentCell.Row].Length);
+            return grid[currentCell.Row][currentCell.Column];
+        }
+
         public void SetCell(int x, int y, Ball value)
         {
             grid[x][y] = value;
@@ -52,6 +61,7 @@
                 }
             }
         }
+
 
         /*
         public void IncrementCell(int x, int y)
