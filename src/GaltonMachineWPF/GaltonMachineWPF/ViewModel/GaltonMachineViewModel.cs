@@ -195,7 +195,7 @@ namespace GaltonMachineWPF.ViewModel
             BallDiameter = BALL_DIAMETER;
 
             // TODO: Adattare pure questo
-            GenerateFirstBall();
+            //GenerateFirstBall();
 
             RegisterCommands();
 
@@ -213,7 +213,14 @@ namespace GaltonMachineWPF.ViewModel
         {
             try
             {
+                // Genera la prima pallina che cade
+                Cell newCell = new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR));
+                PlaceBallOnTopStick(newCell);
+                model.FallingBallCells.Add(newCell);
+                Application.Current.Dispatcher.Invoke(() => FallingBallsList.Add(newCell.Content));
+
                 Thread.Sleep(SimulationSpeed);
+
                 // Loop dei cicli della simulazione
                 for (int i = 0; i < SimulationLength - 1; i++)
                 {
@@ -223,12 +230,14 @@ namespace GaltonMachineWPF.ViewModel
                         Cell currentCell  = model.FallingBallCells.ElementAt(j);
                             
                         // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
-                        if (currentCell.Content.Bounce() && currentCell.Column < model.Grid.GetRowSize(j) - 1)
+                        if (currentCell.Content.Bounce() && currentCell.Column < model.Grid.GetRowSize(j))
                         {
+                            Console.WriteLine("BALL at column-row: {0}-{1} max row: {2}",
+                               currentCell.Column, currentCell.Row, model.Grid.GetRowSize(j));
                             currentCell.Column++;
                         }
-                        // Se la pallina raggiunge la fine della QuincunxGrid, toglila dalla simulazione
-                        if (currentCell.Row + 1 < model.Grid.Size - 1)
+                        // Se la pallina non è all'ultima riga, falla scendere, altrimenti rimuovila e aggiorna il grafico
+                        if (currentCell.Row < model.Grid.Size - 1)
                         {
                             currentCell.Row++;
                         }
@@ -261,18 +270,23 @@ namespace GaltonMachineWPF.ViewModel
                             HistogramsLabels.ElementAt(currentCell.Column).Text = currentHistogram.Value.ToString();
 
                             model.FallingBallCells.Remove(currentCell);
+                            Application.Current.Dispatcher.Invoke(() => this.FallingBallsList.Remove(currentCell.Content));
                         }
-                        PlaceBallOnStick(currentCell, model.Grid.GetCell(currentCell));
                         
+                        PlaceBallOnStick(currentCell, model.Grid.GetCell(currentCell));
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.FallingBallsList.Clear();
+                            foreach (Cell cell in model.FallingBallCells)
+                            {
+                                FallingBallsList.Add(cell.Content);
+                            }
+                        });
                     }
-                    Console.WriteLine("---------------------------------------------------------");
-                    // Genera la prossima pallina
-                    model.FallingBallCells.Add(new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR)));
-                    
-                    Thread.Sleep(SimulationSpeed);
-
                     CurrentIteration++;
-                    
+
+                    model.FallingBallCells.Add(new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR)));
+
                     Thread.Sleep(SimulationSpeed);
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
@@ -434,9 +448,9 @@ namespace GaltonMachineWPF.ViewModel
             {
                 // Genera la prima pallina che cade
                 Cell newCell = new Cell(0, 0, new Ball(BALL_DIAMETER, BALL_COLOR));
-                model.FallingBallCells.Add(newCell);
-
                 PlaceBallOnTopStick(newCell);
+                model.FallingBallCells.Add(newCell);
+                FallingBallsList.Add(newCell.Content);
             }
             else
             {

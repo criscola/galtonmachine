@@ -37,8 +37,8 @@ namespace GaltonMachineWPF.Model
 
         public Ball GetCell(Cell currentCell)
         {
-            Console.WriteLine("CurrentBall: {0},{1}", currentCell.Row, currentCell.Column);
-            Console.WriteLine("Lunghezza righe {0}, Lunghezza colonne {1}", grid.Length, grid[currentCell.Row].Length);
+            //Console.WriteLine("CurrentBall: {0},{1}", currentCell.Row, currentCell.Column);
+            //Console.WriteLine("Lunghezza righe {0}, Lunghezza colonne {1}", grid.Length, grid[currentCell.Row].Length);
             return grid[currentCell.Row][currentCell.Column];
         }
 

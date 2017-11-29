@@ -1,15 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GaltonMachineWPF.Helpers;
 
 namespace GaltonMachineWPF.Model
 {
-    public class Cell
+    public class Cell : BindableBase
     {
-        public int Row { get; set; }
-        public int Column { get; set; }
+        private int row;
+
+        public int Row
+        {
+            get { return row; }
+            set
+            {
+                row = value;
+                OnPropertyChanged(() => Column);
+            }
+        }
+
+        private int column;
+
+        public int Column
+        {
+            get { return column; }
+            set
+            {
+                column = value;
+                OnPropertyChanged(() => Column);
+            }
+        }
+
         public Ball Content { get; set; }
 
         public Cell()
