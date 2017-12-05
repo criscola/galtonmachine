@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CCD2058C-83F0-4F75-B64C-D356363BCE34}</ProjectGuid>
+    <ProjectGuid>{EED59870-B111-4617-B729-0C64469376E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>GaltonMachine</RootNamespace>
     <AssemblyName>GaltonMachine</AssemblyName>
@@ -37,7 +37,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -50,24 +49,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\sw\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helper\BindableBase.cs" />
-    <Compile Include="Helper\DelegateCommand.cs" />
-    <Compile Include="Helper\IDelegateCommand.cs" />
-    <Compile Include="Model\BellCurve.cs" />
-    <Compile Include="Model\ChartLabel.cs" />
-    <Compile Include="Model\Circle.cs" />
-    <Compile Include="Model\Histogram.cs" />
-    <Compile Include="Model\QuincunxGrid.cs" />
-    <Compile Include="Model\Stick.cs" />
     <Compile Include="ViewModel\GaltonMachineViewModel.cs" />
     <Compile Include="View\GaltonMachineView.xaml.cs">
       <DependentUpon>GaltonMachineView.xaml</DependentUpon>
@@ -80,6 +67,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper\BindableBase.cs" />
+    <Compile Include="Helper\DelegateCommand.cs" />
+    <Compile Include="Helper\IDelegateCommand.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -90,6 +80,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Ball.cs" />
+    <Compile Include="Model\BellCurve.cs" />
+    <Compile Include="Model\ChartLabel.cs" />
+    <Compile Include="Model\DistributionChart.cs" />
+    <Compile Include="Model\GaltonSimulation.cs" />
+    <Compile Include="Model\Histogram.cs" />
+    <Compile Include="Model\QuincunxGrid.cs" />
+    <Compile Include="Model\Stick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,8 +1,8 @@
-﻿using GaltonMachineWPF.Helpers;
+﻿using GaltonMachine.Helper;
 using System.Windows;
 using System.Windows.Media;
 
-namespace GaltonMachine.Model.Graphics
+namespace GaltonMachine.Model
 {
     public class ChartLabel : BindableBase
     {

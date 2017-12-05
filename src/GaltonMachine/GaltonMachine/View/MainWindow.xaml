@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:GaltonMachine.View"
         mc:Ignorable="d"
-        Title="Galton Machine" Height="350" Width="525">
-
+        Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <view:GaltonMachineView />
+        <view:GaltonMachineView/>
     </Grid>
 </Window>

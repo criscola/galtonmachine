@@ -1,6 +1,6 @@
-﻿using GaltonMachineWPF.Helpers;
+﻿using GaltonMachine.Helper;
 
-namespace GaltonMachine.Model.Graphics
+namespace GaltonMachine.Model
 {
     public class Histogram : BindableBase
     {

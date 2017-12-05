@@ -1,10 +1,6 @@
-﻿using GaltonMachine.Model.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GaltonMachine.Model
 {
@@ -16,10 +12,21 @@ namespace GaltonMachine.Model
 
         #region ================== Attributi & proprietà =================
 
-        private Histogram[] histograms;
+        private ObservableCollection<Histogram> histograms;
+        private ObservableCollection<ChartLabel> labels;
         private BellCurve normalCurve;
         private int size;
-        
+
+        public Size GDeviceSize { get; set; }
+
+        public ObservableCollection<Histogram> Histograms
+        {
+            get { return histograms; }
+        }
+        public ObservableCollection<ChartLabel> Labels
+        {
+            get { return labels; }
+        }
         public int Size
         {
             get { return size; }
@@ -38,8 +45,11 @@ namespace GaltonMachine.Model
 
         }
 
-        public DistributionChart(int size, Size GDeviceSize)
+        public DistributionChart(int size, Size gDeviceSize)
         {
+            Size = size;
+            GDeviceSize = gDeviceSize;
+
             GenerateChart(GDeviceSize);
         }
 
@@ -57,14 +67,17 @@ namespace GaltonMachine.Model
 
         #region ================== Metodi privati ==================
 
-        public void GenerateChart(Size gDeviceSize)
+        public void GenerateChart(Size GDeviceSize)
         {
-            histograms = new Histogram[Size];
-            for (int i = 0; i < histograms.Length; i++)
+            if (Size > 0)
             {
-                histograms[i] = new Histogram();
+                histograms = new ObservableCollection<Histogram>();
+                for (int i = 0; i < Size; i++)
+                {
+                    histograms[i] = new Histogram();
+                }
+                normalCurve = new BellCurve(Size, GDeviceSize);
             }
-            normalCurve = new BellCurve(Size, gDeviceSize);
         }
 
         #endregion

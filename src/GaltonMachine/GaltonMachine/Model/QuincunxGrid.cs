@@ -1,5 +1,4 @@
-﻿
-namespace GaltonMachine.Model
+﻿namespace GaltonMachine.Model
 {
     public class QuincunxGrid
     {
@@ -27,7 +26,7 @@ namespace GaltonMachine.Model
         #endregion
 
         #region ================== Costruttori =================
-    
+
         public QuincunxGrid(int size)
         {
             this.size = size;
@@ -43,9 +42,9 @@ namespace GaltonMachine.Model
             return sticksGrid[row][column];
         }
 
-        public void SetStick(int x, int y, Stick stick)
+        public void SetStick(int row, int column, Stick stick)
         {
-            sticksGrid[x][y] = stick;
+            sticksGrid[row][column] = stick;
         }
 
         public int GetRowSize(int rowIndex)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GaltonMachineWPF.Helpers
+namespace GaltonMachine.Helper
 {
     public class DelegateCommand : IDelegateCommand
     {

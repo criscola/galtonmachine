@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace GaltonMachineWPF.Helpers
+namespace GaltonMachine.Helper
 {
     public interface IDelegateCommand : ICommand
     {

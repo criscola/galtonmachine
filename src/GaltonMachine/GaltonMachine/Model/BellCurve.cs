@@ -1,4 +1,4 @@
-﻿using GaltonMachineWPF.Helpers;
+﻿using GaltonMachine.Helper;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +7,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace GaltonMachine.Model.Graphics
+namespace GaltonMachine.Model
 {
     public class BellCurve : BindableBase
     {
@@ -48,7 +48,7 @@ namespace GaltonMachine.Model.Graphics
         public BellCurve(int size, Size gDeviceSize)
         {
             GDeviceSize = gDeviceSize;
-            Data = new float[size];
+            data = new float[size];
         }
 
         #endregion
