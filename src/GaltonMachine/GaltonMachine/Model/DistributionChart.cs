@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 
-
 namespace GaltonMachine.Model
 {
     public class DistributionChart
@@ -22,10 +21,12 @@ namespace GaltonMachine.Model
         public ObservableCollection<Histogram> Histograms
         {
             get { return histograms; }
+            set { histograms = value; }
         }
         public ObservableCollection<ChartLabel> Labels
         {
             get { return labels; }
+            set { labels = value; }
         }
         public int Size
         {
@@ -59,8 +60,16 @@ namespace GaltonMachine.Model
 
         public void SetValue(int index, int value)
         {
-            histograms[index].Value = value;
-            normalCurve.UpdateData(index, value);
+            if (Histograms.Count > index)
+            {
+                Histograms[index].Value = value;
+                normalCurve.UpdateData(index, value);
+            }
+            else
+            {
+                throw new System.ArgumentOutOfRangeException("index", "param index is greater than histograms count.");
+            }
+            
         }
 
         #endregion
@@ -69,12 +78,15 @@ namespace GaltonMachine.Model
 
         public void GenerateChart(Size GDeviceSize)
         {
+            Histograms = new ObservableCollection<Histogram>();
+            Labels = new ObservableCollection<ChartLabel>();
             if (Size > 0)
             {
-                histograms = new ObservableCollection<Histogram>();
+                Histograms = new ObservableCollection<Histogram>();
                 for (int i = 0; i < Size; i++)
                 {
-                    histograms[i] = new Histogram();
+                    Histograms.Add(new Histogram());
+                    Labels.Add(new ChartLabel());
                 }
                 normalCurve = new BellCurve(Size, GDeviceSize);
             }

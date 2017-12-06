@@ -9,7 +9,7 @@
              xmlns:viewmodel="clr-namespace:GaltonMachineWPF.ViewModel"
              xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
              mc:Ignorable="d"
-             Height="710" Width="1200" MinHeight="710" MinWidth="460">
+                >
 
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
@@ -95,6 +95,8 @@
                 </ItemsControl.Resources>
             </ItemsControl>
         </Grid>
+        
+        <!-- Menu -->
         <StackPanel Grid.Row="1" Margin="0,10,0,0" Grid.ColumnSpan="2">
             <Grid Grid.Column="0" Grid.Row="1">
                 <Grid.ColumnDefinitions>

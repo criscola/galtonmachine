@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Drawing;
 
 namespace GaltonMachine.Model
@@ -11,7 +12,6 @@ namespace GaltonMachine.Model
         #region ================== Attributi & proprietà =================
 
         private ObservableCollection<Ball> fallingBalls;
-        private QuincunxGrid quincunxGrid;
         private int simulationSize;
 
         public Size GDeviceSize { get; set; }
@@ -24,7 +24,7 @@ namespace GaltonMachine.Model
             }
             private set
             {
-                FallingBalls = value;
+                fallingBalls = value;
             }
         }
         public int SimulationSize
@@ -32,12 +32,7 @@ namespace GaltonMachine.Model
             get { return simulationSize; }
             set
             {
-                // Aggiorna i valori delle classi gestite a cascata
                 simulationSize = value;
-                quincunxGrid.Size = value;
-                // E' necessario riprendere le stecche dalla quincunxGrid perchè la grid è cambiata
-                Sticks = GetSticks();
-                GenerateSimulationInstances();
             }
         }
 
@@ -57,8 +52,8 @@ namespace GaltonMachine.Model
         {
             SimulationSize = simulationSize;
             GDeviceSize = gDeviceSize;
-
-            GenerateSimulationInstances();
+            Sticks = new ObservableCollection<Stick>();
+            FallingBalls = new ObservableCollection<Ball>();
         }
 
         #endregion
@@ -80,39 +75,14 @@ namespace GaltonMachine.Model
 
         }
 
-        public void ClearSticks()
+        public Stick GetStick(int row, int column)
         {
-            Sticks.Clear();
-        }
-
-        public void SetStick(int row, int column, Stick s)
-        {
-            quincunxGrid.SetStick(row, column, s);
+            return Sticks[2 * row + column];   
         }
 
         #endregion
 
         #region ================== Metodi privati ==================
-
-        private void GenerateSimulationInstances()
-        {
-            quincunxGrid = new QuincunxGrid(SimulationSize);
-            fallingBalls = new ObservableCollection<Ball>();
-        }
-
-        private ObservableCollection<Stick> GetSticks()
-        {
-            if (quincunxGrid == null) return null;
-            ObservableCollection<Stick> s = new ObservableCollection<Stick>();
-            for (int i = 0; i < quincunxGrid.Size; i++)
-            {
-                for (int j = 0; j < quincunxGrid.GetRowSize(i); j++)
-                {
-                    s.Add(quincunxGrid.GetStick(i, j));
-                }
-            }
-            return s;
-        }
 
         #endregion
 

@@ -3,13 +3,148 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:viewmodel="clr-namespace:GaltonMachine.ViewModel"
+             xmlns:model="clr-namespace:GaltonMachine.Model"
+             xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             Height="710" Width="1200" MinHeight="710" MinWidth="460">
     <UserControl.DataContext>
         <viewmodel:GaltonMachineViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="SimulationItemsCollection" Source="{Binding Path=SimulationItemsCollection, Mode=OneTime}"/>
+        <CollectionViewSource x:Key="ChartItemsCollection" Source="{Binding Path=ChartItemsCollection, Mode=OneTime}"/>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding Path=CanvasHeight}"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Stecche -->
+        <ItemsControl Panel.ZIndex="1">
+            <ItemsControl.ItemsSource>
+                <CompositeCollection>
+                    <CollectionContainer Collection="{Binding Source={StaticResource SimulationItemsCollection}}"/>
+                </CompositeCollection>
+            </ItemsControl.ItemsSource>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type model:Stick}">
+                    <Ellipse Width="{Binding Path=Diameter}" Height="{Binding Path=Diameter}" Fill="{Binding Path=Color}"/>
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
+
+        <!-- Menu -->
+        <StackPanel Grid.Row="1" Margin="0,10,0,0" Grid.ColumnSpan="2">
+            <Grid Grid.Column="0" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,0">
+                    <Run Text="Simulazione n° " />
+                    <Run Text="{Binding Path=IterationCount, Mode=OneWay}" />
+                    <Run Text=" di " />
+                    <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
+                </TextBlock>
+
+                <!-- Riga 1 -->
+                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Margin" Value="05,10,5,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button x:Name="btn_start" Content="Start" Width="75" Command="{Binding Path=StartSimulationCommand}"/>
+                    <Button x:Name="btn_pause" Content="Pause" Width="75" />
+                    <Button x:Name="btn_stop" Content="Stop" Width="75" Command="{Binding Path=StopSimulationCommand}"/>
+                    <Button x:Name="btn_reset" Content="Reset" Width="75" Command="{Binding Path=ResetSimulationCommand}"/>
+                    <Button x:Name="btn_about" Content="About" Width="75" Command="{Binding Path=AboutApplicationCommand}"/>
+                    <Button x:Name="btn_close" Content="Close" Width="75" Command="{Binding Path=CloseApplicationCommand}" />
+                </StackPanel>
+
+                <!-- Riga 2 -->
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Numero di simulazioni" Margin="5,10,0,0" />
+
+                <Slider x:Name="sl_simulationLength" Grid.Row="3" Grid.Column="0" Margin="10,10,0,5"
+                    Value="{Binding Path=SimulationLength, Mode=TwoWay}"
+                    Minimum="{Binding Path=MIN_SIMULATION_LENGTH, Mode=OneTime}" 
+                    Maximum="{Binding Path=MAX_SIMULATION_LENGTH, Mode=OneTime}" 
+                    TickPlacement="BottomRight" TickFrequency="3" IsSnapToTickEnabled="True"
+                    IsEnabled="{Binding Path=IsSimulationNotRunning, Mode=OneWay}"
+                    />
+
+                <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_LENGTH, Mode=OneTime}"
+                                Text="{Binding ElementName=sl_simulationLength, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
+                                Maximum="{Binding Path=MAX_SIMULATION_LENGTH, Mode=OneTime}" 
+                                Minimum="{Binding Path=MIN_SIMULATION_LENGTH, Mode=OneTime}"
+                                IsEnabled="{Binding Path=IsSimulationNotRunning, Mode=OneWay}" 
+                                />
+
+                <!-- Riga 3-->
+                <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Grandezza base" Margin="5,0,0,0"/>
+
+                <Slider x:Name="sl_simulationSize" Grid.Row="5" Grid.Column="0" Margin="10,10,0,5"
+                    Value="{Binding Path=SimulationSize, Mode=TwoWay}"
+                    Minimum="{Binding Path=MIN_SIMULATION_SIZE, Mode=OneTime}" 
+                    Maximum="{Binding Path=MAX_SIMULATION_SIZE, Mode=OneTime}" 
+                    TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"
+                    IsEnabled="{Binding Path=IsSimulationNotRunning}"/>
+
+                <xctk:IntegerUpDown Grid.Row="5" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SIZE, Mode=OneTime}"
+                                Text="{Binding ElementName=sl_simulationSize, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
+                                Maximum="{Binding Path=MAX_SIMULATION_SIZE, Mode=OneTime}" 
+                                Minimum="{Binding Path=MIN_SIMULATION_SIZE, Mode=OneTime}"
+                                IsEnabled="{Binding Path=IsSimulationNotRunning, Mode=OneWay}"
+                                />
+
+                <!-- Riga 4 -->
+                <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Velocità pallina [ms]" Margin="5,0,0,0"/>
+
+                <Slider x:Name="sl_simulationSpeed" Grid.Row="7" Grid.Column="0" Margin="10,10,0,5"
+                    Value="{Binding Path=SimulationSpeed, Mode=TwoWay}"
+                    Minimum="{Binding Path=MIN_SIMULATION_SPEED, Mode=OneTime}" 
+                    Maximum="{Binding Path=MAX_SIMULATION_SPEED, Mode=OneTime}" 
+                    TickPlacement="BottomRight" TickFrequency="20" IsSnapToTickEnabled="True" 
+                    IsDirectionReversed="True"
+                    />
+
+                <xctk:IntegerUpDown Grid.Row="7" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SPEED, Mode=OneTime}"
+                                Text="{Binding ElementName=sl_simulationSpeed, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
+                                Maximum="{Binding Path=MAX_SIMULATION_SPEED, Mode=OneTime}" 
+                                Minimum="{Binding Path=MIN_SIMULATION_SPEED, Mode=OneTime}"/>
+            </Grid>
+        </StackPanel>
+
+
     </Grid>
 </UserControl>

@@ -13,7 +13,7 @@ namespace GaltonMachine.Model
         public double Y { get; set; }
         public double Diameter { get; set; }
         public string Color { get; set; }
-
+        
         #endregion
 
         #region ================== Delegati=================

@@ -1,6 +1,9 @@
 ﻿using GaltonMachine.Helper;
 using GaltonMachine.Model;
+using System;
+using System.Drawing;
 using System.Threading;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
@@ -68,6 +71,7 @@ namespace GaltonMachine.ViewModel
                 OnPropertyChanged(() => SimulationSpeed);
             }
         }
+
         public int SimulationSize
         {
             get
@@ -77,18 +81,10 @@ namespace GaltonMachine.ViewModel
             set
             {
                 simulationSize = value;
-                /*
-                // Cambiando SimulationSize di GaltonSim, essa verrà propagata per il resto della simulazione
-                if (GaltonSim != null) GaltonSim.SimulationSize = value;
-                
-
-                GenerateSticks();*/
-                //GenerateChart();
-                // TODO: Adattare questo codice alla nuova architettura
                 OnPropertyChanged(() => SimulationSize);
-                //if (model != null) GenerateFirstBall();
             }
         }
+
         public int SimulationLength
         {
             get
@@ -101,6 +97,7 @@ namespace GaltonMachine.ViewModel
                 OnPropertyChanged(() => SimulationLength);
             }
         }
+
         public int IterationCount
         {
             get
@@ -113,6 +110,7 @@ namespace GaltonMachine.ViewModel
                 OnPropertyChanged(() => IterationCount);
             }
         }
+
         public bool IsSimulationRunning
         {
             get
@@ -126,10 +124,28 @@ namespace GaltonMachine.ViewModel
             }
         }
 
+        public BitmapImage Curve
+        {
+            get
+            {
+                return curve;
+            }
+            set
+            {
+                curve = Curve;
+                OnPropertyChanged(() => IsSimulationRunning);
+            }
+        }
+
         #endregion
 
         #region ================== Delegati=================
 
+        public IDelegateCommand StartSimulationCommand { get; protected set; }
+        public IDelegateCommand StopSimulationCommand { get; protected set; }
+        public IDelegateCommand ResetSimulationCommand { get; protected set; }
+        public IDelegateCommand CloseApplicationCommand { get; protected set; }
+        public IDelegateCommand AboutApplicationCommand { get; protected set; }
 
         #endregion
 
@@ -145,8 +161,10 @@ namespace GaltonMachine.ViewModel
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
 
+            System.Drawing.Size gDeviceSize = new System.Drawing.Size(CanvasWidth, CanvasHeight);
             // Inizializzazione model/proprietà vm
-            GaltonSim = new GaltonSimulation(SimulationSize, new System.Drawing.Size(CanvasWidth, CanvasHeight));
+            GaltonSim = new GaltonSimulation(SimulationSize, gDeviceSize);
+            DisChart = new DistributionChart(SimulationSize, gDeviceSize);
 
             SimulationItemsCollection = new CompositeCollection();
             SimulationItemsCollection.Add(new CollectionContainer { Collection = GaltonSim.Sticks });
@@ -158,12 +176,10 @@ namespace GaltonMachine.ViewModel
 
             GenerateSticks();
 
-            //GenerateChart();
-
             // TODO: Adattare pure questo
             //GenerateFirstBall();
 
-            //RegisterCommands();
+            RegisterCommands();
         }
 
         #endregion
@@ -172,11 +188,102 @@ namespace GaltonMachine.ViewModel
         #endregion
 
         #region ================== Metodi privati ==================
+        
+        private void AnimateFallingBall()
+        {
+            try
+            {
+                // Genera la prima pallina che cade
+                Ball firstFallingBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
+                PlaceBallOnTopStick(firstFallingBall);
+                Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(firstFallingBall));
+                Thread.Sleep(SimulationSpeed);
 
+                // Loop dei cicli della simulazione
+                for (int i = 0; i < SimulationLength - 1; i++)
+                {
+                    // Loop delle palline che cadono
+                    for (int j = 0; j < GaltonSim.FallingBalls.Count; j++)
+                    {
+                        Ball currentBall = GaltonSim.FallingBalls[j];
 
+                        // Fa rimbalzare la pallina se la pallina non cade fuori dalla riga
+                        Random rnd = new Random();
+                        if (rnd.Next(0 , 1) == 0 && currentBall.Column < j + 1)
+                        {
+                            currentBall.Column++;
+                        }
+                        // Se la pallina non è all'ultima riga, falla scendere, altrimenti rimuovila e aggiorna il grafico
+                        if (currentBall.Row < SimulationSize - 1)
+                        {
+                            currentBall.Row++;
+                            PlaceBallOnStick(GaltonSim.GetStick(currentBall.Row, currentBall.Column), currentBall);
+                            Console.WriteLine(GaltonSim.GetStick(currentBall.Row, currentBall.Column).X);
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Remove(currentBall));
+                            /*
+                            // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
+                            Histogram currentHistogram = HistogramsList.ElementAt(currentCell.Column);
+                            currentHistogram.Value++;
+
+                            // Aggiorna la curva
+                            model.HistogramChart.Curve.UpdateData(currentCell.Column, currentHistogram.Value);
+                            model.HistogramChart.Curve.Image?.Freeze();
+                            Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
+
+                            // Prende l'istogramma con valore più grande
+                            Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
+
+                            // Aggiorna altezza degli istogrammi
+                            for (int k = 0; k < HistogramsList.Count; k++)
+                            {
+                                Histogram h = HistogramsList.ElementAt(k);
+                                int value = h.Value;
+                                float perc = value / (float)maxHistogram.Value;
+                                double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
+                                h.Height = barHeight;
+                                h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                            }
+
+                            // Aggiorna la label dell'istogramma
+                            HistogramsLabels.ElementAt(currentCell.Column).Text = currentHistogram.Value.ToString();
+
+                            model.FallingBallCells.Remove(currentCell);
+                            Application.Current.Dispatcher.Invoke(() => this.FallingBallsList.Remove(currentCell.Content));*/
+                        }
+                    }
+
+                    Ball nextBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
+                    PlaceBallOnTopStick(nextBall);
+                    Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(nextBall));
+                    IterationCount++;
+                    Thread.Sleep(SimulationSpeed);
+                    
+                }
+                // Resetta la simulazione quando la pallina completa la simulazione
+                //IsSimulationRunning = false;
+
+                // Essendo un altro thread che processa la chiamata, è necessario
+                // usare il Dispatcher per "passare" l'invocazione al thread della UI,
+                // altrimenti Execute lancerebbe una InvalidOperationException
+
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
+                //    StopSimulationCommand.RaiseCanExecuteChanged();
+                //    StartSimulationCommand.RaiseCanExecuteChanged();
+                //});
+            }
+            catch (ThreadInterruptedException)
+            {
+                return;
+            }
+        }
+        
         private void GenerateSticks()
         {
-            GaltonSim.ClearSticks();
+            GaltonSim.Sticks.Clear();
 
             // Larghezza e altezza canvas 
             double cw = CanvasWidth - CANVAS_HOFFSET;
@@ -189,8 +296,6 @@ namespace GaltonMachine.ViewModel
             // Coordinate x y delle stecche iniziali
             double x = CanvasWidth / 2 - STICKS_DIAMETER;
             double y = 0;
-
-            int column = 0;
 
             for (int i = 0; i < GaltonSim.SimulationSize; i++)
             {
@@ -207,16 +312,108 @@ namespace GaltonMachine.ViewModel
                         x = dx * (GaltonSim.SimulationSize - i - 1);
                     }
 
-                    GaltonSim.SetStick(i, column, new Stick(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER, STICKS_COLOR));
-                    column++;
+                    GaltonSim.Sticks.Add(new Stick(x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER, STICKS_COLOR));
                 }
                 y += dy;
             }
         }
 
+        private void PlaceBallOnStick(Stick stick, Ball ball)
+        {
+            ball.X = stick.X + stick.Diameter / 2 - ball.Diameter / 2;
+            ball.Y = stick.Y - ball.Diameter - 0.5;
+        }
+
+        private void PlaceBallOnTopStick(Ball ball)
+        {
+            PlaceBallOnStick(GaltonSim.Sticks[0], ball);
+        }
+
+        private void StartSimulation()
+        {
+            IsSimulationRunning = true;
+
+            //model.Reset();
+            //// Generazione del grafico
+            //GenerateChart();
+
+            // Istanza thread pallina che cade animata
+            animationThread = new Thread(new ThreadStart(AnimateFallingBall));
+            // Necessario per far chiudere la thread quando si chiude l'applicazione
+            animationThread.IsBackground = true;
+            animationThread.Start();
+
+            IterationCount = 1;
+
+            StartSimulationCommand.RaiseCanExecuteChanged();
+            StopSimulationCommand.RaiseCanExecuteChanged();
+        }
+
+        private void StopSimulation()
+        {
+            IsSimulationRunning = false;
+            IterationCount = 0;
+
+            StopSimulationCommand.RaiseCanExecuteChanged();
+            StartSimulationCommand.RaiseCanExecuteChanged();
+
+            animationThread?.Interrupt();
+        }
+
         #endregion
 
         #region ================== Metodi dei delegati =================
+
+        private void RegisterCommands()
+        {
+            StartSimulationCommand = new DelegateCommand(OnStart, CanStart);
+            StopSimulationCommand = new DelegateCommand(OnStop, CanStop);
+            ResetSimulationCommand = new DelegateCommand(OnReset);
+            CloseApplicationCommand = new DelegateCommand(OnClose);
+            AboutApplicationCommand = new DelegateCommand(OnAbout);
+        }
+
+        private void OnStart(object obj)
+        {
+            StartSimulation();
+        }
+
+        private bool CanStart(object obj)
+        {
+            return !IsSimulationRunning;
+        }
+
+        private void OnStop(object obj)
+        {
+            StopSimulation();
+            //GenerateFirstBall();
+        }
+
+        private void OnReset(object obj)
+        {
+            OnStop(obj);
+            SimulationLength = DEFAULT_SIMULATION_LENGTH;
+            SimulationSize = DEFAULT_SIMULATION_SIZE;
+            SimulationSpeed = DEFAULT_SIMULATION_SPEED;
+        }
+
+        private void OnAbout(object obj)
+        {
+            MessageBox.Show("Creato da Cristiano Colangelo I4AC", "About", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private bool CanStop(object obj)
+        {
+            return IsSimulationRunning;
+        }
+
+        private void OnClose(object obj)
+        {
+            IsSimulationRunning = false;
+            animationThread?.Interrupt();
+            animationThread?.Join();
+            Application.Current.Shutdown();
+        }
 
         #endregion
     }
