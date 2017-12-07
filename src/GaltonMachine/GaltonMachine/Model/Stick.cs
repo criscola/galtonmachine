@@ -9,8 +9,29 @@ namespace GaltonMachine.Model
 
         #region ================== Attributi & proprietà =================
 
-        public double X { get; set; }
-        public double Y { get; set; }
+        private double x;
+        private double y;
+
+        public double X
+        {
+            get { return x; }
+            set
+            {
+                x = value;
+                OnPropertyChanged(() => X);
+            }
+        }
+
+        public double Y
+        {
+            get { return y; }
+            set
+            {
+                y = value;
+                OnPropertyChanged(() => Y);
+            }
+        }
+
         public double Diameter { get; set; }
         public string Color { get; set; }
         

@@ -16,7 +16,6 @@
             set
             {
                 row = value;
-                OnPropertyChanged(() => Row);
             }
         }
         public int Column
@@ -25,7 +24,6 @@
             set
             {
                 column = value;
-                OnPropertyChanged(() => Column);
             }
         }
 

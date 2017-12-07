@@ -13,18 +13,32 @@ namespace GaltonMachine.Model
     {
         #region ================== Costanti =================
 
-        public float DEFAULT_DEVIATION_COUNT { get; set; }
+        public double DEFAULT_DEVIATION_COUNT { get; set; }
 
         #endregion
 
         #region ================== Attributi & proprietà =================
 
         private BitmapImage image;
-        private float[] data;
+        private double[] data;
+        private List<double> valori;
 
-        public float Mean { get; private set; }
-        public float Variance { get; private set; }
-        public float StdDev { get; private set; }
+        public double Mean { get; private set; }
+        private double media = double.NaN;
+
+        public double Media
+        {
+            get
+            {
+                //if (media == double.NaN)
+                    GetMedia();
+                return media;
+            }
+            private set { media = value; }
+        }
+
+        public double Variance { get; private set; }
+        public double StdDev { get; private set; }
         public Size GDeviceSize { get; set; }
         public BitmapImage Image
         {
@@ -48,76 +62,126 @@ namespace GaltonMachine.Model
         public BellCurve(int size, Size gDeviceSize)
         {
             GDeviceSize = gDeviceSize;
-            data = new float[size];
+            data = new double[size];
+
+            valori = new List<double>();
         }
 
         #endregion
 
         #region ================== Metodi pubblici =================
 
-        public void UpdateData(int index, float value)
+        public void UpdateData(int index, double value)
         {
+            valori.Add(index);
+
             data[index] = value / 10;
 
-            int count = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] != 0)
-                {
-                    count++;
-                }
-            }
+            int count = GetDataCount();
+
             if (count > 2)
             {
-                Mean = GetMean(data);
-                Variance = GetVariance(data, Mean);
-                StdDev = (float)Math.Sqrt(Variance);
+                Mean = GetMean();
+                Variance = GetVariance();
+                StdDev = (double)Math.Sqrt(Variance);
 
                 DrawCurve(DEFAULT_DEVIATION_COUNT, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
             }
 
         }
 
-        public float F(float x, float mean, float stddev, float var)
+        public double F(double x, double mean, double stddev, double var)
         {
-            return (float)(1 / stddev * Math.Sqrt(2 * Math.PI)) * (float)(Math.Exp(-(((x - mean) * (x - mean)) / (2 * var))));
+            return (double)(1.0 / stddev * Math.Sqrt(2 * Math.PI)) * (double)(Math.Exp(-(((x - mean) * (x - mean)) / (2 * var))));
         }
-
-        public float GetMean(float[] values)
+        public double GetMedia()
         {
             // Calcola la media dei numeri
-            float mean = 0;
-
-            for (int i = 0; i < values.Length; i++)
+            double mean = 0;
+            foreach (var v in valori)
             {
-                mean += values[i];
+                mean += v;
             }
 
-            mean = mean / values.Length;
+            mean = mean / valori.Count;
+
+            //// Guarda se i valori sono distribuiti più verso sinistra o verso destra o idealmente distribuiti
+            //int half = data.Length / 2;
+            //double[] n1 = new double[half];
+            //double[] n2 = new double[half];
+            //bool isValuesCountEven = true;
+
+            //// Calcola se la lunghezza del set è dispari
+            //if (data.Length % 2 == 1)
+            //{
+            //    isValuesCountEven = false;
+            //}
+
+            //n1 = SubArray<double>(data, 0, half);
+            //if (isValuesCountEven)
+            //{
+            //    n2 = SubArray<double>(data, half, half);
+            //}
+            //else
+            //{
+            //    n2 = SubArray<double>(data, half + 1, half);
+            //}
+            //double n1Sum = 0;
+            //double n2Sum = 0;
+            //for (int i = 0; i < n1.Length; i++)
+            //{
+            //    n1Sum += n1[i];
+            //    n2Sum += n2[i];
+            //}
+
+            //if (n1Sum > n2Sum)
+            //{
+            //    mean = -mean;
+            //}
+            //else if (n1Sum == n2Sum)
+            //{
+            //    mean = 0;
+            //}
+            Media = mean;
+            return mean;
+        }
+
+
+        public double GetMean()
+        {
+            // Calcola la media dei numeri
+            double mean = 0;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                mean += data[i];
+            }
+
+            mean = mean / data.Length;
 
             // Guarda se i valori sono distribuiti più verso sinistra o verso destra o idealmente distribuiti
-            int half = values.Length / 2;
-            float[] n1 = new float[half];
-            float[] n2 = new float[half];
+            int half = data.Length / 2;
+            double[] n1 = new double[half];
+            double[] n2 = new double[half];
             bool isValuesCountEven = true;
 
             // Calcola se la lunghezza del set è dispari
-            if (values.Length % 2 == 1)
+            if (data.Length % 2 == 1)
             {
                 isValuesCountEven = false;
             }
 
-            n1 = SubArray<float>(values, 0, half);
+            n1 = SubArray<double>(data, 0, half);
             if (isValuesCountEven)
             {
-                n2 = SubArray<float>(values, half, half);
+                n2 = SubArray<double>(data, half, half);
             }
             else
             {
-                n2 = SubArray<float>(values, half + 1, half);
+                n2 = SubArray<double>(data, half + 1, half);
             }
-            float n1Sum = 0;
-            float n2Sum = 0;
+            double n1Sum = 0;
+            double n2Sum = 0;
             for (int i = 0; i < n1.Length; i++)
             {
                 n1Sum += n1[i];
@@ -132,17 +196,27 @@ namespace GaltonMachine.Model
             {
                 mean = 0;
             }
-
+            Media = mean;
             return mean;
         }
 
-        public float GetVariance(float[] values, float mean)
+        public double GetVariance()
         {
-            float dist = 0;
+            double dist = 0;
 
-            for (int i = 0; i < values.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                dist += (values[i] - mean) * (values[i] - mean);
+                dist += (data[i] - Media) * (data[i] - Media);
+            }
+
+            return dist;
+        }
+        public double GetVarianza()
+        {
+            double dist = 0;
+            foreach (var v in valori)
+            {
+                dist += (v - Media) * (v - Media);
             }
 
             return dist;
@@ -153,7 +227,7 @@ namespace GaltonMachine.Model
         #region ================== Metodi privati ==================
 
         // Fonte: Rod Stephens - http://csharphelper.com/blog/2015/09/draw-a-normal-distribution-curve-in-c/
-        private void DrawCurve(float stddev_multiple, int wid, int hgt, float mean, float stddev, float var)
+        private void DrawCurve(double stddev_multiple, int wid, int hgt, double mean, double stddev, double var)
         {
             Bitmap bm = new Bitmap(GDeviceSize.Width, GDeviceSize.Height);
             using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(bm))
@@ -243,7 +317,7 @@ namespace GaltonMachine.Model
                             sf.Alignment = StringAlignment.Near;
                             sf.LineAlignment = StringAlignment.Center;
                             int index = 0;
-                            foreach (float y in new float[] { 0.25f, 0.5f, 0.75f, 1.0f })
+                            foreach (double y in new double[] { 0.25f, 0.5f, 0.75f, 1.0f })
                             {
                                 gr.DrawString(y.ToString("0.00"), font, Brushes.Black,
                                     ints_array[index++], sf);
@@ -258,9 +332,9 @@ namespace GaltonMachine.Model
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
-                            float z_score = (x - mean) / stddev;
-                            float y = F(z_score, mean, stddev, var);
-                            points.Add(new PointF(x, y));
+                            double z_score = (x - mean) / stddev;
+                            double y = F(z_score, mean, stddev, var);
+                            points.Add(new PointF(x, (float)y));
                         }
 
                         pen.Color = Color.Red;
@@ -288,11 +362,24 @@ namespace GaltonMachine.Model
             }
         }
 
-        private float[] SubArray<T>(float[] data, int index, int length)
+        private double[] SubArray<T>(double[] data, int index, int length)
         {
-            float[] result = new float[length];
+            double[] result = new double[length];
             Array.Copy(data, index, result, 0, length);
             return result;
+        }
+
+        public int GetDataCount()
+        {
+            int count = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] != 0)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         #endregion

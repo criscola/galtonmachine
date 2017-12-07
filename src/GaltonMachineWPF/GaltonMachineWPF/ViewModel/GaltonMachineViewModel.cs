@@ -85,8 +85,6 @@ namespace GaltonMachineWPF.ViewModel
                 }
                 GenerateSticks();
                 GenerateChart();
-                // TODO: Adattare questo codice alla nuova architettura
-                //if (model != null) GenerateFirstBall();
             }
         }
         public int SimulationLength

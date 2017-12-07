@@ -51,6 +51,49 @@
             </ItemsControl.Resources>
         </ItemsControl>
 
+        <!-- Grafico -->
+        <Grid Grid.Column="1">
+            <ItemsControl Panel.ZIndex="1000">
+                <ItemsControl.ItemsSource>
+                    <CompositeCollection>
+                        <CollectionContainer Collection="{Binding Source={StaticResource ChartItemsCollection}}"/>
+                        <Image Stretch="None">
+                            <Image.Source>
+                                <DrawingImage PresentationOptions:Freeze="True">
+                                    <DrawingImage.Drawing>
+                                        <DrawingGroup>
+                                            <ImageDrawing Rect="{Binding Path=CurveDimensions}" ImageSource="{Binding Path=Curve}"/>
+
+                                        </DrawingGroup>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>
+
+                    </CompositeCollection>
+                </ItemsControl.ItemsSource>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Focusable="False" Width="{Binding Path=CanvasWidth}" Height="{Binding Path=CanvasHeight}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Path=X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Path=Y}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type model:Histogram}">
+                        <Rectangle Width="{Binding Path=Width}" Height="{Binding Path=Height}" Fill="Blue" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type model:ChartLabel}">
+                        <TextBlock Text="{Binding Path=Text}" Width="{Binding Path=Width}" TextAlignment="Center" Background="Yellow"/>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+            </ItemsControl>
+        </Grid>
+
         <!-- Menu -->
         <StackPanel Grid.Row="1" Margin="0,10,0,0" Grid.ColumnSpan="2">
             <Grid Grid.Column="0" Grid.Row="1">
@@ -85,7 +128,6 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button x:Name="btn_start" Content="Start" Width="75" Command="{Binding Path=StartSimulationCommand}"/>
-                    <Button x:Name="btn_pause" Content="Pause" Width="75" />
                     <Button x:Name="btn_stop" Content="Stop" Width="75" Command="{Binding Path=StopSimulationCommand}"/>
                     <Button x:Name="btn_reset" Content="Reset" Width="75" Command="{Binding Path=ResetSimulationCommand}"/>
                     <Button x:Name="btn_about" Content="About" Width="75" Command="{Binding Path=AboutApplicationCommand}"/>

@@ -46,14 +46,8 @@ namespace GaltonMachineWPF.Model
         {
             Data[index] = value / 10;
 
-            int count = 0;
-            for (int i = 0; i < Data.Length; i++)
-            {
-                if (Data[i] != 0)
-                {
-                    count++;
-                }
-            }
+            int count = GetDataCount();
+
             if (count > 2)
             {
                 /*
@@ -335,11 +329,25 @@ namespace GaltonMachineWPF.Model
                 return bitmapimage;
             }
         }
+
         public float[] SubArray<T>(float[] data, int index, int length)
         {
             float[] result = new float[length];
             Array.Copy(data, index, result, 0, length);
             return result;
+        }
+
+        public int GetDataCount()
+        {
+            int count = 0;
+            for (int i = 0; i < Data.Length; i++)
+            {
+                if (Data[i] != 0)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }

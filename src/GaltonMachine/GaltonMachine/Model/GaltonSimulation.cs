@@ -60,21 +60,6 @@ namespace GaltonMachine.Model
 
         #region ================== Metodi pubblici =================
 
-        public void StartSimulation()
-        {
-
-        }
-
-        public void StopSimulation()
-        {
-
-        }
-
-        public void PauseSimulation()
-        {
-
-        }
-
         public Stick GetStick(int row, int column)
         {
             return Sticks[2 * row + column];   

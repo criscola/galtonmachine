@@ -50,11 +50,11 @@ namespace GaltonMachine.ViewModel
 
         public int CanvasWidth { get; private set; }
         public int CanvasHeight { get; private set; }
+        public string CurveDimensions { get { return "0, 0, " + CanvasWidth + ", " + CanvasHeight; } }
         public GaltonSimulation GaltonSim { get; set; }
         public DistributionChart DisChart { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
         public CompositeCollection SimulationItemsCollection { get; private set; }
-
         #endregion
 
         #region ================== Getter & setter =================
@@ -132,8 +132,8 @@ namespace GaltonMachine.ViewModel
             }
             set
             {
-                curve = Curve;
-                OnPropertyChanged(() => IsSimulationRunning);
+                curve = value;
+                OnPropertyChanged(() => Curve);
             }
         }
 
@@ -164,7 +164,7 @@ namespace GaltonMachine.ViewModel
             System.Drawing.Size gDeviceSize = new System.Drawing.Size(CanvasWidth, CanvasHeight);
             // Inizializzazione model/proprietà vm
             GaltonSim = new GaltonSimulation(SimulationSize, gDeviceSize);
-            DisChart = new DistributionChart(SimulationSize, gDeviceSize);
+            DisChart = new DistributionChart(SimulationSize, gDeviceSize, CANVAS_VOFFSET);
 
             SimulationItemsCollection = new CompositeCollection();
             SimulationItemsCollection.Add(new CollectionContainer { Collection = GaltonSim.Sticks });
@@ -193,15 +193,15 @@ namespace GaltonMachine.ViewModel
         {
             try
             {
-                // Genera la prima pallina che cade
-                Ball firstFallingBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
-                PlaceBallOnTopStick(firstFallingBall);
-                Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(firstFallingBall));
-                Thread.Sleep(SimulationSpeed);
-
                 // Loop dei cicli della simulazione
                 for (int i = 0; i < SimulationLength - 1; i++)
                 {
+                    // Genera la prima pallina che cade
+                    Ball firstFallingBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
+                    PlaceBallOnTopStick(firstFallingBall);
+                    Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(firstFallingBall));
+                    Thread.Sleep(SimulationSpeed);
+
                     // Loop delle palline che cadono
                     for (int j = 0; j < GaltonSim.FallingBalls.Count; j++)
                     {
@@ -217,49 +217,28 @@ namespace GaltonMachine.ViewModel
                         if (currentBall.Row < SimulationSize - 1)
                         {
                             currentBall.Row++;
-                            PlaceBallOnStick(GaltonSim.GetStick(currentBall.Row, currentBall.Column), currentBall);
-                            Console.WriteLine(GaltonSim.GetStick(currentBall.Row, currentBall.Column).X);
-                        }
+                            PlaceBallOnStick(GaltonSim.GetStick(currentBall.Row, currentBall.Column), currentBall);                        }
                         else
                         {
                             Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Remove(currentBall));
-                            /*
-                            // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
-                            Histogram currentHistogram = HistogramsList.ElementAt(currentCell.Column);
-                            currentHistogram.Value++;
+
+                            // Incrementa di 1 l'istogramma alla stessa posizione della pallina corrente
+                            DisChart.IncrementValue(currentBall.Column);
 
                             // Aggiorna la curva
-                            model.HistogramChart.Curve.UpdateData(currentCell.Column, currentHistogram.Value);
-                            model.HistogramChart.Curve.Image?.Freeze();
-                            Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
-
-                            // Prende l'istogramma con valore più grande
-                            Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
-
-                            // Aggiorna altezza degli istogrammi
-                            for (int k = 0; k < HistogramsList.Count; k++)
-                            {
-                                Histogram h = HistogramsList.ElementAt(k);
-                                int value = h.Value;
-                                float perc = value / (float)maxHistogram.Value;
-                                double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
-                                h.Height = barHeight;
-                                h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
+                            if (DisChart.GetDataCount() > 2)
+                            { 
+                                Curve = DisChart.GetCurveImage();
                             }
-
-                            // Aggiorna la label dell'istogramma
-                            HistogramsLabels.ElementAt(currentCell.Column).Text = currentHistogram.Value.ToString();
-
-                            model.FallingBallCells.Remove(currentCell);
-                            Application.Current.Dispatcher.Invoke(() => this.FallingBallsList.Remove(currentCell.Content));*/
                         }
                     }
 
-                    Ball nextBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
+                    /*Ball nextBall = new Ball(0, 0, 0, 0, BALL_DIAMETER);
                     PlaceBallOnTopStick(nextBall);
-                    Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(nextBall));
+                    Application.Current.Dispatcher.Invoke(() => GaltonSim.FallingBalls.Add(nextBall));*/
                     IterationCount++;
-                    Thread.Sleep(SimulationSpeed);
+                    
+                    //Thread.Sleep(SimulationSpeed);
                     
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
@@ -284,6 +263,7 @@ namespace GaltonMachine.ViewModel
         private void GenerateSticks()
         {
             GaltonSim.Sticks.Clear();
+            DisChart.Reset();
 
             // Larghezza e altezza canvas 
             double cw = CanvasWidth - CANVAS_HOFFSET;
@@ -353,11 +333,13 @@ namespace GaltonMachine.ViewModel
         {
             IsSimulationRunning = false;
             IterationCount = 0;
+            DisChart.Reset();
 
             StopSimulationCommand.RaiseCanExecuteChanged();
             StartSimulationCommand.RaiseCanExecuteChanged();
 
             animationThread?.Interrupt();
+
         }
 
         #endregion
@@ -386,7 +368,6 @@ namespace GaltonMachine.ViewModel
         private void OnStop(object obj)
         {
             StopSimulation();
-            //GenerateFirstBall();
         }
 
         private void OnReset(object obj)
