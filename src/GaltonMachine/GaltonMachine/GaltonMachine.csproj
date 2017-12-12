@@ -83,14 +83,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Ball.cs" />
     <Compile Include="Model\BellCurve.cs" />
     <Compile Include="Model\ChartLabel.cs" />
     <Compile Include="Model\DistributionChart.cs" />
     <Compile Include="Model\GaltonSimulation.cs" />
     <Compile Include="Model\Histogram.cs" />
     <Compile Include="Model\QuincunxGrid.cs" />
-    <Compile Include="Model\Stick.cs" />
+    <Compile Include="Model\Ball.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,16 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="GaltonMachine.Model.Ball" Collapsed="true">
-    <Position X="0.5" Y="2" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAABAAAACQAAAAgAAAAAAAAAAAAA=</HashCode>
-      <FileName>Model\Ball.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="GaltonMachine.Model.BellCurve">
     <Position X="3" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAAgAhAEAQAAAAAAAAAAAAAEAAIBBAEgAAQEAACAQA=</HashCode>
+      <HashCode>AEAAgAhAEAQAAAAAABAAAAAAEABIBBAEgAAQFAACAQQ=</HashCode>
       <FileName>Model\BellCurve.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -31,7 +24,7 @@
   <Class Name="GaltonMachine.Model.GaltonSimulation">
     <Position X="10" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAwAAAAEAAAAAAAAAAAAAAiAAAIAAAACAAAAAAAAA=</HashCode>
+      <HashCode>AAAAwAAAAEAAAAAAAAAAAAAAiAAAAAAAACAAAAAAAAA=</HashCode>
       <FileName>Model\GaltonSimulation.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -49,11 +42,11 @@
       <FileName>Model\QuincunxGrid.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GaltonMachine.Model.Stick" Collapsed="true">
+  <Class Name="GaltonMachine.Model.Ball" Collapsed="true">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABhgAAAYAA=</HashCode>
-      <FileName>Model\Stick.cs</FileName>
+      <HashCode>AAAAAAAAAAAABAAAAABAAAACQAAAAgAAAABhgAAAYAA=</HashCode>
+      <FileName>Model\Ball.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

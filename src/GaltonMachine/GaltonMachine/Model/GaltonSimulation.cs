@@ -11,22 +11,11 @@ namespace GaltonMachine.Model
 
         #region ================== Attributi & proprietà =================
 
-        private ObservableCollection<Ball> fallingBalls;
         private int simulationSize;
 
         public Size GDeviceSize { get; set; }
-        public ObservableCollection<Stick> Sticks { get; private set; }
-        public ObservableCollection<Ball> FallingBalls
-        {
-            get
-            {
-                return fallingBalls;
-            }
-            private set
-            {
-                fallingBalls = value;
-            }
-        }
+        public Ball FallingBall { get; private set; }
+        public ObservableCollection<Ball> Sticks { get; private set; }
         public int SimulationSize
         {
             get { return simulationSize; }
@@ -48,21 +37,28 @@ namespace GaltonMachine.Model
 
         }
 
-        public GaltonSimulation(int simulationSize, Size gDeviceSize)
+        public GaltonSimulation(int simulationSize, Size gDeviceSize, Ball fallingBall)
         {
             SimulationSize = simulationSize;
             GDeviceSize = gDeviceSize;
-            Sticks = new ObservableCollection<Stick>();
-            FallingBalls = new ObservableCollection<Ball>();
+            Sticks = new ObservableCollection<Ball>();
+            FallingBall = fallingBall;
         }
 
         #endregion
 
         #region ================== Metodi pubblici =================
 
-        public Stick GetStick(int row, int column)
+        public Ball GetStick(int row, int column)
         {
-            return Sticks[2 * row + column];   
+            foreach (var Stick in Sticks)
+            {
+                if (Stick.Column == column && Stick.Row == row)
+                {
+                    return Stick;
+                }
+            }
+            throw new ArgumentOutOfRangeException("row and/or column", "Row and/or column arguments are out of bounds!");
         }
 
         #endregion

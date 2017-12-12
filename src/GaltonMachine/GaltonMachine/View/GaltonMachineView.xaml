@@ -31,6 +31,8 @@
             <ItemsControl.ItemsSource>
                 <CompositeCollection>
                     <CollectionContainer Collection="{Binding Source={StaticResource SimulationItemsCollection}}"/>
+                    <Ellipse Canvas.Top="{Binding Path=FallingBall.Y}" Canvas.Left="{Binding Path=FallingBall.X}"
+                        Width="{Binding Path=BALL_DIAMETER}" Height="{Binding Path=BALL_DIAMETER}" Fill="Black" />
                 </CompositeCollection>
             </ItemsControl.ItemsSource>
             <ItemsControl.ItemsPanel>
@@ -45,7 +47,7 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type model:Stick}">
+                <DataTemplate DataType="{x:Type model:Ball}">
                     <Ellipse Width="{Binding Path=Diameter}" Height="{Binding Path=Diameter}" Fill="{Binding Path=Color}"/>
                 </DataTemplate>
             </ItemsControl.Resources>

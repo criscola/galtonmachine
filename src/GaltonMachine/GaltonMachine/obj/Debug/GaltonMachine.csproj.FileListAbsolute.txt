@@ -16,3 +16,4 @@ C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.pdb
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csprojResolveAssemblyReference.cache
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csproj.CoreCompileInputs.cache

@@ -9,7 +9,7 @@ namespace GaltonMachine.Model
 
         #region ================== Attributi & proprietà =================
 
-        private Stick[][] sticksGrid;
+        private Ball[][] sticksGrid;
         private int size;
 
         public int Size
