@@ -24,7 +24,7 @@ namespace GaltonMachine.Model
             set
             {
                 x = value;
-                OnPropertyChanged(() => x);
+                OnPropertyChanged(() => X);
             }
         }
         public double Y
@@ -36,7 +36,7 @@ namespace GaltonMachine.Model
             set
             {
                 y = value;
-                OnPropertyChanged(() => y);
+                OnPropertyChanged(() => Y);
             }
         }
         public double Width
@@ -48,7 +48,7 @@ namespace GaltonMachine.Model
             set
             {
                 width = value;
-                OnPropertyChanged(() => width);
+                OnPropertyChanged(() => Width);
             }
         }
         public double Height
@@ -60,7 +60,7 @@ namespace GaltonMachine.Model
             set
             {
                 height = value;
-                OnPropertyChanged(() => height);
+                OnPropertyChanged(() => Height);
             }
         }
         public int Value
@@ -72,7 +72,7 @@ namespace GaltonMachine.Model
             set
             {
                 this.value = value;
-                OnPropertyChanged(() => this.value);
+                OnPropertyChanged(() => Value);
             }
         }
 
@@ -93,11 +93,11 @@ namespace GaltonMachine.Model
 
         public Histogram(double x, double y, double w, double h, int value)
         {
-            this.x = x;
-            this.y = y;
-            width = w;
-            height = h;
-            this.value = value;
+            X = x;
+            Y = y;
+            Width = w;
+            Height = h;
+            Value = value;
         }
 
         #endregion

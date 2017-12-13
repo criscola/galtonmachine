@@ -37,7 +37,7 @@ namespace GaltonMachine.Model
             set
             {
                 text = value;
-                OnPropertyChanged(() => text);
+                OnPropertyChanged(() => Text);
             }
         }
 

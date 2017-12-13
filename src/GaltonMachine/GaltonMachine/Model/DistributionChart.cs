@@ -18,17 +18,10 @@ namespace GaltonMachine.Model
         private ObservableCollection<ChartLabel> labels;
         private BellCurve normalCurve;
         private int size;
-        private double gDeviceVerticalOffset;
 
         public Size GDeviceSize { get; set; }
-        public double GDeviceVerticalOffset
-        {
-            get { return gDeviceVerticalOffset; }
-            set
-            {
-                gDeviceVerticalOffset = value;
-            }
-        }
+        public double HistogramWidth { get; set; }
+        public double VerticalAnchor { get; set; }
 
         public ObservableCollection<Histogram> Histograms
         {
@@ -43,7 +36,11 @@ namespace GaltonMachine.Model
         public int Size
         {
             get { return size; }
-            set { size = value; }
+            set
+            {
+                size = value;
+                GenerateChart();
+            }
         }
 
         #endregion
@@ -58,12 +55,14 @@ namespace GaltonMachine.Model
 
         }
 
-        public DistributionChart(int size, Size gDeviceSize, double gDeviceVerticalOffset)
+        public DistributionChart(int size, Size gDeviceSize, double histogramWidth, double verticalAnchor)
         {
-            Size = size;
             GDeviceSize = gDeviceSize;
-            GDeviceVerticalOffset = gDeviceVerticalOffset;
-            GenerateChart();
+            HistogramWidth = histogramWidth;
+            VerticalAnchor = verticalAnchor;
+            Labels = new ObservableCollection<ChartLabel>();
+            Histograms = new ObservableCollection<Histogram>();
+            Size = size;
         }
 
         #endregion
@@ -85,24 +84,27 @@ namespace GaltonMachine.Model
                     Histogram h = Histograms[i];
                     int value = h.Value;
                     float perc = value / (float)maxHistogram.Value;
-                    double barHeight = Math.Round(perc * (GDeviceSize.Height - GDeviceVerticalOffset));
+                    double barHeight = Math.Round(perc * (GDeviceSize.Height));
+                    if (barHeight < 0) barHeight = 1;
                     h.Height = barHeight;
-                    h.Y = GDeviceSize.Height - barHeight - (gDeviceVerticalOffset / 2);
-                    // TODO: Aggiornare labels   
+                    h.Y = VerticalAnchor - barHeight;
                 }
-
+                Labels[index].Text = Histograms[index].Value.ToString();
             }
             else
             {
-                throw new System.ArgumentOutOfRangeException("index", "param index is greater than histograms count.");
+                throw new ArgumentOutOfRangeException("index", "param index is greater than histograms count.");
             }
             
         }
 
         public BitmapImage GetCurveImage()
         {
-            normalCurve.Image.Freeze();
-            return normalCurve.Image;
+            if (normalCurve.Image != null)
+            {
+                return normalCurve.Image;
+            }
+            return null;
         }
 
         public int GetDataCount()
@@ -121,15 +123,23 @@ namespace GaltonMachine.Model
 
         public void GenerateChart()
         {
-            Histograms = new ObservableCollection<Histogram>();
-            Labels = new ObservableCollection<ChartLabel>();
             if (Size > 0)
             {
-                Histograms = new ObservableCollection<Histogram>();
+                Histograms.Clear();
+                Labels.Clear();
+
+                // Distanza fra gli istogrammi
+                double dx = (GDeviceSize.Width - (HistogramWidth * Size)) / (Size + 1);
+
+                // Coordinate iniziali x y degli istogrammi 
+                double x = dx;
+
                 for (int i = 0; i < Size; i++)
-                {
-                    Histograms.Add(new Histogram());
-                    Labels.Add(new ChartLabel());
+                {   
+                    Histograms.Add(new Histogram(x, VerticalAnchor, HistogramWidth, 0));
+                    Labels.Add(new ChartLabel(x, VerticalAnchor, HistogramWidth, "0"));
+
+                    x += dx + HistogramWidth;
                 }
                 normalCurve = new BellCurve(Size, GDeviceSize);
                 

@@ -1,11 +1,13 @@
 ﻿using GaltonMachine.Helper;
 using GaltonMachine.Model;
 using System;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace GaltonMachine.ViewModel
 {
@@ -83,6 +85,9 @@ namespace GaltonMachine.ViewModel
             set
             {
                 simulationSize = value;
+                // Aggiorna a cascata la grandezza della simulazione
+                if (GaltonSim != null) GaltonSim.SimulationSize = value;
+                if (DisChart != null) DisChart.Size = value;
                 OnPropertyChanged(() => SimulationSize);
             }
         }
@@ -123,6 +128,15 @@ namespace GaltonMachine.ViewModel
             {
                 isSimulationRunning = value;
                 OnPropertyChanged(() => IsSimulationRunning);
+                OnPropertyChanged(() => IsSimulationNotRunning);
+            }
+        }
+
+        public bool IsSimulationNotRunning
+        {
+            get
+            {
+                return !isSimulationRunning;
             }
         }
 
@@ -164,10 +178,20 @@ namespace GaltonMachine.ViewModel
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
 
             System.Drawing.Size gDeviceSize = new System.Drawing.Size(CanvasWidth, CanvasHeight);
-            // Inizializzazione model/proprietà vm
-            GaltonSim = new GaltonSimulation(SimulationSize, gDeviceSize, new Ball(BALL_DIAMETER, BALL_COLOR));
 
-            DisChart = new DistributionChart(SimulationSize, gDeviceSize, CANVAS_VOFFSET);
+            // Inizializzazione model/proprietà vm
+            GaltonSim = new GaltonSimulation(SimulationSize, 
+                new Ball(BALL_DIAMETER, BALL_COLOR), 
+                gDeviceSize, 
+                CANVAS_HOFFSET,
+                CANVAS_VOFFSET,
+                STICKS_DIAMETER,
+                STICKS_COLOR);
+
+            DisChart = new DistributionChart(SimulationSize, 
+                gDeviceSize, 
+                HISTOGRAM_WIDTH, 
+                GaltonSim.Sticks[GaltonSim.Sticks.Count - 1].Y);
 
             SimulationItemsCollection = new CompositeCollection();
             SimulationItemsCollection.Add(new CollectionContainer { Collection = GaltonSim.Sticks });
@@ -176,8 +200,7 @@ namespace GaltonMachine.ViewModel
             ChartItemsCollection.Add(new CollectionContainer { Collection = DisChart.Histograms });
             ChartItemsCollection.Add(new CollectionContainer { Collection = DisChart.Labels });
 
-            GenerateSticks();
-            PlaceBallOnTopStick();
+            GaltonSim.PlaceBallOnTopStick();
 
             RegisterCommands();
            
@@ -197,8 +220,8 @@ namespace GaltonMachine.ViewModel
                 for (int i = 0; i < SimulationLength - 1; i++)
                 {
                     FallingBall.Reset();
-                    PlaceBallOnTopStick();
-                    
+                    GaltonSim.PlaceBallOnTopStick();
+
                     for (int j = 0; j < SimulationSize - 1; j++)
                     {
                         Thread.Sleep(SimulationSpeed);
@@ -211,46 +234,18 @@ namespace GaltonMachine.ViewModel
                             FallingBall.Column++;
                         }
                         Ball currentStick = GaltonSim.GetStick(FallingBall.Row, FallingBall.Column);
-                        PlaceBallOnStick(currentStick);
+                        GaltonSim.PlaceBallOnStick(currentStick);
                     }
-                    /*
-                    // Incrementa di 1 il valore dell'istogramma e modifica l'altezza di conseguenza
-                    Histogram currentHistogram = HistogramsList.ElementAt(model.BallColumn);
-                    currentHistogram.Value++;
-
-                    // Aggiorna la curva
-                    model.HistogramChart.Curve.UpdateData(model.BallColumn, (float)currentHistogram.Value);
-                    Console.WriteLine("Aggiornati i dati all'indice {0} con valore {1}", model.BallColumn, currentHistogram.Value);
-                    model.HistogramChart.Curve.Image?.Freeze();
-                    Dispatcher.CurrentDispatcher.Invoke(() => Curve = model.HistogramChart.Curve.Image);
-
-                    // Prende l'istogramma con valore più grande
-                    Histogram maxHistogram = HistogramsList.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
-
-                    // Aggiorna altezza degli istogrammi
-                    for (int j = 0; j < HistogramsList.Count; j++)
-                    {
-                        Histogram h = HistogramsList.ElementAt(j);
-                        int value = h.Value;
-                        float perc = value / (float)maxHistogram.Value;
-                        double barHeight = Math.Round(perc * (CanvasHeight - CANVAS_VOFFSET));
-                        h.Height = barHeight;
-                        h.Y = CanvasHeight - barHeight - (CANVAS_VOFFSET / 2);
-                    }
-
-                    // Aggiorna la label dell'istogramma
-                    HistogramsLabels.ElementAt(model.BallColumn).Text = currentHistogram.Value.ToString();
-                    */
+                    
+                    // Aggiorna istogrammi e curva
+                    DisChart.IncrementValue(FallingBall.Column);
+                    Dispatcher.CurrentDispatcher.Invoke(() => Curve = DisChart.GetCurveImage());
                     IterationCount++;
 
                     Thread.Sleep(SimulationSpeed);
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
                 IsSimulationRunning = false;
-
-                // Essendo un altro thread che processa la chiamata, è necessario
-                // usare il Dispatcher per "passare" l'invocazione al thread della UI,
-                // altrimenti Execute lancerebbe una InvalidOperationException
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -264,62 +259,10 @@ namespace GaltonMachine.ViewModel
             }
         }
 
-        private void GenerateSticks()
-        {
-            GaltonSim.Sticks.Clear();
-            DisChart.Reset();
-
-            // Larghezza e altezza canvas 
-            double cw = CanvasWidth - CANVAS_HOFFSET;
-            double ch = CanvasHeight - CANVAS_VOFFSET;
-
-            // Distanza fra le stecche
-            double dx = (cw - STICKS_DIAMETER) / (GaltonSim.SimulationSize - 1) / 2;
-            double dy = (ch - STICKS_DIAMETER) / (GaltonSim.SimulationSize - 1);
-
-            // Coordinate x y delle stecche iniziali
-            double x = CanvasWidth / 2 - STICKS_DIAMETER;
-            double y = 0;
-            
-            for (int i = 0; i < GaltonSim.SimulationSize; i++)
-            {
-                for (int j = 0; j < i + 1; j++)
-                {
-                    // Se non è la prima stecca
-                    if (j != 0)
-                    {
-                        x += dx * 2;
-
-                    }
-                    else
-                    {
-                        x = dx * (GaltonSim.SimulationSize - i - 1);
-                    }
-
-                    GaltonSim.Sticks.Add(new Ball(i, j, x + (CANVAS_HOFFSET / 2), y + (CANVAS_VOFFSET / 2), STICKS_DIAMETER, STICKS_COLOR));
-                }
-                y += dy;
-            }
-        }
-
-        private void PlaceBallOnStick(Ball stick)
-        {
-            FallingBall.X = stick.X + stick.Diameter / 2 - FallingBall.Diameter / 2;
-            FallingBall.Y = stick.Y - FallingBall.Diameter - 0.5;
-        }
-
-        private void PlaceBallOnTopStick()
-        {
-            PlaceBallOnStick(GaltonSim.Sticks[0]);
-        }
-
         private void StartSimulation()
         {
             IsSimulationRunning = true;
-
-            //model.Reset();
-            //// Generazione del grafico
-            //GenerateChart();
+            DisChart.Reset();
 
             // Istanza thread pallina che cade animata
             animationThread = new Thread(new ThreadStart(AnimateFallingBall));
@@ -337,7 +280,6 @@ namespace GaltonMachine.ViewModel
         {
             IsSimulationRunning = false;
             IterationCount = 0;
-            DisChart.Reset();
 
             StopSimulationCommand.RaiseCanExecuteChanged();
             StartSimulationCommand.RaiseCanExecuteChanged();

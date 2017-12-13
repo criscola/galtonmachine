@@ -24,7 +24,7 @@
   <Class Name="GaltonMachine.Model.GaltonSimulation">
     <Position X="10" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAwAAAAEAAAAAAAAAAAAAAiAAAAAAAACAAAAAAAAA=</HashCode>
+      <HashCode>ACACwAAAAEAABIAAgAAIAAAAiAAQAAAAACAAACAQAAA=</HashCode>
       <FileName>Model\GaltonSimulation.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -33,13 +33,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAQAQAAAAEAAAAAAACAAAABgAAAAYAA=</HashCode>
       <FileName>Model\Histogram.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="GaltonMachine.Model.QuincunxGrid" Collapsed="true">
-    <Position X="6.5" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAAAAIAAAAAAAAAQAABAAAAAAAAAAAA=</HashCode>
-      <FileName>Model\QuincunxGrid.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GaltonMachine.Model.Ball" Collapsed="true">

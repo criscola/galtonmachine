@@ -18,7 +18,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -88,7 +88,6 @@
     <Compile Include="Model\DistributionChart.cs" />
     <Compile Include="Model\GaltonSimulation.cs" />
     <Compile Include="Model\Histogram.cs" />
-    <Compile Include="Model\QuincunxGrid.cs" />
     <Compile Include="Model\Ball.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
