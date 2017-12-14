@@ -219,9 +219,11 @@ namespace GaltonMachine.ViewModel
             {
                 for (int i = 0; i < SimulationLength - 1; i++)
                 {
+                    // Piazza la pallina in cima
                     FallingBall.Reset();
                     GaltonSim.PlaceBallOnTopStick();
 
+                    // Simulazione caduta pallina
                     for (int j = 0; j < SimulationSize - 1; j++)
                     {
                         Thread.Sleep(SimulationSpeed);
@@ -239,9 +241,10 @@ namespace GaltonMachine.ViewModel
                     
                     // Aggiorna istogrammi e curva
                     DisChart.IncrementValue(FallingBall.Column);
-                    Dispatcher.CurrentDispatcher.Invoke(() => Curve = DisChart.GetCurveImage());
-                    IterationCount++;
+                    DisChart.GetCurveImage()?.Freeze();
+                    Application.Current.Dispatcher.Invoke(() => Curve = DisChart.GetCurveImage());
 
+                    IterationCount++;
                     Thread.Sleep(SimulationSpeed);
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
@@ -285,7 +288,6 @@ namespace GaltonMachine.ViewModel
             StartSimulationCommand.RaiseCanExecuteChanged();
 
             animationThread?.Interrupt();
-
         }
 
         #endregion

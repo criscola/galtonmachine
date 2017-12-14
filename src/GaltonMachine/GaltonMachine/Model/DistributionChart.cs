@@ -74,7 +74,7 @@ namespace GaltonMachine.Model
             if (Histograms.Count > index)
             {
                 Histograms[index].Value++;
-                normalCurve.UpdateData(index, Histograms[index].Value);
+                normalCurve.UpdateData(index);
 
                 Histogram maxHistogram = Histograms.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
 
@@ -105,11 +105,6 @@ namespace GaltonMachine.Model
                 return normalCurve.Image;
             }
             return null;
-        }
-
-        public int GetDataCount()
-        {
-            return normalCurve.GetDataCount();
         }
 
         public void Reset()
