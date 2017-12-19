@@ -54,6 +54,9 @@ namespace GaltonMachine.ViewModel
         public int CanvasWidth { get; private set; }
         public int CanvasHeight { get; private set; }
         public string CurveDimensions { get { return "0, 0, " + CanvasWidth + ", " + CanvasHeight; } }
+        public double CurveMean { get { if (DisChart != null) return Math.Round(DisChart.Mean, 3); else return 0; } }
+        public double CurveVariance { get { if (DisChart != null) return Math.Round(DisChart.Variance, 3); else return 0; } }
+        public double CurveStdDev { get { if (DisChart != null) return Math.Round(DisChart.StdDev, 3); else return 0; } }
         public GaltonSimulation GaltonSim { get; set; }
         public DistributionChart DisChart { get; private set; }
         public CompositeCollection ChartItemsCollection { get; private set; }
@@ -231,12 +234,13 @@ namespace GaltonMachine.ViewModel
                         FallingBall.Row++;
 
                         Random rnd = new Random();
-                        if (rnd.Next(0, 2) == 0 && FallingBall.Column < j + 1)
+                        if (rnd.Next(0, 2) == 1 && FallingBall.Column < j + 1)
                         {
                             FallingBall.Column++;
                         }
-                        Ball currentStick = GaltonSim.GetStick(FallingBall.Row, FallingBall.Column);
-                        GaltonSim.PlaceBallOnStick(currentStick);
+
+                        GaltonSim.PlaceBallOnStick(GaltonSim.GetStick(FallingBall.Row, FallingBall.Column));
+
                     }
                     
                     // Aggiorna istogrammi e curva
@@ -244,7 +248,12 @@ namespace GaltonMachine.ViewModel
                     DisChart.GetCurveImage()?.Freeze();
                     Application.Current.Dispatcher.Invoke(() => Curve = DisChart.GetCurveImage());
 
+                    // Aggiorna le etichette
+                    OnPropertyChanged(() => CurveMean);
+                    OnPropertyChanged(() => CurveVariance);
+                    OnPropertyChanged(() => CurveStdDev);
                     IterationCount++;
+
                     Thread.Sleep(SimulationSpeed);
                 }
                 // Resetta la simulazione quando la pallina completa la simulazione
@@ -324,6 +333,7 @@ namespace GaltonMachine.ViewModel
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;
+            Curve = null;
         }
 
         private void OnAbout(object obj)

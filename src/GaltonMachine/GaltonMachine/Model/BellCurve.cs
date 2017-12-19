@@ -22,7 +22,7 @@ namespace GaltonMachine.Model
         private BitmapImage image;
         private List<double> data;
 
-        public double Mean { get; set; }
+        public double Mean { get; private set; }
         public double Variance { get; private set; }
         public double StdDev { get; private set; }
         public Size GDeviceSize { get; set; }
@@ -49,6 +49,9 @@ namespace GaltonMachine.Model
         {
             GDeviceSize = gDeviceSize;
             data = new List<double>();
+            Mean = 0;
+            Variance = 0;
+            StdDev = 0;
         }
 
         #endregion
@@ -65,7 +68,7 @@ namespace GaltonMachine.Model
                 Variance = GetVariance();
                 StdDev = (double)Math.Sqrt(Variance);
 
-                DrawCurve(DEFAULT_DEVIATION_COUNT, GDeviceSize.Width, GDeviceSize.Height, Mean, StdDev, Variance);
+                DrawCurve();
             }
 
         }
@@ -104,7 +107,7 @@ namespace GaltonMachine.Model
         }
 
         // Fonte: Rod Stephens - http://csharphelper.com/blog/2015/09/draw-a-normal-distribution-curve-in-c/
-        private void DrawCurve(double stddev_multiple, int wid, int hgt, double mean, double stddev, double var)
+        private void DrawCurve()
         {
             Bitmap bm = new Bitmap(GDeviceSize.Width, GDeviceSize.Height);
             using (System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(bm))
@@ -135,30 +138,6 @@ namespace GaltonMachine.Model
                 {
                     using (Font font = new Font("Arial", 8))
                     {
-                        // Disegna l'asse X
-                        gr.Transform = transform;
-                        pen.Color = Color.Black;
-                        gr.DrawLine(pen, wxmin, 0, wxmax, 0);
-                        for (int x = (int)wxmin; x <= wxmax; x++)
-                        {
-                            gr.DrawLine(pen, x, -0.05f, x, 0.05f);
-                            gr.DrawLine(pen, x + 0.25f, -0.025f, x + 0.25f, 0.025f);
-                            gr.DrawLine(pen, x + 0.50f, -0.025f, x + 0.50f, 0.025f);
-                            gr.DrawLine(pen, x + 0.75f, -0.025f, x + 0.75f, 0.025f);
-                        }
-
-                        // Disegna l'asse Y
-                        gr.Transform = transform;
-                        pen.Color = Color.Black;
-                        gr.DrawLine(pen, 0, wymin, 0, wymax);
-                        for (int y = (int)wymin; y <= wymax; y++)
-                        {
-                            gr.DrawLine(pen, -0.2f, y, 0.2f, y);
-                            gr.DrawLine(pen, -0.1f, y + 0.25f, 0.1f, y + 0.25f);
-                            gr.DrawLine(pen, -0.1f, y + 0.50f, 0.1f, y + 0.50f);
-                            gr.DrawLine(pen, -0.1f, y + 0.75f, 0.1f, y + 0.75f);
-                        }
-
                         // Disegna la curva
                         gr.Transform = transform;
                         List<PointF> points = new List<PointF>();
@@ -166,13 +145,12 @@ namespace GaltonMachine.Model
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
-                            double z_score = (x - mean) / stddev;
-                            double y = F(z_score, mean, stddev, var);
+                            double z_score = (x - Mean) / StdDev;
+                            double y = F(z_score, Mean, StdDev, Variance);
                             points.Add(new PointF(x, (float)y));
                         }
                         
                         pen.Color = Color.Red;
-                        Console.WriteLine("ASAADFSDFSDFSDF {0}", points.Count);
                         gr.DrawLines(pen, points.ToArray());
 
                     } // Font
@@ -180,6 +158,8 @@ namespace GaltonMachine.Model
                 Image = BitmapToImageSource(bm);
             }
         }
+
+
 
         private BitmapImage BitmapToImageSource(Bitmap bitmap)
         {

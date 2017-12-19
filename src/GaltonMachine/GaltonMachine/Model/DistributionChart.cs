@@ -42,6 +42,40 @@ namespace GaltonMachine.Model
                 GenerateChart();
             }
         }
+        public double Mean
+        {
+            get
+            {
+                if (normalCurve != null)
+                {
+                    return normalCurve.Mean;
+                }
+                return 0;
+            }
+        }
+        public double Variance
+        {
+            get
+            {
+                if (normalCurve != null)
+                {
+                    return normalCurve.Variance;
+                }
+                return 0;
+            }
+        }
+
+        public double StdDev
+        {
+            get
+            {
+                if (normalCurve != null)
+                {
+                    return normalCurve.StdDev;
+                }
+                return 0;
+            }
+        }
 
         #endregion
 
@@ -76,9 +110,9 @@ namespace GaltonMachine.Model
                 Histograms[index].Value++;
                 normalCurve.UpdateData(index);
 
+                // Aggiorna altezza degli istogrammi
                 Histogram maxHistogram = Histograms.Aggregate((i1, i2) => i1.Value > i2.Value ? i1 : i2);
 
-                // Aggiorna altezza degli istogrammi
                 for (int i = 0; i < Histograms.Count; i++)
                 {
                     Histogram h = Histograms[i];
@@ -116,12 +150,13 @@ namespace GaltonMachine.Model
 
         #region ================== Metodi privati ==================
 
-        public void GenerateChart()
+        private void GenerateChart()
         {
             if (Size > 0)
             {
                 Histograms.Clear();
                 Labels.Clear();
+                normalCurve = null;
 
                 // Distanza fra gli istogrammi
                 double dx = (GDeviceSize.Width - (HistogramWidth * Size)) / (Size + 1);

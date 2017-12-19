@@ -1,3 +1,4 @@
 fig1 https://geniincompresse.files.wordpress.com/2013/03/220px-galton_box-svg.png
 https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/MonoGame_Logo.svg/2000px-MonoGame_Logo.svg.png
 https://webtooling.visualstudio.com/themes/standard/favicon/mstile-310x310.png
+https://www.mathsisfun.com/data/standard-normal-distribution.html

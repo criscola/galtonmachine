@@ -122,6 +122,15 @@
                     <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
                 </TextBlock>
 
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,15,0" TextAlignment="Right">
+                    <Run Text="Media: " />
+                    <Run Text="{Binding Path=CurveMean, Mode=OneWay}" />
+                    <Run Text="Varianza: " />
+                    <Run Text="{Binding Path=CurveVariance, Mode=OneWay}" />
+                    <Run Text="Standard deviation: " />
+                    <Run Text="{Binding Path=CurveStdDev, Mode=OneWay}" />
+                </TextBlock>
+                
                 <!-- Riga 1 -->
                 <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center">
                     <StackPanel.Resources>
