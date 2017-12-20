@@ -17,3 +17,21 @@ C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csprojResolveAssemblyReference.cache
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\bin\Debug\Xceed.Wpf.Toolkit.dll
 C:\Users\A4XX-COLCRI\Documents\I4AC\Progetti\01_GaltonMachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csproj.CoreCompileInputs.cache
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\bin\Debug\GaltonMachine.exe.config
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\bin\Debug\GaltonMachine.exe
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\bin\Debug\GaltonMachine.pdb
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\bin\Debug\Xceed.Wpf.Toolkit.dll
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csprojResolveAssemblyReference.cache
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\View\MainWindow.g.cs
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\View\GaltonMachineView.g.cs
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\App.g.cs
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine_MarkupCompile.cache
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine_MarkupCompile.lref
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\View\MainWindow.baml
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\View\GaltonMachineView.baml
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.g.resources
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.Properties.Resources.resources
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.csproj.GenerateResource.Cache
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.exe
+E:\Utenti\Cristiano Colangelo\Documenti\Scuola\SAMT\I4AC\Progetti\galtonmachine\src\GaltonMachine\GaltonMachine\obj\Debug\GaltonMachine.pdb
