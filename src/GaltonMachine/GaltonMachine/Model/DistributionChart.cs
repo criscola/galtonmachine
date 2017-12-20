@@ -22,6 +22,7 @@ namespace GaltonMachine.Model
         public Size GDeviceSize { get; set; }
         public double HistogramWidth { get; set; }
         public double VerticalAnchor { get; set; }
+        public BitmapImage CurveImage { get { return normalCurve.Image; } }
 
         public ObservableCollection<Histogram> Histograms
         {
@@ -132,18 +133,10 @@ namespace GaltonMachine.Model
             
         }
 
-        public BitmapImage GetCurveImage()
-        {
-            if (normalCurve.Image != null)
-            {
-                return normalCurve.Image;
-            }
-            return null;
-        }
-
         public void Reset()
         {
             GenerateChart();
+            normalCurve.Reset();
         }
 
         #endregion

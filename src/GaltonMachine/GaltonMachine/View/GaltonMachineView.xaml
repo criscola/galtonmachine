@@ -64,7 +64,7 @@
                                 <DrawingImage PresentationOptions:Freeze="True">
                                     <DrawingImage.Drawing>
                                         <DrawingGroup>
-                                            <ImageDrawing Rect="{Binding Path=CurveDimensions}" ImageSource="{Binding Path=Curve}"/>
+                                            <ImageDrawing Rect="{Binding Path=CurveDimensions}" ImageSource="{Binding Path=Curve}" />
 
                                         </DrawingGroup>
                                     </DrawingImage.Drawing>
@@ -122,15 +122,15 @@
                     <Run Text="{Binding Path=SimulationLength, Mode=OneWay}" />
                 </TextBlock>
 
-                <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,15,0" TextAlignment="Right">
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,8,0" TextAlignment="Right">
                     <Run Text="Media: " />
                     <Run Text="{Binding Path=CurveMean, Mode=OneWay}" />
                     <Run Text="Varianza: " />
                     <Run Text="{Binding Path=CurveVariance, Mode=OneWay}" />
-                    <Run Text="Standard deviation: " />
+                    <Run Text="Deviazione standard: " />
                     <Run Text="{Binding Path=CurveStdDev, Mode=OneWay}" />
                 </TextBlock>
-                
+
                 <!-- Riga 1 -->
                 <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center">
                     <StackPanel.Resources>
@@ -148,15 +148,15 @@
                 <!-- Riga 2 -->
                 <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Numero di simulazioni" Margin="5,10,0,0" />
 
-                <Slider x:Name="sl_simulationLength" Grid.Row="3" Grid.Column="0" Margin="10,10,0,5"
+                <Slider x:Name="sl_simulationLength" Grid.Row="3" Grid.Column="0" Margin="10,10,201,5.2"
                     Value="{Binding Path=SimulationLength, Mode=TwoWay}"
                     Minimum="{Binding Path=MIN_SIMULATION_LENGTH, Mode=OneTime}" 
                     Maximum="{Binding Path=MAX_SIMULATION_LENGTH, Mode=OneTime}" 
                     TickPlacement="BottomRight" TickFrequency="3" IsSnapToTickEnabled="True"
-                    IsEnabled="{Binding Path=IsSimulationNotRunning, Mode=OneWay}"
+                    IsEnabled="{Binding Path=IsSimulationNotRunning, Mode=OneWay}" Grid.ColumnSpan="2"
                     />
 
-                <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_LENGTH, Mode=OneTime}"
+                <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="204,10,10,10.2" DefaultValue="{Binding Path=DEFAULT_SIMULATION_LENGTH, Mode=OneTime}"
                                 Text="{Binding ElementName=sl_simulationLength, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
                                 Maximum="{Binding Path=MAX_SIMULATION_LENGTH, Mode=OneTime}" 
                                 Minimum="{Binding Path=MIN_SIMULATION_LENGTH, Mode=OneTime}"
@@ -166,14 +166,14 @@
                 <!-- Riga 3-->
                 <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Grandezza base" Margin="5,0,0,0"/>
 
-                <Slider x:Name="sl_simulationSize" Grid.Row="5" Grid.Column="0" Margin="10,10,0,5"
+                <Slider x:Name="sl_simulationSize" Grid.Row="5" Grid.Column="0" Margin="10,10.2,201,5"
                     Value="{Binding Path=SimulationSize, Mode=TwoWay}"
                     Minimum="{Binding Path=MIN_SIMULATION_SIZE, Mode=OneTime}" 
                     Maximum="{Binding Path=MAX_SIMULATION_SIZE, Mode=OneTime}" 
                     TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"
-                    IsEnabled="{Binding Path=IsSimulationNotRunning}"/>
+                    IsEnabled="{Binding Path=IsSimulationNotRunning}" Grid.ColumnSpan="2"/>
 
-                <xctk:IntegerUpDown Grid.Row="5" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SIZE, Mode=OneTime}"
+                <xctk:IntegerUpDown Grid.Row="5" Grid.Column="1" Margin="204,10.2,10,10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SIZE, Mode=OneTime}"
                                 Text="{Binding ElementName=sl_simulationSize, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
                                 Maximum="{Binding Path=MAX_SIMULATION_SIZE, Mode=OneTime}" 
                                 Minimum="{Binding Path=MIN_SIMULATION_SIZE, Mode=OneTime}"
@@ -183,15 +183,15 @@
                 <!-- Riga 4 -->
                 <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Velocità pallina [ms]" Margin="5,0,0,0"/>
 
-                <Slider x:Name="sl_simulationSpeed" Grid.Row="7" Grid.Column="0" Margin="10,10,0,5"
+                <Slider x:Name="sl_simulationSpeed" Grid.Row="7" Grid.Column="0" Margin="10,10.4,201,4.8"
                     Value="{Binding Path=SimulationSpeed, Mode=TwoWay}"
                     Minimum="{Binding Path=MIN_SIMULATION_SPEED, Mode=OneTime}" 
                     Maximum="{Binding Path=MAX_SIMULATION_SPEED, Mode=OneTime}" 
                     TickPlacement="BottomRight" TickFrequency="20" IsSnapToTickEnabled="True" 
-                    IsDirectionReversed="True"
+                    IsDirectionReversed="True" Grid.ColumnSpan="2"
                     />
 
-                <xctk:IntegerUpDown Grid.Row="7" Grid.Column="1" Margin="10, 10, 10, 10" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SPEED, Mode=OneTime}"
+                <xctk:IntegerUpDown Grid.Row="7" Grid.Column="1" Margin="204,10.4,10,9.8" DefaultValue="{Binding Path=DEFAULT_SIMULATION_SPEED, Mode=OneTime}"
                                 Text="{Binding ElementName=sl_simulationSpeed, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" 
                                 Maximum="{Binding Path=MAX_SIMULATION_SPEED, Mode=OneTime}" 
                                 Minimum="{Binding Path=MIN_SIMULATION_SPEED, Mode=OneTime}"/>

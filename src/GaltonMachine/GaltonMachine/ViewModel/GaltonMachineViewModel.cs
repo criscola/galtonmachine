@@ -245,13 +245,12 @@ namespace GaltonMachine.ViewModel
                     
                     // Aggiorna istogrammi e curva
                     DisChart.IncrementValue(FallingBall.Column);
-                    DisChart.GetCurveImage()?.Freeze();
-                    Application.Current.Dispatcher.Invoke(() => Curve = DisChart.GetCurveImage());
+                    DisChart.CurveImage?.Freeze();
+                    Application.Current.Dispatcher.Invoke(() => Curve = DisChart.CurveImage);
 
-                    // Aggiorna le etichette
-                    OnPropertyChanged(() => CurveMean);
-                    OnPropertyChanged(() => CurveVariance);
-                    OnPropertyChanged(() => CurveStdDev);
+                    // Aggiorna le etichette e l'immagine della curva
+                    UpdateLabels();
+
                     IterationCount++;
 
                     Thread.Sleep(SimulationSpeed);
@@ -299,6 +298,13 @@ namespace GaltonMachine.ViewModel
             animationThread?.Interrupt();
         }
 
+        private void UpdateLabels()
+        {
+            OnPropertyChanged(() => CurveMean);
+            OnPropertyChanged(() => CurveVariance);
+            OnPropertyChanged(() => CurveStdDev);
+            OnPropertyChanged(() => Curve);
+        }
         #endregion
 
         #region ================== Metodi dei delegati =================
@@ -330,6 +336,8 @@ namespace GaltonMachine.ViewModel
         private void OnReset(object obj)
         {
             OnStop(obj);
+            DisChart.Reset();
+            UpdateLabels();
             SimulationLength = DEFAULT_SIMULATION_LENGTH;
             SimulationSize = DEFAULT_SIMULATION_SIZE;
             SimulationSpeed = DEFAULT_SIMULATION_SPEED;

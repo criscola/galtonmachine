@@ -12,9 +12,7 @@ namespace GaltonMachine.Model
     public class BellCurve : BindableBase
     {
         #region ================== Costanti =================
-
-        public double DEFAULT_DEVIATION_COUNT { get; set; }
-
+        
         #endregion
 
         #region ================== Attributi & proprietà =================
@@ -35,6 +33,7 @@ namespace GaltonMachine.Model
             private set
             {
                 image = value;
+                OnPropertyChanged(() => Image);
             }
         }
 
@@ -71,6 +70,14 @@ namespace GaltonMachine.Model
                 DrawCurve();
             }
 
+        }
+
+        public void Reset()
+        {
+            Image = null;
+            Mean = 0;
+            Variance = 0;
+            StdDev = 0;
         }
 
         #endregion
@@ -124,13 +131,19 @@ namespace GaltonMachine.Model
                 const float wymax = 1.1f;
                 const float wwid = wxmax - wxmin;
                 const float whgt = wymax - wymin;
+
+                // Crea il rettangolo rappresentate l’area di disegno
                 RectangleF world = new RectangleF(wxmin, wymin, wwid, whgt);
+
+                // Crea i punti degli angoli dell’area di disegno
                 PointF[] device_points =
                 {
                     new PointF(0, GDeviceSize.Height),
                     new PointF(GDeviceSize.Width, GDeviceSize.Height),
                     new PointF(0, 0),
                 };
+
+                // Crea la matrice sulla base del rettangolo e dei punti
                 Matrix transform = new Matrix(world, device_points);
 
                 // Crea una penna sottile da poter usare
@@ -145,8 +158,7 @@ namespace GaltonMachine.Model
                         float dx = (wxmax - wxmin) / GDeviceSize.Width;
                         for (float x = wxmin; x <= wxmax; x += dx)
                         {
-                            double z_score = (x - Mean) / StdDev;
-                            double y = F(z_score, Mean, StdDev, Variance);
+                            double y = F(x, Mean, StdDev, Variance);
                             points.Add(new PointF(x, (float)y));
                         }
                         
@@ -159,8 +171,6 @@ namespace GaltonMachine.Model
             }
         }
 
-
-
         private BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
@@ -172,11 +182,10 @@ namespace GaltonMachine.Model
                 bitmapimage.StreamSource = memory;
                 bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapimage.EndInit();
-
+                
                 return bitmapimage;
             }
         }
-
         #endregion
 
         #region ================== Metodi dei delegati =================
